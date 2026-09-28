@@ -1,0 +1,36 @@
+export interface Lesson {
+  slug: string;
+  title: string;
+  description: string;
+  subject: string;
+  order: number;
+  minutes: number;
+  lab: 'bits' | 'binary-search' | 'process' | 'javascript' | 'sql' | 'ownership';
+  objectives: string[];
+  prerequisites: string[];
+  quiz: { prompt: string; options: string[]; answer: number; explanation: string };
+  sections: { title: string; markdown: string }[];
+  code: string;
+  source: string;
+}
+
+export type LessonSummary = Omit<Lesson, 'quiz' | 'sections' | 'code'>;
+
+export interface LessonProgress {
+  read: boolean;
+  passed: boolean;
+  attempts: number;
+  bookmark: boolean;
+  note: string;
+}
+
+export interface Progress {
+  version: 1;
+  lessons: Record<string, LessonProgress>;
+  reducedMotion: boolean;
+}
+
+export interface LabProps {
+  lesson: Lesson;
+  reducedMotion: boolean;
+}
