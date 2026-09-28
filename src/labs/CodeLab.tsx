@@ -17,10 +17,10 @@ export default function CodeLab({ lesson }: LabProps) {
   const [code, setCode] = useState(lesson.code);
   const [output, setOutput] = useState<Output[]>([]);
   const [tables, setTables] = useState<Table[]>([]);
-  const [state, setState] = useState<'idle' | 'running' | 'done' | 'error'>('idle');
+  const [state, setState] = useState<'idle' | 'loading' | 'running' | 'done' | 'error'>('idle');
   const stopRef = useRef<(() => void) | null>(null);
   const runId = useRef(0);
-  const active = state === 'running';
+  const active = state === 'loading' || state === 'running';
   useEffect(
     () => () => {
       runId.current++;
@@ -39,7 +39,7 @@ export default function CodeLab({ lesson }: LabProps) {
   function run() {
     stopRef.current?.();
     const id = ++runId.current;
-    setState('running');
+    setState(sql ? 'loading' : 'running');
     setOutput([]);
     setTables([]);
     if (!sql) {
@@ -61,15 +61,22 @@ export default function CodeLab({ lesson }: LabProps) {
       clearTimeout(timer);
       worker.terminate();
     };
-    const timer = setTimeout(() => {
+    const fail = (text: string) => {
       if (id !== runId.current) return;
       dispose();
       setState('error');
-      setOutput([{ kind: 'error', text: 'SQL 运行超过 5 秒，已终止。' }]);
-    }, 5000);
+      setOutput([{ kind: 'error', text }]);
+    };
+    let timer = setTimeout(() => fail('SQLite 加载超过 60 秒，请检查网络后重试。'), 60000);
     stopRef.current = dispose;
     worker.onmessage = (event) => {
       if (id !== runId.current) return;
+      if (event.data.kind === 'ready') {
+        clearTimeout(timer);
+        setState('running');
+        timer = setTimeout(() => fail('SQL 运行超过 5 秒，已终止。'), 5000);
+        return;
+      }
       dispose();
       if (event.data.kind === 'error') {
         setState('error');
@@ -86,12 +93,7 @@ export default function CodeLab({ lesson }: LabProps) {
           ]);
       }
     };
-    worker.onerror = (event) => {
-      if (id !== runId.current) return;
-      dispose();
-      setState('error');
-      setOutput([{ kind: 'error', text: event.message || 'SQLite 加载失败，请检查网络后重试。' }]);
-    };
+    worker.onerror = (event) => fail(event.message || 'SQLite 加载失败，请检查网络后重试。');
     worker.postMessage(code);
   }
   return (
@@ -184,7 +186,15 @@ export default function CodeLab({ lesson }: LabProps) {
         <div className="output-heading">
           <span>{sql ? 'RESULT' : 'CONSOLE'}</span>
           <span className={state === 'error' ? 'error-text' : ''}>
-            {{ idle: '等待运行', running: '运行中…', done: '运行结束', error: '运行出错' }[state]}
+            {
+              {
+                idle: '等待运行',
+                loading: '加载 SQLite…',
+                running: '运行中…',
+                done: '运行结束',
+                error: '运行出错',
+              }[state]
+            }
           </span>
         </div>
         <div className="output-body" role="log" aria-live="polite">

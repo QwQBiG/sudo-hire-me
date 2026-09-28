@@ -6,6 +6,7 @@ self.onmessage = async (event: MessageEvent<string>) => {
   let database;
   try {
     const SQL = await ready;
+    self.postMessage({ kind: 'ready' });
     database = new SQL.Database();
     database.run(`CREATE TABLE students (id INTEGER PRIMARY KEY, name TEXT);
       INSERT INTO students VALUES (1, 'Lin'), (2, 'Zhou'), (3, 'Xu');
