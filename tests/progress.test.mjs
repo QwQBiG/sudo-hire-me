@@ -116,8 +116,8 @@ test('reserved course names are rejected even if supplied in an allowlist', () =
   assert.equal(Object.hasOwn(Object.prototype, 'read'), false);
 });
 
-test('thirty full Chinese lesson notes can be exported and reimported', () => {
-  const expandedSlugs = Array.from({ length: 30 }, (_, index) => `lesson-${index}`);
+test('sixty full Chinese lesson notes can be exported and reimported', () => {
+  const expandedSlugs = Array.from({ length: 60 }, (_, index) => `lesson-${index}`);
   const records = Object.fromEntries(
     expandedSlugs.map((slug) => [slug, { ...freshLesson(), note: '理解'.repeat(2500) }]),
   );

@@ -3,9 +3,9 @@ slug: "network-layers"
 title: "网络分层与一次转发"
 subject: "计算机网络"
 description: "一条消息经过路由器时，哪些地址保留，哪些地址会换成下一跳？"
-order: 14
+order: 15
 minutes: 23
-lab: "walkthrough"
+lab: "encapsulation"
 objectives: ["区分应用、传输、网络和链路职责","跟踪封装与逐跳转发","区分发送时延和传播时延"]
 prerequisites: ["process-thread"]
 ---

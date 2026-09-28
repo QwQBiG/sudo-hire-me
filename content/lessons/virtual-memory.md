@@ -3,9 +3,9 @@ slug: "virtual-memory"
 title: "虚拟内存与地址转换"
 subject: "操作系统"
 description: "程序读取地址 2500 时，为什么真正访问的物理位置可能是 5572？"
-order: 11
+order: 12
 minutes: 22
-lab: "walkthrough"
+lab: "paging"
 objectives: ["把虚拟地址拆成页号和页内偏移","利用页表计算物理地址","区分地址转换缓存未命中与缺页"]
 prerequisites: ["process-thread"]
 ---

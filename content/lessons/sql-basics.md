@@ -3,7 +3,7 @@ slug: "sql-basics"
 title: "SQL 查询与缺失值"
 description: "从三条成绩记录理解筛选、排序，以及 NULL 为什么不能用等号判断。"
 subject: "数据库"
-order: 19
+order: 21
 minutes: 18
 lab: "sql"
 objectives: ["根据需求写出单表查询", "手算筛选和排序结果", "正确判断缺失值"]

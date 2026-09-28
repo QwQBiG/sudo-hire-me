@@ -5,7 +5,37 @@ export interface Lesson {
   subject: string;
   order: number;
   minutes: number;
-  lab: 'bits' | 'binary-search' | 'process' | 'javascript' | 'sql' | 'ownership' | 'walkthrough';
+  lab:
+    | 'bits'
+    | 'binary-search'
+    | 'process'
+    | 'javascript'
+    | 'sql'
+    | 'ownership'
+    | 'walkthrough'
+    | 'memory'
+    | 'cpu'
+    | 'cache'
+    | 'complexity'
+    | 'sequence'
+    | 'stack-queue'
+    | 'hash'
+    | 'recursion'
+    | 'tree'
+    | 'paging'
+    | 'race'
+    | 'locks'
+    | 'encapsulation'
+    | 'transport'
+    | 'tcp'
+    | 'dns'
+    | 'http'
+    | 'http-cache'
+    | 'index'
+    | 'transaction'
+    | 'git'
+    | 'debug'
+    | 'isolation';
   objectives: string[];
   prerequisites: string[];
   quiz: { prompt: string; options: string[]; answer: number; explanation: string };

@@ -172,6 +172,7 @@
   border-block: 1px solid #e8d9e5;
   background: #fff;
   overflow: hidden;
+  padding: 8px 28px;
 }
 .walkthrough-heading {
   display: flex;
@@ -307,6 +308,9 @@
   }
 }
 @media (max-width: 720px) {
+  .walkthrough {
+    padding: 4px 16px;
+  }
   .step-track {
     flex-wrap: wrap;
     row-gap: 16px;

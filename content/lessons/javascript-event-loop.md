@@ -3,7 +3,7 @@ slug: "javascript-event-loop"
 title: "事件循环"
 subject: "Web 与程序执行"
 description: "先预测，再运行。看清同步代码、微任务与定时器的执行顺序。"
-order: 25
+order: 29
 minutes: 12
 lab: "javascript"
 objectives: ["区分注册与执行回调","推演任务和微任务","修改代码验证输出"]

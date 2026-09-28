@@ -45,10 +45,18 @@ prerequisites: ["binary-representation"]
 | `sql` | SQLite 查询 |
 | `ownership` | Rust 所有权教学演示 |
 | `walkthrough` | 从 Markdown 提取的可逐步查看的例题 |
+| `memory` / `cpu` / `cache` | 字节地址格、指令数据通路、缓存行访问 |
+| `complexity` / `sequence` | 操作数量比较、数组与链接的插入差异 |
+| `stack-queue` / `hash` / `recursion` / `tree` | 容器操作、哈希桶、调用栈、树遍历 |
+| `paging` / `race` / `locks` | 地址转换、线程交错、锁资源分配 |
+| `encapsulation` / `transport` / `tcp` | 层间封装、传输差异、连接状态 |
+| `dns` / `http` / `http-cache` | DNS 缓存查询、请求响应、HTTP 缓存 |
+| `index` / `transaction` / `isolation` | 索引路径、转账事务、双事务可见性 |
+| `git` / `debug` | 三区快照、边界测试与定位 |
 
 已有实验具有特定含义。新主题没有合适实验时，应扩展类型、校验规则和组件映射，不能随意套用不相关的 `lab`。
 
-概念型课程可选择 `walkthrough`。正文必须包含 `## 逐步推演`，其后直接以三级标题开始，包含三至六个非空步骤。例如：
+优先选择能体现概念本身的交互：修改输入、申请资源、观察状态、比较路径或验证结果。通用 `walkthrough` 仅用于确实需要顺序阅读的例题，不把它作为所有概念型课程的默认实验。使用时正文必须包含 `## 逐步推演`，其后直接以三级标题开始，包含三至六个非空步骤。例如：
 
 ```markdown
 ## 逐步推演
@@ -67,6 +75,8 @@ prerequisites: ["binary-representation"]
 ```
 
 每步应有具体数据、状态、表格或推导，不把一段介绍拆成几个空泛步骤。网站使用同一份正文呈现步骤，Markdown 本身仍可顺序阅读。它是例题讲解，不等于真实运行。
+
+专属实验的代码按知识领域放入 `src/labs/` 子目录，状态规则放入 `src/domain/` 的纯函数。界面须有初始状态、明确的操作边界、重置和结果反馈；模型使用的输入范围、简化假设、错误含义需要与正文一致。新模型至少测试正常路径和一个边界或错误路径，并验证窄屏排版和键盘操作。
 
 ## 正文结构
 

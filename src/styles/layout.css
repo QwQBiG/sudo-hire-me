@@ -270,15 +270,15 @@
   transition: width 0.4s;
 }
 .main-content {
-  max-width: 1390px;
+  max-width: 1336px;
   margin: auto;
-  padding: 38px 40px 0;
+  padding: 40px 48px 0;
   min-height: calc(100vh - 145px);
 }
 .site-footer {
-  max-width: 1390px;
+  max-width: 1336px;
   margin: 40px auto 0;
-  padding: 22px 40px;
+  padding: 22px 48px;
   display: flex;
   align-items: center;
   gap: 20px;

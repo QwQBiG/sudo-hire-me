@@ -3,9 +3,9 @@ slug: "deadlock"
 title: "死锁与锁获取顺序"
 subject: "操作系统"
 description: "A 等 B，B 又等 A：怎样从资源持有关系判断谁也无法继续？"
-order: 13
+order: 14
 minutes: 19
-lab: "walkthrough"
+lab: "locks"
 objectives: ["构造并识别两把锁形成的死锁","解释四个必要条件","用统一获取顺序打破循环等待"]
 prerequisites: ["synchronization"]
 ---

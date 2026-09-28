@@ -3,7 +3,7 @@ slug: "promise-async"
 title: "Promise 与 async/await"
 description: "跟踪一次异步取成绩的成功和失败，理解返回值、暂停位置以及错误如何被接住。"
 subject: "Web 与程序执行"
-order: 26
+order: 30
 minutes: 22
 lab: "javascript"
 objectives: ["区分 Promise 状态与结果", "推演 await 前后的执行顺序", "用 try/catch 处理被拒绝的 Promise"]

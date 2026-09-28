@@ -3,7 +3,7 @@ slug: "process-thread"
 title: "进程与线程"
 subject: "操作系统"
 description: "资源由谁管理，指令由谁执行？把共享与独立的部分拆开来看。"
-order: 10
+order: 11
 minutes: 18
 lab: "process"
 objectives: ["区分资源与执行流","判断线程共享哪些数据","解释就绪、运行与阻塞的转换"]

@@ -3,9 +3,9 @@ slug: "testing-debugging"
 title: "从失败用例定位错误"
 description: "用全负数数组发现求最大值函数的初始化错误，再让测试保护修正后的行为。"
 subject: "工程实践"
-order: 29
+order: 33
 minutes: 22
-lab: "walkthrough"
+lab: "debug"
 objectives: ["从接口约定选择测试输入", "通过中间状态定位错误", "编写能识别原始缺陷的回归检查"]
 prerequisites: ["javascript-values"]
 ---

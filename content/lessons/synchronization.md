@@ -3,9 +3,9 @@ slug: "synchronization"
 title: "互斥与临界区"
 subject: "操作系统"
 description: "两个线程都加了一次，为什么结果只有 1？找出真正需要一起保护的步骤。"
-order: 12
+order: 13
 minutes: 20
-lab: "walkthrough"
+lab: "race"
 objectives: ["推演一次丢失更新","确定临界区的完整范围","解释加锁规则与数据竞争的区别"]
 prerequisites: ["process-thread"]
 ---

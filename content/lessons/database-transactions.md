@@ -3,9 +3,9 @@ slug: "database-transactions"
 title: "事务与完整修改"
 description: "用一笔转账理解提交、回滚，以及事务为什么不能自动修正业务逻辑。"
 subject: "数据库"
-order: 22
+order: 25
 minutes: 22
-lab: "walkthrough"
+lab: "transaction"
 objectives: ["解释提交与回滚的作用", "推演转账成功和失败的余额", "区分事务保证与业务检查"]
 prerequisites: ["sql-basics"]
 ---
@@ -22,6 +22,9 @@ prerequisites: ["sql-basics"]
 本课以 SQLite 和整数金额为例，单位是分，避免把浮点数舍入问题混进转账过程。
 有两条已存在的账户记录：账户 1 为 1000，账户 2 为 500。目标是从 1 转 300 给 2。
 “金额大于零、双方存在、余额足够”是例子的已知前提，实际程序必须检查这些条件。
+
+交互中的账户为事务状态模型，不是真实数据库连接。余额约束错误采用 SQLite 默认 ABORT 的语句级撤销行为；
+应用随后要求回滚整个转账，禁用中途提交是业务保护，不是数据库自动理解了转账含义。
 
 ## 四个性质如何落到这笔转账
 
