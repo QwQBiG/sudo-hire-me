@@ -14,7 +14,7 @@ import catalog from '../.generated/lessons.json';
 import { Sidebar } from './components/Sidebar';
 import { LessonLoader } from './components/LessonLoader';
 import { useProgress } from './hooks/useProgress';
-import { freshLesson } from './domain/progress.mjs';
+import { freshLesson, MAX_PROGRESS_FILE_BYTES } from './domain/progress.mjs';
 import type { LessonSummary } from './types';
 
 const lessons = catalog as LessonSummary[];
@@ -26,10 +26,18 @@ export default function App() {
   const [route, setRoute] = useState(getRoute);
   const [sidebar, setSidebar] = useState(false);
   const [query, setQuery] = useState('');
+  const [subject, setSubject] = useState('');
   const [notice, setNotice] = useState('');
   const { progress, update, importProgress, setProgress, warning } = useProgress(slugs);
   const completed = lessons.filter((l) => progress.lessons[l.slug]?.passed).length;
   const lesson = lessons.find((l) => l.slug === route);
+  const visibleLessons = lessons.filter(
+    (item) =>
+      (!subject || item.subject === subject) &&
+      `${item.title}${item.subject}${item.description}`
+        .toLowerCase()
+        .includes(query.trim().toLowerCase()),
+  );
   useEffect(() => {
     const navigate = () => {
       setRoute(getRoute());
@@ -56,7 +64,7 @@ export default function App() {
   }
   async function importFile(file?: File) {
     if (!file) return;
-    if (file.size > 300000) {
+    if (file.size > MAX_PROGRESS_FILE_BYTES) {
       setNotice('文件过大，请选择有效的进度备份。');
       return;
     }
@@ -86,6 +94,8 @@ export default function App() {
         open={sidebar}
         query={query}
         setQuery={setQuery}
+        subject={subject}
+        setSubject={setSubject}
         close={() => setSidebar(false)}
         toggleMotion={() => setProgress((old) => ({ ...old, reducedMotion: !old.reducedMotion }))}
       />
@@ -135,6 +145,7 @@ export default function App() {
               key={lesson.slug}
               lesson={lesson}
               next={lessons[lessons.findIndex((item) => item.slug === lesson.slug) + 1]}
+              prerequisites={lessons.filter((item) => lesson.prerequisites.includes(item.slug))}
               progress={progress.lessons[lesson.slug] ?? freshLesson()}
               reducedMotion={progress.reducedMotion}
               update={(patch) => update(lesson.slug, patch)}
@@ -147,7 +158,7 @@ export default function App() {
               <h1>{route === 'map' ? '从理解开始，一关一关来。' : '把知识，变成自己的表达。'}</h1>
               <p className="overview-intro">
                 {route === 'map'
-                  ? '计算机基础 · 算法 · 操作系统 · Web · 数据库 · 编程语言'
+                  ? '计算机基础 · 数据结构与算法 · 操作系统 · 网络 · 数据库 · 编程语言 · 工程实践'
                   : '收藏、笔记与练习记录，回到仍值得再想一次的问题。'}
               </p>
               <div className="journey-stats">
@@ -171,7 +182,7 @@ export default function App() {
                 </div>
               </div>
               <div className="course-grid">
-                {lessons.map((item) => {
+                {visibleLessons.map((item) => {
                   const record = progress.lessons[item.slug];
                   return (
                     <a
@@ -200,7 +211,7 @@ export default function App() {
                         <span>
                           {route === 'review'
                             ? `${record?.bookmark ? '已收藏 · ' : ''}练习 ${record?.attempts ?? 0} 次`
-                            : `${item.minutes} 分钟 · 交互实验`}
+                            : `${item.minutes} 分钟 · ${item.lab === 'walkthrough' ? '例题推演' : '交互实验'}`}
                         </span>
                         <ArrowRight size={19} />
                       </div>
@@ -208,6 +219,7 @@ export default function App() {
                   );
                 })}
               </div>
+              {!visibleLessons.length && <p className="empty-courses">没有匹配的课程。</p>}
               <section className="backup-section">
                 <div>
                   <h2>

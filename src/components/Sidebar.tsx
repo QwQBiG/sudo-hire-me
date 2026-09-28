@@ -19,6 +19,8 @@ interface Props {
   open: boolean;
   query: string;
   setQuery: (query: string) => void;
+  subject: string;
+  setSubject: (subject: string) => void;
   close: () => void;
   toggleMotion: () => void;
 }
@@ -29,6 +31,8 @@ export function Sidebar({
   open,
   query,
   setQuery,
+  subject,
+  setSubject,
   close,
   toggleMotion,
 }: Props) {
@@ -46,7 +50,7 @@ export function Sidebar({
     if (!open || !mobile) return;
     const previous = document.activeElement as HTMLElement | null;
     const controls = () =>
-      Array.from(panel.current?.querySelectorAll<HTMLElement>('a, button, input') ?? []);
+      Array.from(panel.current?.querySelectorAll<HTMLElement>('a, button, input, select') ?? []);
     controls()[0]?.focus();
     const keydown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') onClose.current();
@@ -68,8 +72,11 @@ export function Sidebar({
       previous?.focus();
     };
   }, [open, mobile]);
-  const filtered = lessons.filter((l) =>
-    `${l.title}${l.subject}${l.description}`.toLowerCase().includes(query.toLowerCase()),
+  const subjects = [...new Set(lessons.map((item) => item.subject))];
+  const filtered = lessons.filter(
+    (l) =>
+      (!subject || l.subject === subject) &&
+      `${l.title}${l.subject}${l.description}`.toLowerCase().includes(query.trim().toLowerCase()),
   );
   return (
     <>
@@ -117,8 +124,19 @@ export function Sidebar({
             aria-label="查找知识点"
           />
         </label>
+        <label className="subject-filter">
+          <span className="sr-only">筛选主题</span>
+          <select value={subject} onChange={(event) => setSubject(event.target.value)}>
+            <option value="">全部主题</option>
+            {subjects.map((item) => (
+              <option key={item} value={item}>
+                {item}
+              </option>
+            ))}
+          </select>
+        </label>
         <div className="nav-section-title">
-          基础训练 <span>{lessons.length} 关</span>
+          {query || subject ? '筛选结果' : '基础训练'} <span>{filtered.length} 关</span>
         </div>
         <nav className="lesson-nav" aria-label="课程目录">
           {filtered.map((lesson) => (
@@ -126,6 +144,7 @@ export function Sidebar({
               key={lesson.slug}
               href={`#/lesson/${lesson.slug}`}
               className={route === lesson.slug ? 'active' : ''}
+              aria-current={route === lesson.slug ? 'page' : undefined}
               onClick={close}
             >
               <span

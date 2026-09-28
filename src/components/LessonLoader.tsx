@@ -6,6 +6,7 @@ import type { Lesson, LessonSummary, LessonProgress } from '../types';
 interface Props {
   lesson: LessonSummary;
   next?: LessonSummary;
+  prerequisites: LessonSummary[];
   progress: LessonProgress;
   reducedMotion: boolean;
   update: (patch: Partial<LessonProgress>) => void;

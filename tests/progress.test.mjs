@@ -1,6 +1,12 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { freshLesson, freshProgress, parseProgress } from '../src/domain/progress.mjs';
+import {
+  freshLesson,
+  freshProgress,
+  parseProgress,
+  MAX_PROGRESS_CHARACTERS,
+  MAX_PROGRESS_FILE_BYTES,
+} from '../src/domain/progress.mjs';
 
 const slugs = ['binary-search', 'binary-representation'];
 const encode = (lessons = {}, overrides = {}) =>
@@ -49,7 +55,7 @@ test('progress import rejects malformed envelopes and unsupported versions', () 
     '{',
     'null',
     '[]',
-    'x'.repeat(100001),
+    'x'.repeat(MAX_PROGRESS_CHARACTERS + 1),
     encode({}, { version: 2 }),
     encode({}, { reducedMotion: 0 }),
     encode({}, { lessons: [] }),
@@ -108,4 +114,15 @@ test('reserved course names are rejected even if supplied in an allowlist', () =
     assert.throws(() => parseProgress(encode(lessons), [slug]));
   }
   assert.equal(Object.hasOwn(Object.prototype, 'read'), false);
+});
+
+test('thirty full Chinese lesson notes can be exported and reimported', () => {
+  const expandedSlugs = Array.from({ length: 30 }, (_, index) => `lesson-${index}`);
+  const records = Object.fromEntries(
+    expandedSlugs.map((slug) => [slug, { ...freshLesson(), note: '理解'.repeat(2500) }]),
+  );
+  const raw = JSON.stringify({ version: 1, lessons: records, reducedMotion: false }, null, 2);
+  assert.ok(raw.length > 100000);
+  assert.ok(Buffer.byteLength(raw, 'utf8') < MAX_PROGRESS_FILE_BYTES);
+  assert.deepEqual(parseProgress(raw, expandedSlugs).lessons, records);
 });

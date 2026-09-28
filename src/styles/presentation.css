@@ -1,0 +1,343 @@
+.subject-filter {
+  margin-bottom: 20px;
+}
+.subject-filter select {
+  width: 100%;
+  padding: 9px 10px;
+  color: #765d77;
+  background: #fff;
+  border: 1px solid #e9d9e5;
+  border-radius: 5px;
+  font-size: 12px;
+}
+.subject-filter select:focus-visible {
+  outline: 3px solid #9471ba;
+  outline-offset: 2px;
+}
+.reading-index {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+  border-bottom: 1px solid var(--line);
+  padding: 12px 0 22px;
+}
+.reading-index button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: none;
+  padding: 6px 0;
+  text-align: left;
+  font-size: 12px;
+  color: var(--muted);
+}
+.reading-index button span {
+  font: 10px var(--mono);
+  color: #af85a1;
+}
+.reading-index button:hover {
+  color: var(--accent);
+}
+.reading h2 {
+  scroll-margin-top: 20px;
+}
+.prerequisite-links a {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  font-size: 12px;
+  line-height: 1.7;
+  padding: 6px 0;
+  color: var(--accent);
+}
+.empty-courses {
+  padding: 25px 0;
+  color: var(--muted);
+}
+.code-block {
+  margin: 20px 0;
+  border: 1px solid #e2dce9;
+  border-radius: 7px;
+  overflow: hidden;
+  background: #f6f4fa;
+  color: #494357;
+}
+.code-block figcaption {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 7px 12px 7px 16px;
+  background: #eeebf5;
+  border-bottom: 1px solid #e2dce9;
+  min-height: 44px;
+}
+.code-language {
+  font: 11px var(--mono);
+  color: #715394;
+}
+.code-line-count {
+  font: 10px var(--mono);
+  color: #8a7f97;
+}
+.code-tools {
+  margin-left: auto;
+  display: flex;
+  gap: 3px;
+}
+.code-tools .icon-button {
+  width: 29px;
+  height: 29px;
+  color: #82748d;
+}
+.code-tools .icon-button:hover,
+.code-tools button[aria-pressed='true'] {
+  background: #e2d7ef;
+  color: #734b98;
+}
+.code-block-body {
+  display: flex;
+  max-height: 420px;
+  overflow: auto;
+}
+.code-gutter {
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  padding: 16px 12px;
+  min-width: 42px;
+  font: 12px/1.9 var(--mono);
+  text-align: right;
+  color: #a091aa;
+  user-select: none;
+}
+.prose .code-block pre {
+  background: transparent;
+  margin: 0;
+  padding: 16px 18px 16px 0;
+  overflow: visible;
+  color: #494357;
+  border: 0;
+  border-radius: 0;
+  font-size: 12px;
+  line-height: 1.9;
+  flex: 1;
+  min-width: max-content;
+}
+.prose .code-block pre code {
+  padding: 0;
+  background: transparent;
+  color: inherit;
+}
+.wrap-code .code-block-body {
+  display: block;
+}
+.prose .wrap-code pre {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  min-width: 0;
+  padding-left: 16px;
+}
+.hljs-keyword,
+.hljs-selector-tag,
+.hljs-type {
+  color: #a03f83;
+}
+.hljs-string,
+.hljs-regexp {
+  color: #286c8d;
+}
+.hljs-number,
+.hljs-literal {
+  color: #946016;
+}
+.hljs-comment {
+  color: #84778d;
+  font-style: italic;
+}
+.hljs-title,
+.hljs-title.function_,
+.hljs-built_in {
+  color: #6850ad;
+}
+.hljs-attr,
+.hljs-variable,
+.hljs-symbol {
+  color: #a6465e;
+}
+.hljs-meta {
+  color: #526d94;
+}
+.walkthrough {
+  border-block: 1px solid #e8d9e5;
+  background: #fff;
+  overflow: hidden;
+}
+.walkthrough-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  padding: 18px 0;
+  border-bottom: 1px solid #efe8ef;
+}
+.walkthrough-heading > span:first-child {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-size: 13px;
+  color: var(--accent);
+  font-weight: 650;
+}
+.walkthrough-heading > span:last-child {
+  font: 11px var(--mono);
+  color: #947a92;
+}
+.step-track {
+  list-style: none;
+  padding: 22px 0;
+  margin: 0;
+  display: flex;
+}
+.step-track li {
+  flex: 1;
+  min-width: 0;
+  position: relative;
+}
+.step-track li:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  top: 16px;
+  left: 32px;
+  right: 0;
+  height: 2px;
+  background: #eee7ef;
+  pointer-events: none;
+}
+.step-track li.visited::after {
+  background: #d9acce;
+}
+.step-track button {
+  position: relative;
+  width: 100%;
+  text-align: left;
+  background: none;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 0 10px 0 0;
+  color: #9a8a9d;
+  font-size: 11px;
+  line-height: 1.7;
+}
+.step-track button > span:first-child {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #f0eaf3;
+  color: #8c759c;
+  font: 12px var(--mono);
+  transition:
+    background 0.25s,
+    color 0.25s,
+    box-shadow 0.25s;
+}
+.step-track button > span:last-child {
+  min-height: 38px;
+  overflow-wrap: anywhere;
+}
+.step-track button[aria-current='step'] {
+  color: #943d73;
+  font-weight: 650;
+}
+.step-track button[aria-current='step'] > span:first-child {
+  color: #fff;
+  background: #b55385;
+  box-shadow: 0 0 0 4px #f9e9f2;
+}
+.step-track .visited button > span:first-child {
+  background: #f5dfef;
+  color: #a65383;
+}
+.step-stage {
+  min-height: 330px;
+  padding: 18px 0 28px;
+}
+.step-content {
+  animation: step-enter 0.28s ease-out;
+}
+.step-content h3 {
+  font-size: 20px;
+  color: #403547;
+  margin: 13px 0 18px;
+}
+.step-content .prose {
+  font-size: 14px;
+}
+.step-content .eyebrow {
+  color: #ad7ba0;
+}
+.walkthrough-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 0;
+  border-top: 1px solid var(--line);
+}
+.walkthrough-controls > div {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.walkthrough-controls .primary {
+  min-width: 114px;
+}
+@keyframes step-enter {
+  from {
+    opacity: 0;
+    transform: translateX(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+@media (max-width: 720px) {
+  .step-track {
+    flex-wrap: wrap;
+    row-gap: 16px;
+  }
+  .step-track li {
+    flex: 0 0 33.333%;
+  }
+  .step-track li:nth-child(3)::after {
+    display: none;
+  }
+  .step-track button {
+    font-size: 10px;
+  }
+  .step-stage {
+    min-height: 330px;
+  }
+  .step-content h3 {
+    font-size: 18px;
+  }
+  .code-line-count {
+    display: none;
+  }
+  .code-tools {
+    gap: 0;
+  }
+  .prose .code-block pre,
+  .code-gutter {
+    font-size: 11px;
+  }
+  .code-block figcaption {
+    gap: 6px;
+    padding-left: 12px;
+  }
+}

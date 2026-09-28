@@ -1,17 +1,19 @@
 :root {
   font-family: Inter, 'Segoe UI', 'Microsoft YaHei', sans-serif;
-  color: #242724;
-  background: #f6f7f8;
+  color: #36313e;
+  background: #faf8fb;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   --paper: #fff;
-  --ink: #242724;
-  --muted: #737873;
-  --line: #e3e7e5;
-  --lime: #c9f75c;
-  --green: #3c6719;
-  --cyan: #54d3d8;
+  --ink: #36313e;
+  --muted: #766c7c;
+  --line: #e9e1e8;
+  --accent-bright: #f4a8c7;
+  --accent: #a33e6c;
+  --accent-soft: #fceaf2;
+  --violet: #7b60a1;
+  --cyan: #83c7eb;
   --mono: Consolas, Menlo, 'Liberation Mono', monospace;
   --sidebar: 250px;
 }
@@ -24,7 +26,8 @@ body {
 }
 button,
 input,
-textarea {
+textarea,
+select {
   font: inherit;
 }
 button,
@@ -55,7 +58,7 @@ button:focus-visible,
 a:focus-visible,
 input:focus-visible,
 textarea:focus-visible {
-  outline: 3px solid #159ca4;
+  outline: 3px solid #9471ba;
   outline-offset: 3px;
 }
 h1,
@@ -117,7 +120,7 @@ fieldset {
 }
 .lesson-loading {
   padding: 70px 0;
-  color: #6f7b68;
+  color: #71586c;
   font-size: 14px;
 }
 .icon-button {
@@ -131,7 +134,7 @@ fieldset {
   flex-shrink: 0;
 }
 .icon-button:hover {
-  background: #eaf0eb;
+  background: #f8edf2;
 }
 .primary,
 .secondary {
@@ -149,19 +152,19 @@ fieldset {
     transform 0.15s;
 }
 .primary {
-  background: #242824;
+  background: var(--accent);
   color: white;
 }
 .primary:hover:not(:disabled) {
-  background: #3b4736;
+  background: #8f315e;
   transform: translateY(-1px);
 }
 .secondary {
-  border: 1px solid #d8dedb;
+  border: 1px solid #e5cad7;
   background: white;
 }
 .secondary:hover {
-  background: #f1f5f1;
+  background: #f8edf2;
 }
 .text-button {
   display: inline-flex;
@@ -170,7 +173,7 @@ fieldset {
   padding: 4px 0;
   background: none;
   font-size: 12px;
-  color: #517130;
+  color: #514453;
 }
 .text-button:hover {
   text-decoration: underline;
@@ -179,7 +182,7 @@ fieldset {
   font-family: var(--mono);
   font-size: 10px;
   font-weight: 500;
-  color: #717c75;
+  color: var(--muted);
   display: flex;
   align-items: center;
   gap: 13px;
@@ -198,8 +201,8 @@ fieldset {
   margin: 0;
   font-size: 13px;
 }
-.text-green {
-  color: #467127;
+.text-accent {
+  color: #514453;
 }
 .skip-link {
   position: fixed;
@@ -220,7 +223,7 @@ fieldset {
 }
 .title-dot,
 .footer-dot {
-  color: #83b843;
+  color: var(--accent);
 }
 @keyframes enter {
   from {

@@ -5,16 +5,17 @@ export interface Lesson {
   subject: string;
   order: number;
   minutes: number;
-  lab: 'bits' | 'binary-search' | 'process' | 'javascript' | 'sql' | 'ownership';
+  lab: 'bits' | 'binary-search' | 'process' | 'javascript' | 'sql' | 'ownership' | 'walkthrough';
   objectives: string[];
   prerequisites: string[];
   quiz: { prompt: string; options: string[]; answer: number; explanation: string };
   sections: { title: string; markdown: string }[];
+  steps: { title: string; markdown: string }[];
   code: string;
   source: string;
 }
 
-export type LessonSummary = Omit<Lesson, 'quiz' | 'sections' | 'code'>;
+export type LessonSummary = Omit<Lesson, 'quiz' | 'sections' | 'steps' | 'code'>;
 
 export interface LessonProgress {
   read: boolean;

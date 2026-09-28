@@ -14,6 +14,9 @@ interface Output {
 }
 export default function CodeLab({ lesson }: LabProps) {
   const sql = lesson.lab === 'sql';
+  const inputData = lesson.sections.find((section) =>
+    ['看清输入数据', '输入数据'].includes(section.title),
+  );
   const [code, setCode] = useState(lesson.code);
   const [output, setOutput] = useState<Output[]>([]);
   const [tables, setTables] = useState<Table[]>([]);
@@ -111,16 +114,14 @@ export default function CodeLab({ lesson }: LabProps) {
           <code>scores(student_id, score)</code>
         </div>
       )}
-      {sql && (
+      {sql && inputData && (
         <details className="schema-preview">
           <summary>初始数据</summary>
-          <Markdown>
-            {lesson.sections.find((section) => section.title === '看清输入数据')?.markdown ?? ''}
-          </Markdown>
+          <Markdown>{inputData.markdown}</Markdown>
         </details>
       )}
       <div className="editor-heading">
-        <span>{sql ? 'query.sql' : 'event-loop.js'}</span>
+        <span>{sql ? 'query.sql' : `${lesson.slug}.js`}</span>
         <div>
           <button
             className="icon-button"
@@ -200,7 +201,7 @@ export default function CodeLab({ lesson }: LabProps) {
         <div className="output-body" role="log" aria-live="polite">
           {state === 'idle' && !output.length && (
             <p className="output-placeholder">
-              {sql ? '先预测 Xu 会出现几行，再执行查询。' : '先预测输出顺序，再用运行结果验证。'}
+              {sql ? '先预测查询返回哪些行，再执行查询。' : '先预测输出，再用运行结果验证。'}
             </p>
           )}
           {output.map((line, index) => (

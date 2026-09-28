@@ -19,15 +19,26 @@ import type { Lesson, LessonProgress, LessonSummary } from '../types';
 interface Props {
   lesson: Lesson;
   next?: LessonSummary;
+  prerequisites: LessonSummary[];
   progress: LessonProgress;
   reducedMotion: boolean;
   update: (patch: Partial<LessonProgress>) => void;
 }
-export function LessonView({ lesson, next, progress, reducedMotion, update }: Props) {
+export function LessonView({
+  lesson,
+  next,
+  prerequisites,
+  progress,
+  reducedMotion,
+  update,
+}: Props) {
   const [tab, setTab] = useState<'lab' | 'read' | 'quiz'>('lab');
   const [copied, setCopied] = useState(false);
   const answer = lesson.sections.find((s) => s.title === '面试回答')?.markdown ?? '';
   const beginner = lesson.sections.find((s) => s.title.includes('从零')) ?? lesson.sections[1];
+  const readingSections = lesson.sections.filter(
+    (s) => !['面试回答', '选择题', '开放题'].includes(s.title),
+  );
   return (
     <div className="lesson-page page-enter">
       <header className="lesson-title">
@@ -155,14 +166,29 @@ export function LessonView({ lesson, next, progress, reducedMotion, update }: Pr
             )}
             {tab === 'read' && (
               <div className="reading">
-                {lesson.sections
-                  .filter((s) => !['面试回答', '选择题', '开放题'].includes(s.title))
-                  .map((section) => (
-                    <section key={section.title}>
-                      <h2>{section.title}</h2>
-                      <Markdown>{section.markdown}</Markdown>
-                    </section>
+                <nav className="reading-index" aria-label="本课目录">
+                  {readingSections.map((section, index) => (
+                    <button
+                      key={section.title}
+                      onClick={() => {
+                        const target = document.getElementById(`reading-${index}`);
+                        target?.focus({ preventScroll: true });
+                        target?.scrollIntoView({ block: 'start' });
+                      }}
+                    >
+                      <span>{String(index + 1).padStart(2, '0')}</span>
+                      {section.title}
+                    </button>
                   ))}
+                </nav>
+                {readingSections.map((section, index) => (
+                  <section key={section.title}>
+                    <h2 id={`reading-${index}`} tabIndex={-1}>
+                      {section.title}
+                    </h2>
+                    <Markdown>{section.markdown}</Markdown>
+                  </section>
+                ))}
                 <button
                   className="primary"
                   onClick={() => {
@@ -195,6 +221,20 @@ export function LessonView({ lesson, next, progress, reducedMotion, update }: Pr
           </footer>
         </main>
         <aside className="lesson-rail">
+          {prerequisites.length > 0 && (
+            <div className="rail-section prerequisite-links">
+              <h2>
+                <BookOpen size={16} />
+                先理解这些
+              </h2>
+              {prerequisites.map((item) => (
+                <a key={item.slug} href={`#/lesson/${item.slug}`}>
+                  {item.title}
+                  <ArrowRight size={14} />
+                </a>
+              ))}
+            </div>
+          )}
           <div className="rail-section">
             <h2>
               <Flag size={16} />
@@ -220,7 +260,7 @@ export function LessonView({ lesson, next, progress, reducedMotion, update }: Pr
             </p>
             <p className="record-row">
               <span>关卡挑战</span>
-              <b className={progress.passed ? 'text-green' : ''}>
+              <b className={progress.passed ? 'text-accent' : ''}>
                 {progress.passed ? '已通过' : '待挑战'}
               </b>
             </p>

@@ -15,7 +15,15 @@ const lessonSchema = z
     subject: z.string().min(2),
     order: z.number().int().nonnegative(),
     minutes: z.number().int().positive(),
-    lab: z.enum(['bits', 'binary-search', 'process', 'javascript', 'sql', 'ownership']),
+    lab: z.enum([
+      'bits',
+      'binary-search',
+      'process',
+      'javascript',
+      'sql',
+      'ownership',
+      'walkthrough',
+    ]),
     objectives: z.array(z.string()).min(2).max(4),
     prerequisites: z.array(z.string()).default([]),
   })
@@ -37,7 +45,12 @@ function extractQuiz(section, filename, source) {
   const options = lines.filter((line) => /^[A-D][.、]\s/.test(line));
   const answerNode = paragraphs.find((node) => /(?:正确)?答案[：:]\s*[A-D]/.test(plainText(node)));
   const match = answerNode && plainText(answerNode).match(/(?:正确)?答案[：:]\s*([A-D])/);
-  if (options.length !== 4 || !match) throw new Error(`Invalid quiz in ${filename}`);
+  if (options.length !== 4 || !match || options.map((option) => option[0]).join('') !== 'ABCD') {
+    throw new Error(`Invalid quiz in ${filename}`);
+  }
+  if (!paragraphs[0] || /^[A-D][.、]\s|^(?:正确)?答案[：:]/.test(plainText(paragraphs[0]))) {
+    throw new Error(`Missing quiz prompt in ${filename}`);
+  }
   const answerIndex = section.nodes.indexOf(answerNode);
   return {
     prompt: plainText(paragraphs[0]),
@@ -45,6 +58,24 @@ function extractQuiz(section, filename, source) {
     answer: match[1].charCodeAt(0) - 65,
     explanation: sourceOf(section.nodes.slice(answerIndex), source),
   };
+}
+
+function extractSteps(section, filename, source) {
+  if (!section) return [];
+  const steps = [];
+  for (const node of section.nodes) {
+    if (node.type === 'heading' && node.depth === 3) {
+      steps.push({ title: plainText(node), nodes: [] });
+    } else if (steps.length) {
+      steps.at(-1).nodes.push(node);
+    } else {
+      throw new Error(`Walkthrough must start with a step heading in ${filename}`);
+    }
+  }
+  if (steps.length < 3 || steps.length > 6 || steps.some((step) => !step.nodes.length)) {
+    throw new Error(`Walkthrough needs 3 to 6 nonempty steps in ${filename}`);
+  }
+  return steps.map(({ title, nodes }) => ({ title, markdown: sourceOf(nodes, source) }));
 }
 
 export function parseLesson(raw, filename) {
@@ -77,6 +108,14 @@ export function parseLesson(raw, filename) {
   }));
   const codeSection = sections.find((section) => section.title === '实验代码');
   const code = codeSection?.nodes.find((node) => node.type === 'code');
+  const steps = extractSteps(
+    sections.find((section) => section.title === '逐步推演'),
+    filename,
+    content,
+  );
+  if (metadata.lab === 'walkthrough' && !steps.length) {
+    throw new Error(`Missing walkthrough in ${filename}`);
+  }
   const quiz = extractQuiz(
     sections.find((section) => section.title === '选择题'),
     filename,
@@ -86,6 +125,7 @@ export function parseLesson(raw, filename) {
     ...metadata,
     quiz,
     sections: sectionsJson,
+    steps,
     code: code?.value ?? '',
     source: filename,
     markdown: content,
@@ -113,13 +153,14 @@ export async function buildContent() {
       }
     }
   }
+  validatePrerequisites(lessons);
   await mkdir(path.join(root, '.generated'), { recursive: true });
   await mkdir(path.join(root, 'public/lessons'), { recursive: true });
   await mkdir(path.join(root, 'public/data'), { recursive: true });
   await writeFile(
     path.join(root, '.generated/lessons.json'),
     `${JSON.stringify(
-      lessons.map(({ quiz, sections, code, markdown, ...summary }) => summary),
+      lessons.map(({ quiz, sections, steps, code, markdown, ...summary }) => summary),
       null,
       2,
     )}\n`,
@@ -140,6 +181,23 @@ export async function buildContent() {
     ),
   );
   return lessons;
+}
+
+export function validatePrerequisites(lessons) {
+  const bySlug = new Map(lessons.map((lesson) => [lesson.slug, lesson]));
+  const visiting = new Set();
+  const visited = new Set();
+  function visit(slug) {
+    if (visiting.has(slug)) throw new Error(`Cyclic prerequisite at ${slug}`);
+    if (visited.has(slug)) return;
+    const lesson = bySlug.get(slug);
+    if (!lesson) throw new Error(`Unknown prerequisite ${slug}`);
+    visiting.add(slug);
+    for (const prerequisite of lesson.prerequisites) visit(prerequisite);
+    visiting.delete(slug);
+    visited.add(slug);
+  }
+  for (const lesson of lessons) visit(lesson.slug);
 }
 
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {

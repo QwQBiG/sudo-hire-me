@@ -3,24 +3,18 @@ slug: "sql-join"
 title: "SQL 左连接"
 subject: "数据库"
 description: "没有成绩的学生去了哪里？从两张小表开始理解 JOIN 与 NULL。"
-order: 4
+order: 20
 minutes: 15
 lab: "sql"
 objectives: ["解释一对多连接结果","保留没有匹配的行","区分 COUNT(*) 与 COUNT(列)"]
-prerequisites: []
+prerequisites: ["sql-basics"]
 ---
 
 # SQL：没有成绩的学生为什么会消失？
 
-## 面试回答
-
-`LEFT JOIN` 保留左表的每一行，并按 `ON` 条件连接右表匹配的记录。
-若一行匹配多条右表记录，结果会有多行；若完全没有匹配，右表各列用 `NULL` 补齐。
-`COUNT(*)` 统计结果行数，`COUNT(表达式)` 只统计表达式结果不是 `NULL` 的行数。
-因此，左连接后不能直接用 `COUNT(*)` 统计每个学生的成绩记录数。
-
 ## 从零理解
 
+结构化查询语言（Structured Query Language，SQL）可以连接多张表。左外连接（left outer join，SQL 写作 `LEFT JOIN`）保留左表中没有匹配的行。
 表由行和列组成。一行学生记录描述一个学生，一行成绩记录描述一次成绩登记。
 `students.id` 标识学生，`scores.student_id` 指出成绩属于谁。
 相同列名不是连接的依据，`ON r.student_id = s.id` 才明确了匹配条件。
@@ -114,14 +108,21 @@ Xu 的组有一条补齐行，因此 `COUNT(*)` 是 1；该行的右表列都是
 - **“加 DISTINCT 就能修好重复。”** 先明确要每次成绩还是每个学生，不能借去重隐藏关系。
 - **“WHERE 和 ON 中的条件完全一样。”** `WHERE r.score >= 60` 会排除补齐行；放入 `ON` 则限制匹配，仍保留左表学生。
 
+## 面试回答
+
+`LEFT JOIN` 保留左表的每一行，并按 `ON` 条件连接右表匹配的记录。
+匹配多条右表记录时产生多行；完全没有匹配时，右表各列用 `NULL` 补齐。
+`COUNT(*)` 统计结果行数，`COUNT(表达式)` 只统计表达式结果不是 `NULL` 的行数。
+所以统计匹配记录应选择本来不会为空的右表标识列，不能直接用 `COUNT(*)`。
+
 ## 选择题
 
 在本课数据中，Xu 的 `COUNT(*)`、`COUNT(r.student_id)`、`COUNT(r.score)` 依次是多少？
 
-A. `0, 0, 0`。
-B. `1, 0, 0`。
-C. `1, 1, 1`。
-D. `NULL, NULL, NULL`。
+- A. `0, 0, 0`。
+- B. `1, 0, 0`。
+- C. `1, 1, 1`。
+- D. `NULL, NULL, NULL`。
 
 **正确答案：B。**
 
@@ -130,7 +131,7 @@ D. `NULL, NULL, NULL`。
 - C 把补齐行当成了右表中的真实非空记录。
 - D 混淆了缺失值与计数结果；这里的 `COUNT` 返回整数计数。
 
-## 开放题
+## 面试追问
 
 怎样列出所有学生及其不低于 85 分的成绩，并仍然保留没有符合条件成绩的学生？
 参考思路：在连接条件中增加 `AND r.score >= 85`，不要在 `WHERE` 中筛掉补齐行。

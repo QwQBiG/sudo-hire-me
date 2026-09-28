@@ -8,8 +8,12 @@ export const freshLesson = () => ({
   note: '',
 });
 
+export const MAX_PROGRESS_CHARACTERS = 500000;
+export const MAX_PROGRESS_FILE_BYTES = MAX_PROGRESS_CHARACTERS * 4;
+
 export function parseProgress(raw, slugs) {
-  if (typeof raw !== 'string' || raw.length > 100000) throw new Error('进度文件过大或格式不正确。');
+  if (typeof raw !== 'string' || raw.length > MAX_PROGRESS_CHARACTERS)
+    throw new Error('进度文件过大或格式不正确。');
   const data = JSON.parse(raw);
   if (
     !data ||
