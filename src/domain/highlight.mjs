@@ -4,6 +4,9 @@ import typescript from 'highlight.js/lib/languages/typescript';
 import sql from 'highlight.js/lib/languages/sql';
 import rust from 'highlight.js/lib/languages/rust';
 import cpp from 'highlight.js/lib/languages/cpp';
+import c from 'highlight.js/lib/languages/c';
+import java from 'highlight.js/lib/languages/java';
+import kotlin from 'highlight.js/lib/languages/kotlin';
 import bash from 'highlight.js/lib/languages/bash';
 import python from 'highlight.js/lib/languages/python';
 import json from 'highlight.js/lib/languages/json';
@@ -15,12 +18,15 @@ const highlighter = createLowlight({
   sql,
   rust,
   cpp,
+  c,
+  java,
+  kotlin,
   bash,
   python,
   json,
   http,
 });
-const aliases = { js: 'javascript', ts: 'typescript', c: 'cpp', sh: 'bash', shell: 'bash' };
+const aliases = { js: 'javascript', ts: 'typescript', sh: 'bash', shell: 'bash' };
 
 /** @returns {import('hast').RootContent[]} */
 export function highlightCode(code, language) {

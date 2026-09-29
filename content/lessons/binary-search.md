@@ -3,7 +3,7 @@ slug: "binary-search"
 title: "二分查找"
 subject: "数据结构与算法"
 description: "每一步都排除一半，靠的是什么？从区间到代码，走完一次查找。"
-order: 8
+order: 50
 minutes: 15
 lab: "binary-search"
 objectives: ["确定闭区间的边界","解释每次排除的理由","处理找到和找不到两种结果"]

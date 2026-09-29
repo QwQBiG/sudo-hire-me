@@ -1,7 +1,10 @@
-import { useEffect, useState } from 'react';
+import { lazy, Suspense, useEffect, useState } from 'react';
 import { RotateCcw } from 'lucide-react';
-import { LessonView } from './LessonView';
 import type { Lesson, LessonSummary, LessonProgress } from '../types';
+
+const LessonView = lazy(() =>
+  import('./LessonView').then((module) => ({ default: module.LessonView })),
+);
 
 interface Props {
   lesson: LessonSummary;
@@ -58,5 +61,15 @@ export function LessonLoader(props: Props) {
         正在加载 {props.lesson.title}…
       </div>
     );
-  return <LessonView {...props} lesson={lesson} />;
+  return (
+    <Suspense
+      fallback={
+        <div className="lesson-loading" role="status">
+          正在打开 {props.lesson.title}…
+        </div>
+      }
+    >
+      <LessonView {...props} lesson={lesson} />
+    </Suspense>
+  );
 }

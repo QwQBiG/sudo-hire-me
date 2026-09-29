@@ -1,0 +1,204 @@
+.alignment-controls {
+  display: grid;
+  grid-template-columns: minmax(150px, 0.7fr) minmax(260px, 1.3fr);
+  gap: 28px;
+  margin-bottom: 22px;
+}
+.alignment-controls > div > strong {
+  display: block;
+  margin-bottom: 10px;
+  color: var(--ink);
+  font-size: 12px;
+}
+.alignment-assumption > div {
+  display: flex;
+}
+.alignment-assumption button {
+  min-width: 60px;
+  min-height: 37px;
+  border: 1px solid #d8d0de;
+  background: #fff;
+  color: #6b5a70;
+  font: 12px var(--mono);
+  cursor: pointer;
+}
+.alignment-assumption button:first-child {
+  border-radius: 4px 0 0 4px;
+}
+.alignment-assumption button:last-child {
+  border-left: 0;
+  border-radius: 0 4px 4px 0;
+}
+.alignment-assumption button.active {
+  background: #eaf2f8;
+  color: #285c82;
+}
+.alignment-fields ol {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.alignment-fields li {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  min-height: 37px;
+  border-bottom: 1px solid var(--line);
+  color: #61536c;
+  font-size: 12px;
+}
+.alignment-fields li > span:nth-child(2) {
+  flex: 1;
+  min-width: 0;
+}
+.alignment-field-dot {
+  width: 9px;
+  height: 9px;
+  flex: none;
+  border-radius: 2px;
+}
+.alignment-field-dot.tag {
+  background: #9a4b78;
+}
+.alignment-field-dot.value {
+  background: #36719e;
+}
+.alignment-field-dot.end {
+  background: #9b792d;
+}
+.alignment-move {
+  display: flex;
+  gap: 2px;
+}
+.alignment-move button {
+  display: grid;
+  place-items: center;
+  width: 31px;
+  height: 31px;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: 3px;
+  background: transparent;
+  color: #715f77;
+  cursor: pointer;
+}
+.alignment-move button:hover:not(:disabled) {
+  border-color: #d8cbd9;
+  background: #f9f2f6;
+}
+.alignment-move button:disabled {
+  opacity: 0.28;
+  cursor: default;
+}
+.alignment-move button:focus-visible,
+.alignment-assumption button:focus-visible {
+  outline: 2px solid #346d98;
+  outline-offset: 2px;
+}
+.alignment-totals {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  padding: 14px 0;
+  border-block: 1px solid var(--line);
+}
+.alignment-totals > div {
+  display: grid;
+  gap: 4px;
+}
+.alignment-totals span {
+  color: var(--muted);
+  font-size: 11px;
+}
+.alignment-totals strong {
+  color: #365f80;
+  font: 18px var(--mono);
+}
+.alignment-map {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 5px;
+  margin-top: 22px;
+  animation: alignment-in 220ms ease both;
+}
+.alignment-byte {
+  display: grid;
+  align-content: space-between;
+  gap: 8px;
+  min-width: 0;
+  min-height: 61px;
+  padding: 7px 3px;
+  border: 1px solid #d8c4d1;
+  border-radius: 3px;
+  background: #f8eaf2;
+  color: #823d68;
+  text-align: center;
+}
+.alignment-byte.value {
+  border-color: #bad2e2;
+  background: #eaf3f9;
+  color: #2c628b;
+}
+.alignment-byte.end {
+  border-color: #dfd2af;
+  background: #faf5e8;
+  color: #84671b;
+}
+.alignment-byte.padding {
+  border-style: dashed;
+  border-color: #d7d1db;
+  background: #f8f6f9;
+  color: #aaa0ad;
+}
+.alignment-byte small {
+  font: 10px var(--mono);
+}
+.alignment-byte strong {
+  overflow-wrap: anywhere;
+  font: 11px var(--mono);
+}
+.alignment-offsets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  margin: 16px 0 0;
+  color: #74657a;
+  font-size: 11px;
+}
+.alignment-offsets code {
+  color: #80506f;
+  font: 11px var(--mono);
+}
+.alignment-offsets strong {
+  color: #365f80;
+}
+@keyframes alignment-in {
+  from {
+    opacity: 0.55;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@media (max-width: 700px) {
+  .alignment-controls {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 17px;
+  }
+  .alignment-totals {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .alignment-map {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .alignment-map {
+    animation: none;
+  }
+}
+[data-reduced-motion='true'] .alignment-map {
+  animation: none;
+}

@@ -1,0 +1,165 @@
+.syscall-choices {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px 22px;
+  margin-bottom: 20px;
+}
+
+.syscall-choices label {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.syscall-stage {
+  display: grid;
+  gap: 0;
+  border-block: 1px solid var(--line);
+}
+
+.syscall-level {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
+  min-height: 95px;
+  padding: 17px 20px;
+  background: #edf3f8;
+  color: #3a617d;
+  opacity: 0.48;
+  transition:
+    opacity 220ms ease,
+    background-color 220ms ease;
+}
+
+.syscall-level[data-active='true'] {
+  opacity: 1;
+  background: #e4f0f8;
+}
+
+.syscall-level > div {
+  display: grid;
+  gap: 6px;
+  min-width: 0;
+}
+
+.syscall-level small {
+  font: 10px var(--mono);
+}
+
+.syscall-level strong {
+  font-size: 15px;
+}
+
+.syscall-kernel {
+  background: #f8edf2;
+  color: #8c3d63;
+}
+
+.syscall-kernel[data-active='true'] {
+  background: #f8e0eb;
+}
+
+.syscall-position {
+  margin-left: auto;
+  padding-left: 12px;
+  font-size: 11px;
+  white-space: nowrap;
+}
+
+.syscall-divider {
+  padding: 8px 12px;
+  border-block: 1px dashed #b6a8b9;
+  color: var(--muted);
+  font: 10px var(--mono);
+  text-align: center;
+}
+
+.syscall-readout {
+  min-height: 120px;
+  padding: 20px 0 10px;
+}
+
+.syscall-count {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 18px;
+  color: var(--muted);
+  font: 11px var(--mono);
+}
+
+.syscall-readout h4 {
+  margin: 15px 0 8px;
+  font-size: 17px;
+}
+
+.syscall-readout p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.7;
+}
+
+.syscall-progress {
+  display: flex;
+  gap: 5px;
+  margin: 12px 0 20px;
+}
+
+.syscall-progress span {
+  flex: 1;
+  height: 5px;
+  background: #e7e1e9;
+}
+
+.syscall-progress span[data-done='true'] {
+  background: #8fb4d0;
+}
+
+.syscall-progress span[data-current='true'] {
+  background: #ae4f7d;
+}
+
+.syscall-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.syscall-actions button {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  min-height: 40px;
+  padding: 8px 12px;
+  border: 1px solid #d8ccdc;
+  border-radius: 4px;
+  background: #fff;
+  color: var(--ink);
+  font-size: 12px;
+}
+
+.syscall-actions button:hover:not(:disabled) {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+@media (max-width: 440px) {
+  .syscall-level {
+    padding-inline: 12px;
+  }
+  .syscall-position {
+    white-space: normal;
+    text-align: right;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .syscall-level {
+    transition: none;
+  }
+}

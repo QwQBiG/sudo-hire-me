@@ -485,20 +485,41 @@
   border-bottom: 1px solid #514453;
 }
 .schema-preview {
-  padding: 13px 21px;
   border-bottom: 1px solid #514453;
   font-size: 11px;
 }
-.schema-preview summary {
-  cursor: pointer;
+.schema-preview > button {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 13px 21px;
+  background: #322e38;
   color: #b49dac;
+  text-align: left;
 }
-.schema-preview[open] {
+.schema-preview > button:hover,
+.schema-preview > button[aria-expanded='true'] {
+  background: #3b3341;
+  color: #f4d8e7;
+}
+.schema-preview > button > svg {
+  transition: transform 0.16s ease;
+}
+.schema-preview > button[aria-expanded='true'] > svg {
+  transform: rotate(180deg);
+}
+.schema-preview-body {
   background: #f8edf2;
+  color: var(--ink);
+  padding: 14px 21px;
+  animation: select-field-in 0.16s ease-out both;
 }
-.schema-preview[open] summary {
-  color: #71586c;
-  margin-bottom: 18px;
+html[data-motion='reduced'] .schema-preview-body {
+  animation: none;
+}
+html[data-motion='reduced'] .schema-preview > button > svg {
+  transition: none;
 }
 .schema-strip code {
   font-size: 10px;
@@ -522,8 +543,7 @@
   display: flex;
   padding: 16px 0;
   background: #322e38;
-  max-height: 330px;
-  overflow: auto;
+  overflow: hidden;
 }
 .line-numbers {
   display: flex;
@@ -531,6 +551,8 @@
   gap: 0;
   padding: 0 12px 0 18px;
   min-width: 44px;
+  height: 298px;
+  overflow: hidden;
   text-align: right;
   color: #71586c;
   font: 11px/24px var(--mono);
@@ -540,15 +562,40 @@
   color: #e5cad7;
   background: transparent;
   border: 0;
-  resize: vertical;
+  resize: none;
   flex: 1;
   min-width: 0;
-  min-height: 235px;
+  height: 298px;
+  overflow: auto;
   padding: 0 20px 0 3px;
   font: 11px/24px var(--mono);
   white-space: pre;
   tab-size: 2;
   outline-offset: -2px !important;
+}
+.code-input,
+.output-body,
+.result-table {
+  scrollbar-width: thin;
+  scrollbar-color: #9b819e #322e38;
+}
+.code-input::-webkit-scrollbar,
+.output-body::-webkit-scrollbar,
+.result-table::-webkit-scrollbar {
+  width: 9px;
+  height: 9px;
+}
+.code-input::-webkit-scrollbar-track,
+.output-body::-webkit-scrollbar-track,
+.result-table::-webkit-scrollbar-track {
+  background: #322e38;
+}
+.code-input::-webkit-scrollbar-thumb,
+.output-body::-webkit-scrollbar-thumb,
+.result-table::-webkit-scrollbar-thumb {
+  border: 2px solid #322e38;
+  border-radius: 8px;
+  background: #9b819e;
 }
 .code-controls {
   display: flex;

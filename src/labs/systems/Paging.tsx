@@ -1,3 +1,4 @@
+import { SelectField } from '../../components/SelectField';
 import { useState } from 'react';
 import { Download, ArrowRight } from 'lucide-react';
 import { Experiment } from '../../components/Experiment';
@@ -34,17 +35,17 @@ export default function Paging() {
         </label>
         <label>
           访问方式
-          <select
+          <SelectField
             value={write ? 'write' : 'read'}
             onChange={(event) => setWrite(event.target.value === 'write')}
           >
             <option value="read">读取</option>
             <option value="write">写入</option>
-          </select>
+          </SelectField>
         </label>
         <label>
           目标页
-          <select
+          <SelectField
             aria-label="目标页"
             value={result.page ?? ''}
             onChange={(event) =>
@@ -63,7 +64,7 @@ export default function Paging() {
                       : ''}
               </option>
             ))}
-          </select>
+          </SelectField>
         </label>
       </div>
       <div className="experiment-scene">

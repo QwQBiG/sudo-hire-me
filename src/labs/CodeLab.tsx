@@ -1,5 +1,13 @@
-import { useEffect, useRef, useState } from 'react';
-import { Braces, Database, Play, RotateCcw, Square, TriangleAlert } from 'lucide-react';
+import { useEffect, useId, useRef, useState } from 'react';
+import {
+  Braces,
+  ChevronDown,
+  Database,
+  Play,
+  RotateCcw,
+  Square,
+  TriangleAlert,
+} from 'lucide-react';
 import { runJavaScript } from '../runners/javascript';
 import { Markdown } from '../components/Markdown';
 import type { LabProps } from '../types';
@@ -14,10 +22,14 @@ interface Output {
 }
 export default function CodeLab({ lesson }: LabProps) {
   const sql = lesson.lab === 'sql';
+  const usesPresetTables = /\b(?:students|scores)\b/i.test(lesson.code);
   const inputData = lesson.sections.find((section) =>
     ['看清输入数据', '输入数据'].includes(section.title),
   );
   const [code, setCode] = useState(lesson.code);
+  const [showInputData, setShowInputData] = useState(false);
+  const inputDataId = useId();
+  const lineNumbersRef = useRef<HTMLDivElement>(null);
   const [output, setOutput] = useState<Output[]>([]);
   const [tables, setTables] = useState<Table[]>([]);
   const [state, setState] = useState<'idle' | 'loading' | 'running' | 'done' | 'error'>('idle');
@@ -108,17 +120,28 @@ export default function CodeLab({ lesson }: LabProps) {
         </span>
         <span className="lab-kind">真实运行</span>
       </header>
-      {sql && (
+      {sql && usesPresetTables && (
         <div className="schema-strip">
           <code>students(id, name)</code>
           <code>scores(student_id, score)</code>
         </div>
       )}
       {sql && inputData && (
-        <details className="schema-preview">
-          <summary>初始数据</summary>
-          <Markdown>{inputData.markdown}</Markdown>
-        </details>
+        <div className="schema-preview">
+          <button
+            type="button"
+            aria-expanded={showInputData}
+            aria-controls={inputDataId}
+            onClick={() => setShowInputData((value) => !value)}
+          >
+            初始数据 <ChevronDown size={15} />
+          </button>
+          {showInputData && (
+            <div id={inputDataId} className="schema-preview-body">
+              <Markdown>{inputData.markdown}</Markdown>
+            </div>
+          )}
+        </div>
       )}
       <div className="editor-heading">
         <span>{sql ? 'query.sql' : `${lesson.slug}.js`}</span>
@@ -151,7 +174,7 @@ export default function CodeLab({ lesson }: LabProps) {
         </div>
       </div>
       <div className="editor">
-        <div className="line-numbers" aria-hidden="true">
+        <div ref={lineNumbersRef} className="line-numbers" aria-hidden="true">
           {code.split('\n').map((_, index) => (
             <span key={index}>{index + 1}</span>
           ))}
@@ -161,6 +184,10 @@ export default function CodeLab({ lesson }: LabProps) {
           aria-label={sql ? 'SQL 代码' : 'JavaScript 代码'}
           value={code}
           onChange={(event) => setCode(event.target.value)}
+          onScroll={(event) => {
+            if (lineNumbersRef.current)
+              lineNumbersRef.current.scrollTop = event.currentTarget.scrollTop;
+          }}
           spellCheck={false}
           autoCapitalize="off"
           autoCorrect="off"

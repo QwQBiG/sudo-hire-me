@@ -1,3 +1,4 @@
+import { SelectField } from '../../components/SelectField';
 import { useState } from 'react';
 import { ArrowRight, StepForward } from 'lucide-react';
 import { Experiment } from '../../components/Experiment';
@@ -26,7 +27,7 @@ export default function Sequence() {
       <div className="experiment-controls">
         <label>
           插入下标
-          <select
+          <SelectField
             value={index}
             onChange={(e) => {
               setIndex(Number(e.target.value));
@@ -39,7 +40,7 @@ export default function Sequence() {
                 {i === 0 ? ' · 头部' : i === 3 ? ' · 尾部' : ''}
               </option>
             ))}
-          </select>
+          </SelectField>
         </label>
       </div>
       <div className="f-sequence-comparison">

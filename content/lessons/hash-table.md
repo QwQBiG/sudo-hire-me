@@ -3,7 +3,7 @@ slug: "hash-table"
 title: "哈希表与冲突"
 subject: "数据结构与算法"
 description: "从五个桶中的键值查找出发，理解冲突、键相等和平均常数时间的条件。"
-order: 7
+order: 48
 minutes: 15
 lab: "hash"
 objectives: ["解释哈希定位与键比较各自的作用", "跟踪链地址法中的插入和查找", "说明负载因子、扩容和复杂度前提"]

@@ -3,7 +3,7 @@ slug: "sorting-stability"
 title: "排序、稳定性与代价"
 subject: "数据结构与算法"
 description: "让相同键带着原始编号排序，观察为何结果有序仍可能改变记录的先后。"
-order: 9
+order: 52
 minutes: 20
 lab: "sorting"
 objectives: ["用具体数据解释排序稳定性", "推导插入排序和选择排序的一轮操作", "区分时间复杂度、额外空间和稳定性"]

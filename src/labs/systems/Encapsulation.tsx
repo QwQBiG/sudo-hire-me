@@ -1,3 +1,4 @@
+import { SelectField } from '../../components/SelectField';
 import { useState } from 'react';
 import { ArrowRight } from 'lucide-react';
 import { Experiment } from '../../components/Experiment';
@@ -28,18 +29,18 @@ export default function Encapsulation() {
       <div className="experiment-controls sys-controls">
         <label>
           观察链路
-          <select value={hop} onChange={(event) => setHop(Number(event.target.value))}>
+          <SelectField value={hop} onChange={(event) => setHop(Number(event.target.value))}>
             <option value={0}>客户端 → 路由器入口</option>
             <option value={1}>路由器出口 → 服务器</option>
-          </select>
+          </SelectField>
         </label>
         <label>
           初始 TTL
-          <select value={ttl} onChange={(event) => setTtl(Number(event.target.value))}>
+          <SelectField value={ttl} onChange={(event) => setTtl(Number(event.target.value))}>
             <option value={64}>64</option>
             <option value={2}>2</option>
             <option value={1}>1</option>
-          </select>
+          </SelectField>
         </label>
       </div>
       <div className="experiment-scene">

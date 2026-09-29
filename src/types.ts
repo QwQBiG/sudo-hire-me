@@ -40,17 +40,68 @@ export interface Lesson {
     | 'transaction'
     | 'git'
     | 'debug'
-    | 'isolation';
+    | 'isolation'
+    | 'arithmetic'
+    | 'endian'
+    | 'graph-bfs'
+    | 'lower-bound'
+    | 'arp'
+    | 'dispatch'
+    | 'syscall'
+    | 'fd'
+    | 'scheduling'
+    | 'io-mode'
+    | 'bitwise'
+    | 'alignment'
+    | 'two-pointers'
+    | 'sliding-window'
+    | 'prefix-sums'
+    | 'union-find'
+    | 'process-state'
+    | 'tlb'
+    | 'io-buffer'
+    | 'contribution'
+    | 'identity'
+    | 'cstring'
+    | 'lifetime'
+    | 'linked-reversal'
+    | 'floyd-cycle'
+    | 'quick-partition'
+    | 'kmp-prefix'
+    | 'knapsack-grid'
+    | 'dijkstra-path'
+    | 'array-decay'
+    | 'move-ownership'
+    | 'mutable-default'
+    | 'io-readiness'
+    | 'tcp-framing'
+    | 'bplus-tree'
+    | 'wal'
+    | 'boundary-tests'
+    | 'log-trace'
+    | 'cas'
+    | 'bounded-queue'
+    | 'token-bucket'
+    | 'cache-mapping'
+    | 'branch-predict'
+    | 'dma-transfer';
   objectives: string[];
   prerequisites: string[];
   quiz: { prompt: string; options: string[]; answer: number; explanation: string };
   sections: { title: string; markdown: string }[];
   steps: { title: string; markdown: string }[];
+  languageExamples: {
+    introduction: string;
+    variants: { title: string; markdown: string }[];
+  } | null;
   code: string;
   source: string;
 }
 
-export type LessonSummary = Omit<Lesson, 'quiz' | 'sections' | 'steps' | 'code'>;
+export type LessonSummary = Omit<
+  Lesson,
+  'quiz' | 'sections' | 'steps' | 'languageExamples' | 'code'
+>;
 
 export interface LessonProgress {
   read: boolean;

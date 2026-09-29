@@ -3,7 +3,7 @@ slug: "sql-exists-null"
 title: "NOT EXISTS、NOT IN 与 NULL"
 subject: "数据库"
 description: "找没有成绩的学生，观察一个 NULL 如何改变 NOT IN 的查询结果。"
-order: 30
+order: 132
 minutes: 17
 lab: "sql"
 objectives: ["用相关子查询找缺失记录", "推导 NOT IN 遇到 NULL 的三值逻辑", "解释 EXISTS 为什么只关心是否有行"]

@@ -1,3 +1,4 @@
+import { SelectField } from '../../components/SelectField';
 import { useState } from 'react';
 import { ShieldCheck, Eye } from 'lucide-react';
 import { Experiment } from '../../components/Experiment';
@@ -25,20 +26,20 @@ export default function Http() {
       <div className="experiment-controls sys-controls">
         <label>
           方法
-          <select value={method} onChange={(event) => setMethod(event.target.value)}>
+          <SelectField value={method} onChange={(event) => setMethod(event.target.value)}>
             <option>GET</option>
             <option>HEAD</option>
-          </select>
+          </SelectField>
         </label>
         <label>
           资源
-          <select
+          <SelectField
             value={exists ? 'yes' : 'no'}
             onChange={(event) => setExists(event.target.value === 'yes')}
           >
             <option value="yes">存在 /items/7</option>
             <option value="no">不存在 /items/99</option>
-          </select>
+          </SelectField>
         </label>
         <label className="sys-checkbox">
           <input
@@ -51,13 +52,13 @@ export default function Http() {
         </label>
         <label>
           观察位置
-          <select
+          <SelectField
             value={observer ? 'wire' : 'app'}
             onChange={(event) => setObserver(event.target.value === 'wire')}
           >
             <option value="app">客户端应用内</option>
             <option value="wire">网络中间旁观者</option>
-          </select>
+          </SelectField>
         </label>
       </div>
       <div className="experiment-scene">

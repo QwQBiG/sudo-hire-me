@@ -1,0 +1,189 @@
+.boundary-tests-lab {
+  --boundary-accent: #276b82;
+}
+.boundary-rule {
+  display: grid;
+  grid-template-columns: minmax(0, 0.45fr) 20px minmax(0, 1fr);
+  align-items: center;
+  gap: 15px;
+  padding: 16px 0;
+  border-bottom: 1px solid #e9e0e9;
+}
+.boundary-rule > div {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  min-width: 0;
+}
+.boundary-rule small {
+  color: #ab7498;
+  font: 10px var(--mono);
+}
+.boundary-rule strong {
+  color: #48404e;
+  font-size: 13px;
+  line-height: 1.5;
+}
+.boundary-rule > span {
+  color: #a8537c;
+  font-size: 20px;
+}
+.boundary-controls {
+  padding-top: 22px;
+}
+.boundary-control-heading,
+.boundary-result-heading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+.boundary-control-heading h4 {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  color: #504453;
+  font-size: 13px;
+}
+.boundary-control-heading span,
+.boundary-result-heading span {
+  color: #8d7e8e;
+  font-size: 11px;
+}
+.boundary-candidates {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 8px;
+  margin: 14px 0 16px;
+}
+.boundary-candidates button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  min-width: 0;
+  min-height: 64px;
+  padding: 8px 4px;
+  border: 1px solid #e9dee7;
+  border-radius: 5px;
+  background: #fff;
+  color: #625569;
+  transition:
+    border-color 0.18s ease,
+    background 0.18s ease,
+    transform 0.18s ease;
+}
+.boundary-candidates button:hover {
+  border-color: #9b7090;
+  transform: translateY(-2px);
+}
+.boundary-candidates button.is-selected {
+  border-color: var(--boundary-accent);
+  background: #edf7f9;
+  color: #1e6178;
+}
+.boundary-candidates button span {
+  font: 12px var(--mono);
+}
+.boundary-candidates button small {
+  font-size: 10px;
+}
+.boundary-run {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 36px;
+  padding: 8px 13px;
+  border-radius: 5px;
+  background: var(--boundary-accent);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 650;
+}
+.boundary-run:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+.boundary-results {
+  min-height: 170px;
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid #e9e0e9;
+}
+.boundary-empty {
+  margin: 0;
+  color: #8a7b8e;
+  font-size: 12px;
+  line-height: 1.75;
+}
+.boundary-result-heading strong {
+  color: #49404c;
+  font-size: 13px;
+}
+.boundary-result-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: 15px;
+}
+.boundary-result-grid section {
+  display: flex;
+  gap: 9px;
+  min-width: 0;
+  padding-top: 12px;
+  border-top: 2px solid #d9ceda;
+}
+.boundary-result-grid section.is-caught {
+  border-color: #2d7790;
+}
+.boundary-result-icon {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #f1ebf1;
+  color: #887688;
+}
+.is-caught .boundary-result-icon {
+  background: #e2f2f5;
+  color: #28758b;
+}
+.boundary-result-grid strong {
+  color: #514353;
+  font-size: 12px;
+}
+.boundary-result-grid p,
+.boundary-result-grid code {
+  display: block;
+  margin: 5px 0 0;
+  color: #756977;
+  font-size: 11px;
+  line-height: 1.55;
+}
+.boundary-result-grid code {
+  color: #2a6678;
+  white-space: normal;
+}
+@media (max-width: 700px) {
+  .boundary-candidates {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+  .boundary-result-grid {
+    grid-template-columns: 1fr;
+  }
+  .boundary-rule {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 4px;
+  }
+  .boundary-rule > span {
+    transform: rotate(90deg);
+    width: 20px;
+  }
+}
+html[data-motion='reduced'] .boundary-candidates button {
+  transition: none;
+}

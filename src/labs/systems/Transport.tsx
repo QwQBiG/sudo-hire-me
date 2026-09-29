@@ -1,3 +1,4 @@
+import { SelectField } from '../../components/SelectField';
 import { useState } from 'react';
 import { Send, RefreshCw } from 'lucide-react';
 import { Experiment } from '../../components/Experiment';
@@ -23,7 +24,7 @@ export default function Transport() {
       <div className="experiment-controls sys-controls">
         <label>
           传输服务
-          <select
+          <SelectField
             value={tcp ? 'tcp' : 'udp'}
             onChange={(event) => {
               setTcp(event.target.value === 'tcp');
@@ -32,7 +33,7 @@ export default function Transport() {
           >
             <option value="tcp">TCP 有序字节流</option>
             <option value="udp">UDP 独立数据报</option>
-          </select>
+          </SelectField>
         </label>
         <label className="sys-checkbox">
           <input

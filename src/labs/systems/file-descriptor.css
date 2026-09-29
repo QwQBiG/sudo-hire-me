@@ -1,0 +1,168 @@
+.fd-layout {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  border-block: 1px solid var(--line);
+}
+
+.fd-panel {
+  min-width: 0;
+  padding: 18px 18px 18px 0;
+}
+
+.fd-panel + .fd-panel {
+  padding-left: 18px;
+  border-left: 1px solid var(--line);
+}
+
+.fd-panel h4 {
+  margin: 0 0 14px;
+  font-size: 13px;
+}
+
+.fd-column-heading,
+.fd-slot {
+  display: grid;
+  grid-template-columns: 42px minmax(0, 1fr);
+  align-items: center;
+  gap: 8px;
+}
+
+.fd-column-heading {
+  color: var(--muted);
+  font-size: 10px;
+  padding: 0 9px 8px;
+}
+
+.fd-slots {
+  display: grid;
+  gap: 4px;
+}
+
+.fd-slot {
+  min-height: 36px;
+  padding: 7px 9px;
+  background: #f5f3f6;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.fd-slot[data-open='true'] {
+  background: #eaf2f8;
+  color: #335e7a;
+}
+
+.fd-slot[data-shared='true'] {
+  background: #f8e8f0;
+  color: #8e3b65;
+}
+
+.fd-slot strong {
+  font: 15px var(--mono);
+}
+
+.fd-slot span {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.fd-objects {
+  display: grid;
+  align-content: start;
+}
+
+.fd-object {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  min-width: 0;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.fd-object > div {
+  display: grid;
+  gap: 5px;
+  min-width: 0;
+}
+
+.fd-object strong {
+  font: 15px var(--mono);
+}
+
+.fd-object span,
+.fd-object small,
+.fd-empty {
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.fd-offset {
+  text-align: right;
+}
+
+.fd-offset code {
+  color: #8e3b65;
+  font: 12px var(--mono);
+}
+
+.fd-actions {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: 18px;
+}
+
+.fd-actions button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-width: 0;
+  min-height: 42px;
+  padding: 8px;
+  border: 1px solid #d9d0de;
+  border-radius: 4px;
+  background: #fff;
+  color: var(--ink);
+  font: 12px var(--mono);
+}
+
+.fd-actions button:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.fd-events {
+  display: grid;
+  gap: 6px;
+  padding-left: 20px;
+  font-size: 11px;
+  line-height: 1.7;
+}
+
+.fd-events li {
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 700px) {
+  .fd-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .fd-panel,
+  .fd-panel + .fd-panel {
+    padding: 16px 0;
+    border-left: 0;
+  }
+  .fd-panel + .fd-panel {
+    border-top: 1px solid var(--line);
+  }
+  .fd-actions {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 440px) {
+  .fd-actions {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

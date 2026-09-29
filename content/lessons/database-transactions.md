@@ -3,7 +3,7 @@ slug: "database-transactions"
 title: "事务与完整修改"
 description: "用一笔转账理解提交、回滚，以及事务为什么不能自动修正业务逻辑。"
 subject: "数据库"
-order: 34
+order: 144
 minutes: 22
 lab: "transaction"
 objectives: ["解释提交与回滚的作用", "推演转账成功和失败的余额", "区分事务保证与业务检查"]

@@ -3,7 +3,7 @@ slug: "array-linked-list"
 title: "数组与链表"
 subject: "数据结构与算法"
 description: "把同一次插入拆成搬移元素和修改链接，理解两种存储结构的真实代价。"
-order: 5
+order: 44
 minutes: 15
 lab: "sequence"
 objectives: ["说明连续存储与链接存储的区别", "跟踪数组和链表的插入过程", "带着位置是否已知的前提比较复杂度"]

@@ -1,3 +1,4 @@
+import { SelectField } from '../../components/SelectField';
 import { useEffect, useState } from 'react';
 import { Pause, Play, StepForward } from 'lucide-react';
 import { Experiment } from '../../components/Experiment';
@@ -42,7 +43,7 @@ export default function Tree({ reducedMotion }: LabProps) {
       <div className="experiment-controls">
         <label>
           遍历规则
-          <select
+          <SelectField
             value={order}
             onChange={(e) => {
               setOrder(e.target.value as keyof typeof modes);
@@ -54,7 +55,7 @@ export default function Tree({ reducedMotion }: LabProps) {
                 {label}
               </option>
             ))}
-          </select>
+          </SelectField>
         </label>
         <label>
           <input

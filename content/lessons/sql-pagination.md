@@ -3,7 +3,7 @@ slug: "sql-pagination"
 title: "ORDER BY 与分页边界"
 subject: "数据库"
 description: "同分记录如何稳定分到两页，为什么 LIMIT 不能替代明确排序。"
-order: 31
+order: 135
 minutes: 17
 lab: "sql"
 objectives: ["解释无 ORDER BY 时结果顺序不受保证", "给并列排序键添加唯一破平局键", "区分 OFFSET 分页与游标分页的风险"]

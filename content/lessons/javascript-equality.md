@@ -1,9 +1,9 @@
 ---
 slug: "javascript-equality"
 title: "JavaScript 相等与对象身份"
-subject: "Web 与程序执行"
+subject: "JavaScript 选修"
 description: "比较数字、字符串与两个长得一样的对象，分清值转换和引用身份。"
-order: 37
+order: 201
 minutes: 16
 lab: "javascript"
 objectives: ["区分 === 与 == 的主要行为", "解释对象比较为什么看身份", "指出 NaN 和 Object.is 的特殊情况"]

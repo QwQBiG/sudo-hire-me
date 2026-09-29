@@ -3,7 +3,7 @@ slug: "ipv4-subnet"
 title: "IPv4 子网掩码怎么算"
 subject: "计算机网络"
 description: "从 192.168.10.37/26 算出网络、广播与传统可用主机范围。"
-order: 19
+order: 105
 minutes: 20
 lab: "subnet"
 objectives: ["解释前缀长度和网络位", "逐位计算网络与广播地址", "指出 /31 与 /32 不适合机械套用减二公式"]

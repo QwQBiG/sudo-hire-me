@@ -14,7 +14,7 @@ function renderToken(token: Token, index: number): ReactNode {
 }
 
 export function CodeBlock({ code, language }: { code: string; language: string }) {
-  const [wrapped, setWrapped] = useState(false);
+  const [wrapped, setWrapped] = useState(() => matchMedia('(max-width: 720px)').matches);
   const [collapsed, setCollapsed] = useState(false);
   const [copyState, setCopyState] = useState<'idle' | 'copied' | 'error'>('idle');
   const tokens = useMemo(() => highlightCode(code, language), [code, language]);

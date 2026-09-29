@@ -12,6 +12,7 @@ import {
 } from 'lucide-react';
 import catalog from '../.generated/lessons.json';
 import { Sidebar } from './components/Sidebar';
+import { SelectField } from './components/SelectField';
 import { LessonLoader } from './components/LessonLoader';
 import { useProgress } from './hooks/useProgress';
 import { freshLesson, MAX_PROGRESS_FILE_BYTES } from './domain/progress.mjs';
@@ -19,14 +20,26 @@ import type { LessonSummary } from './types';
 
 const lessons = catalog as LessonSummary[];
 const slugs = lessons.map((l) => l.slug);
+const starterSubject = '__starter__';
+const starterFoundations = new Set(['binary-representation', 'memory-units', 'cpu-execution']);
+const isStarterLesson = (lesson: LessonSummary) =>
+  starterFoundations.has(lesson.slug) || lesson.subject === '编程基础与面向对象';
 const getRoute = () =>
   location.hash.replace(/^#\//, '').replace(/^lesson\//, '') || lessons[0].slug;
 
 export default function App() {
   const [route, setRoute] = useState(getRoute);
   const [sidebar, setSidebar] = useState(false);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(() => {
+    try {
+      return localStorage.getItem('sudo-hire-me:sidebar-collapsed') === '1';
+    } catch {
+      return false;
+    }
+  });
   const [query, setQuery] = useState('');
   const [subject, setSubject] = useState('');
+  const [mapSubject, setMapSubject] = useState(starterSubject);
   const [notice, setNotice] = useState('');
   const { progress, update, importProgress, setProgress, warning } = useProgress(slugs);
   const completed = lessons.filter((l) => progress.lessons[l.slug]?.passed).length;
@@ -34,6 +47,11 @@ export default function App() {
   const visibleLessons = lessons.filter(
     (item) =>
       (!subject || item.subject === subject) &&
+      (route !== 'map' ||
+        query.trim() ||
+        subject ||
+        !mapSubject ||
+        (mapSubject === starterSubject ? isStarterLesson(item) : item.subject === mapSubject)) &&
       `${item.title}${item.subject}${item.description}`
         .toLowerCase()
         .includes(query.trim().toLowerCase()),
@@ -49,6 +67,13 @@ export default function App() {
   useEffect(() => {
     document.documentElement.dataset.motion = progress.reducedMotion ? 'reduced' : 'full';
   }, [progress.reducedMotion]);
+  useEffect(() => {
+    try {
+      localStorage.setItem('sudo-hire-me:sidebar-collapsed', sidebarCollapsed ? '1' : '0');
+    } catch {
+      // The navigation still works when browser storage is unavailable.
+    }
+  }, [sidebarCollapsed]);
   useEffect(() => {
     document.title = `${lesson?.title ?? (route === 'review' ? '复习手册' : '关卡地图')} · sudo hire me`;
   }, [lesson, route]);
@@ -76,7 +101,7 @@ export default function App() {
     }
   }
   return (
-    <>
+    <div className={`app-shell ${sidebarCollapsed ? 'sidebar-collapsed' : ''}`}>
       <a
         className="skip-link"
         href="#main-content"
@@ -92,6 +117,8 @@ export default function App() {
         progress={progress}
         route={route}
         open={sidebar}
+        collapsed={sidebarCollapsed}
+        toggleCollapsed={() => setSidebarCollapsed((value) => !value)}
         query={query}
         setQuery={setQuery}
         subject={subject}
@@ -181,6 +208,25 @@ export default function App() {
                   <small>已读原理</small>
                 </div>
               </div>
+              {route === 'map' && !query.trim() && !subject && (
+                <label className="map-subject-control">
+                  <span>学习主题</span>
+                  <SelectField
+                    value={mapSubject}
+                    onChange={(event) => setMapSubject(event.target.value)}
+                    aria-label="学习主题"
+                  >
+                    <option value={starterSubject}>从零开始</option>
+                    {[...new Set(lessons.map((item) => item.subject))].map((name) => (
+                      <option key={name} value={name}>
+                        {name}
+                      </option>
+                    ))}
+                    <option value="">全部主题</option>
+                  </SelectField>
+                  <span>{visibleLessons.length} 关</span>
+                </label>
+              )}
               <div className="course-grid">
                 {visibleLessons.map((item) => {
                   const record = progress.lessons[item.slug];
@@ -271,6 +317,6 @@ export default function App() {
           </a>
         </footer>
       </div>
-    </>
+    </div>
   );
 }

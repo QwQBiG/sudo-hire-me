@@ -3,7 +3,7 @@ slug: "database-isolation"
 title: "隔离级别与两次读取"
 description: "交错执行两个事务，看清读已提交与可重复读怎样影响同一记录的两次查询。"
 subject: "数据库"
-order: 35
+order: 146
 minutes: 24
 lab: "isolation"
 objectives: ["区分脏读与不可重复读", "推演读已提交和可重复读的可见结果", "说明快照稳定不等于所有业务都安全"]

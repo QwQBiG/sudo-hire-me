@@ -3,7 +3,7 @@ slug: "heap-priority-queue"
 title: "堆与优先队列"
 subject: "数据结构与算法"
 description: "从数组下标画出最小堆，取走堆顶后亲手恢复堆序。"
-order: 12
+order: 58
 minutes: 18
 lab: "heap"
 objectives: ["解释完全二叉树和最小堆的不变量", "逐步推导删除堆顶后的下沉", "区分堆与有序数组"]

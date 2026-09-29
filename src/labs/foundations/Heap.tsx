@@ -1,3 +1,4 @@
+import { SelectField } from '../../components/SelectField';
 import { useState } from 'react';
 import { StepBack, StepForward } from 'lucide-react';
 import { Experiment } from '../../components/Experiment';
@@ -19,7 +20,7 @@ export default function Heap() {
       <div className="experiment-controls">
         <label>
           初始最小堆
-          <select
+          <SelectField
             value={dataset}
             onChange={(event) => {
               setDataset(event.target.value as keyof typeof heapDatasets);
@@ -28,7 +29,7 @@ export default function Heap() {
           >
             <option value="first">2、4、3、8、6、5、7</option>
             <option value="second">1、3、2、9、7、6、4</option>
-          </select>
+          </SelectField>
         </label>
         <span className="heap-step">
           {step + 1} / {frames.length}

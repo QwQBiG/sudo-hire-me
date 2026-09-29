@@ -1,9 +1,9 @@
 ---
 slug: "javascript-this"
 title: "this 由调用方式决定"
-subject: "Web 与程序执行"
+subject: "JavaScript 选修"
 description: "同一个函数被两个对象调用、显式指定接收者、再被单独取出时，会读到谁。"
-order: 39
+order: 203
 minutes: 17
 lab: "javascript"
 objectives: ["按调用表达式判断 this", "解释方法被取出后的差异", "区分普通函数与箭头函数的 this 规则"]

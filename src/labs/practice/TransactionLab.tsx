@@ -1,3 +1,4 @@
+import { SelectField } from '../../components/SelectField';
 import { useState } from 'react';
 import { ArrowDown, ArrowRight, ArrowUp, Check, Play, Undo2 } from 'lucide-react';
 import { Experiment } from '../../components/Experiment';
@@ -22,7 +23,7 @@ export default function TransactionLab() {
       <div className="experiment-controls">
         <label>
           转账金额
-          <select
+          <SelectField
             value={amount}
             disabled={!!state.draft}
             onChange={(event) => setAmount(Number(event.target.value))}
@@ -30,7 +31,7 @@ export default function TransactionLab() {
             <option value={100}>100</option>
             <option value={300}>300</option>
             <option value={1200}>1200（余额不足）</option>
-          </select>
+          </SelectField>
         </label>
         <button disabled={!!state.draft} onClick={() => act('begin')}>
           <Play size={16} />

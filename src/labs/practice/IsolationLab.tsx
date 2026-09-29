@@ -1,3 +1,4 @@
+import { SelectField } from '../../components/SelectField';
 import { useState } from 'react';
 import { Check, Eye, Pencil } from 'lucide-react';
 import { Experiment } from '../../components/Experiment';
@@ -18,13 +19,13 @@ export default function IsolationLab() {
       <div className="experiment-controls">
         <label>
           事务 A 的隔离级别
-          <select
+          <SelectField
             value={state.mode}
             onChange={(event) => setState(newIsolation(event.target.value))}
           >
             <option value="read-committed">读已提交 · Read Committed</option>
             <option value="repeatable-read">可重复读 · Repeatable Read</option>
-          </select>
+          </SelectField>
         </label>
       </div>
       <div className="practice-isolation-store">

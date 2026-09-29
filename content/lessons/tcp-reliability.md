@@ -3,7 +3,7 @@ slug: "tcp-reliability"
 title: "TCP 序号、确认与滑动窗口"
 subject: "计算机网络"
 description: "发送八个字节，亲手制造丢失和乱序，观察累计确认为什么卡住、窗口何时前移。"
-order: 22
+order: 111
 minutes: 22
 lab: "tcp-window"
 objectives: ["按字节计算 TCP 数据序号与累计确认号", "解释丢失和乱序时窗口为何不能前移", "区分接收窗口与拥塞窗口"]

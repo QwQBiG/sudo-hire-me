@@ -55,8 +55,7 @@
   gap: 8px;
   min-height: 40px;
 }
-.experiment input:not([type='range']):not([type='checkbox']),
-.experiment select {
+.experiment input:not([type='range']):not([type='checkbox']) {
   border: 1px solid #d9d1e1;
   background: #fff;
   border-radius: 4px;
@@ -77,9 +76,10 @@
 .experiment input[type='checkbox'] {
   accent-color: var(--accent);
 }
-.experiment select:focus-visible {
-  outline: 3px solid #9471ba;
-  outline-offset: 3px;
+.experiment-controls .select-field {
+  min-width: 136px;
+  width: fit-content;
+  max-width: 100%;
 }
 .experiment-metrics {
   display: flex;

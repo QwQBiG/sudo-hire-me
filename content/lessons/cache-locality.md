@@ -3,7 +3,7 @@ slug: "cache-locality"
 title: "缓存与局部性"
 subject: "计算机基础"
 description: "跟踪一次缺失怎样带来后续命中，理解连续访问为什么经常更高效。"
-order: 3
+order: 31
 minutes: 13
 lab: "cache"
 objectives: ["区分时间局部性与空间局部性", "按缓存行跟踪命中和缺失", "解释访问顺序怎样影响缓存利用"]

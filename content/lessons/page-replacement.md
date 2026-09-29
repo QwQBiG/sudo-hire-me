@@ -3,7 +3,7 @@ slug: "page-replacement"
 title: "缺页时选谁离开：FIFO 与 LRU"
 subject: "操作系统"
 description: "三个页框装满后，逐次访问同一串页，比较两种置换策略的决定。"
-order: 15
+order: 94
 minutes: 18
 lab: "replacement"
 objectives: ["区分缺页和置换", "手工推导 FIFO 与 LRU 的淘汰对象", "解释为什么一次样例不能证明算法普遍更优"]

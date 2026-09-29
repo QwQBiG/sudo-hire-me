@@ -3,7 +3,7 @@ slug: "dns-resolution"
 title: "DNS 查询与缓存"
 subject: "计算机网络"
 description: "输入 www.example.com 后，谁替浏览器找到地址，缓存又省掉了哪些查询？"
-order: 23
+order: 117
 minutes: 22
 lab: "dns"
 objectives: ["区分递归解析器与权威服务器","跟踪一次缓存未命中的查询","正确理解缓存期限和 UDP/TCP 的使用"]

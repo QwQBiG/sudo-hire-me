@@ -1,3 +1,4 @@
+import { SelectField } from '../../components/SelectField';
 import { useState } from 'react';
 import { Search } from 'lucide-react';
 import { Experiment } from '../../components/Experiment';
@@ -24,7 +25,7 @@ export default function IndexLab() {
       <div className="experiment-controls">
         <label>
           目标 score
-          <select
+          <SelectField
             value={target}
             onChange={(event) => {
               setTarget(Number(event.target.value));
@@ -37,7 +38,7 @@ export default function IndexLab() {
                 {value === 42 ? '（不存在）' : ''}
               </option>
             ))}
-          </select>
+          </SelectField>
         </label>
         <label>
           <input

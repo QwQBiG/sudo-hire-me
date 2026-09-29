@@ -1,3 +1,4 @@
+import { SelectField } from '../../components/SelectField';
 import { useState } from 'react';
 import { Experiment } from '../../components/Experiment';
 import { memoryLayout } from '../../domain/foundations.mjs';
@@ -22,23 +23,23 @@ export default function Memory() {
       <div className="experiment-controls">
         <label>
           元素宽度
-          <select value={width} onChange={(e) => setWidth(Number(e.target.value))}>
+          <SelectField value={width} onChange={(e) => setWidth(Number(e.target.value))}>
             {[1, 2, 4, 8].map((n) => (
               <option key={n} value={n}>
                 {n} B
               </option>
             ))}
-          </select>
+          </SelectField>
         </label>
         <label>
           起始地址
-          <select value={base} onChange={(e) => setBase(Number(e.target.value))}>
+          <SelectField value={base} onChange={(e) => setBase(Number(e.target.value))}>
             {[0, 100, 200].map((n) => (
               <option key={n} value={n}>
                 {n}
               </option>
             ))}
-          </select>
+          </SelectField>
         </label>
       </div>
       <div className="f-memory-address">

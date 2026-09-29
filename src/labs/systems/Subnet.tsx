@@ -1,3 +1,4 @@
+import { SelectField } from '../../components/SelectField';
 import { useState } from 'react';
 import { Experiment } from '../../components/Experiment';
 import { calculateSubnet } from '../../domain/subnet.mjs';
@@ -43,13 +44,13 @@ export default function Subnet() {
         </label>
         <label>
           前缀长度
-          <select value={prefix} onChange={(event) => setPrefix(Number(event.target.value))}>
+          <SelectField value={prefix} onChange={(event) => setPrefix(Number(event.target.value))}>
             {[24, 25, 26, 27, 28, 29, 30].map((value) => (
               <option value={value} key={value}>
                 /{value}
               </option>
             ))}
-          </select>
+          </SelectField>
         </label>
       </div>
       {error ? (

@@ -1,9 +1,9 @@
 ---
 slug: "javascript-prototype"
 title: "原型链与属性查找"
-subject: "Web 与程序执行"
+subject: "JavaScript 选修"
 description: "对象本身没有方法时，沿原型链去哪里找；同名属性又怎样遮蔽。"
-order: 40
+order: 204
 minutes: 17
 lab: "javascript"
 objectives: ["区分自有属性与继承属性", "手工追踪一次原型链查找", "解释同名自有属性的遮蔽"]

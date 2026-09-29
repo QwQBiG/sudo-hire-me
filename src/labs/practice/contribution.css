@@ -1,0 +1,143 @@
+.contribution-lab {
+  --record: #2d718b;
+}
+.contribution-tabs {
+  display: flex;
+  gap: 3px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid #e8dfe9;
+  overflow-x: auto;
+}
+.contribution-tabs button {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 37px;
+  padding: 7px 12px;
+  border-bottom: 2px solid transparent;
+  background: transparent;
+  color: #786a7a;
+  white-space: nowrap;
+  font-size: 12px;
+}
+.contribution-tabs button.is-current {
+  border-color: #a33e6c;
+  color: #8e315f;
+  font-weight: 650;
+}
+.contribution-tabs button:hover {
+  background: #fcf2f7;
+}
+.contribution-tabs button > span {
+  font: 10px var(--mono);
+  color: #ac859e;
+}
+.contribution-prompt {
+  margin: 20px 0;
+  font-size: 14px;
+  font-weight: 650;
+  color: #433949;
+}
+.contribution-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr);
+  gap: 28px;
+}
+.contribution-layout > section {
+  min-width: 0;
+}
+.contribution-layout h4 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 13px;
+  color: #67566c;
+  font-size: 12px;
+}
+.contribution-evidence > div {
+  padding: 10px 12px;
+  border-left: 3px solid #d9dce4;
+  border-bottom: 1px solid #eee8ef;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease;
+}
+.contribution-evidence > div.is-relevant {
+  border-left-color: var(--record);
+  background: #edf7fa;
+}
+.contribution-evidence small {
+  color: var(--record);
+  font: 10px var(--mono);
+}
+.contribution-evidence p {
+  margin: 5px 0 0;
+  font-size: 12px;
+  line-height: 1.65;
+}
+.contribution-claims {
+  border-left: 1px solid #e8dfe9;
+  padding-left: 28px;
+}
+.contribution-claims button {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  min-height: 48px;
+  padding: 10px 12px;
+  border-bottom: 1px solid #eee8ef;
+  background: transparent;
+  color: #514453;
+  text-align: left;
+  font-size: 12px;
+  line-height: 1.6;
+}
+.contribution-claims button:hover,
+.contribution-claims button.is-selected {
+  background: #f9eaf2;
+  color: #88325d;
+}
+.contribution-feedback {
+  min-height: 82px;
+  margin-top: 24px;
+  padding: 14px 0 0;
+  border-top: 1px solid #e8dfe9;
+  color: #704c5e;
+}
+.contribution-feedback.is-supported {
+  color: #2c6075;
+}
+.contribution-feedback strong {
+  font-size: 13px;
+}
+.contribution-feedback p {
+  margin: 5px 0;
+  font-size: 12px;
+}
+.contribution-next {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 36px;
+  padding: 7px 11px;
+  background: #a33e6c;
+  color: white;
+  border-radius: 5px;
+  font-size: 11px;
+}
+html[data-motion='reduced'] .contribution-evidence > div {
+  transition: none;
+}
+@media (max-width: 700px) {
+  .contribution-layout {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+  .contribution-claims {
+    border-left: 0;
+    border-top: 1px solid #e8dfe9;
+    padding: 18px 0 0;
+  }
+}

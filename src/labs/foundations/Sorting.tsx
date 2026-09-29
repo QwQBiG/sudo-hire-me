@@ -1,3 +1,4 @@
+import { SelectField } from '../../components/SelectField';
 import { useEffect, useState } from 'react';
 import { Pause, Play, StepBack, StepForward } from 'lucide-react';
 import { Experiment } from '../../components/Experiment';
@@ -48,7 +49,7 @@ export default function Sorting({ reducedMotion }: LabProps) {
       <div className="experiment-controls">
         <label>
           输入序列
-          <select
+          <SelectField
             value={dataset}
             onChange={(event) => {
               setDataset(event.target.value as keyof typeof datasetNames);
@@ -60,7 +61,7 @@ export default function Sorting({ reducedMotion }: LabProps) {
                 {name}
               </option>
             ))}
-          </select>
+          </SelectField>
         </label>
         <span className="sort-origin">原始编号 {labels(original).join(' · ')}</span>
       </div>

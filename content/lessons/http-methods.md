@@ -3,7 +3,7 @@ slug: "http-methods"
 title: "HTTP 方法、安全与幂等"
 subject: "计算机网络"
 description: "同一请求重复发送时，区分 GET、HEAD、POST、PUT、DELETE 的语义。"
-order: 25
+order: 120
 minutes: 16
 lab: "http"
 objectives: ["区分安全与幂等", "解释 GET 与 HEAD 的正文差异", "指出重试 POST 的风险"]

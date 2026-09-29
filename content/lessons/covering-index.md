@@ -3,7 +3,7 @@ slug: "covering-index"
 title: "覆盖索引与回表"
 subject: "数据库"
 description: "同一棵索引树上，改变查询列，判断什么时候还需要读取表记录。"
-order: 33
+order: 140
 minutes: 16
 lab: "index"
 objectives: ["按查询所需列判断索引是否覆盖", "解释索引命中后为何可能回表", "指出覆盖索引不是无条件更快"]

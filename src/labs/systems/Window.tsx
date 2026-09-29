@@ -1,3 +1,4 @@
+import { SelectField } from '../../components/SelectField';
 import { useState } from 'react';
 import { ArrowDownToLine, RotateCw, Send } from 'lucide-react';
 import { Experiment } from '../../components/Experiment';
@@ -42,7 +43,7 @@ export default function Window() {
       <div className="experiment-controls window-controls">
         <label>
           固定发送窗口上限
-          <select
+          <SelectField
             value={state.windowBytes}
             onChange={(event) =>
               setState(createWindowState(Number(event.target.value), state.dropFirst))
@@ -50,7 +51,7 @@ export default function Window() {
           >
             <option value={2}>2 B · 一段</option>
             <option value={4}>4 B · 两段</option>
-          </select>
+          </SelectField>
         </label>
         <label>
           <input

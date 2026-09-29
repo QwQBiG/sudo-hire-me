@@ -65,6 +65,34 @@ test('walkthrough rejects missing, empty, too few or ambiguously prefaced steps'
   }
 });
 
+test('language examples retain each Markdown variant and reject mismatched fences', () => {
+  const examples = [
+    '## 多语言示例',
+    'The same small calculation in two languages.',
+    '### C',
+    `${fence}c`,
+    'int answer = 1;',
+    fence,
+    'C keeps the result in an int.',
+    '### Python 3',
+    `${fence}python`,
+    'answer = 1',
+    fence,
+  ].join('\n\n');
+  const lesson = parseLesson(fixture(`${body}\n\n${examples}`), 'test-lesson.md');
+  assert.equal(lesson.languageExamples.variants.length, 2);
+  assert.match(lesson.languageExamples.variants[0].markdown, /C keeps the result/);
+  assert.match(lesson.languageExamples.introduction, /same small calculation/);
+  assert.throws(
+    () =>
+      parseLesson(
+        fixture(`${body}\n\n${examples.replace(`${fence}python`, `${fence}javascript`)}`),
+        'test-lesson.md',
+      ),
+    /Expected one Python 3 code block/,
+  );
+});
+
 test('prerequisites allow a shared foundation and reject missing or cyclic references', () => {
   const nodes = [
     { slug: 'base', prerequisites: [] },
@@ -112,7 +140,12 @@ test('every course parses and prerequisites form an ordered learning path', asyn
       assert.ok(bySlug.get(slug).order < lesson.order, `${slug} before ${lesson.slug}`);
     assert.equal(new Set(lesson.quiz.options).size, 4);
     assert.ok(lesson.quiz.explanation.length > 30);
-    assert.ok(lesson.sections.some((section) => /参考/.test(section.title)));
+    if (lesson.subject !== '项目与面试表达') {
+      assert.ok(
+        lesson.sections.some((section) => /参考/.test(section.title)),
+        `${lesson.slug} has references`,
+      );
+    }
     if (['javascript', 'sql'].includes(lesson.lab)) assert.ok(lesson.code.trim());
   }
 });
@@ -144,6 +177,10 @@ test('parseLesson supports a conceptual lesson without executable code', () => {
 
 test('parseLesson rejects mismatched filenames and invalid metadata', () => {
   assert.throws(() => parseLesson(fixture(), 'another-lesson.md'), /Slug does not match/);
+  assert.throws(
+    () => parseLesson(fixture(body, { lab: 'unknown' }), 'test-lesson.md'),
+    /Invalid metadata in test-lesson\.md: lab:/,
+  );
   for (const override of [
     { minutes: 0 },
     { order: -1 },

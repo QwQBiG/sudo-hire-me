@@ -13,6 +13,7 @@ import {
 } from 'lucide-react';
 import { Markdown } from './Markdown';
 import { Lab } from './Lab';
+import { LanguageExamples } from './LanguageExamples';
 import { Quiz } from './Quiz';
 import type { Lesson, LessonProgress, LessonSummary } from '../types';
 
@@ -35,7 +36,13 @@ export function LessonView({
   const [tab, setTab] = useState<'lab' | 'read' | 'quiz'>('lab');
   const [copied, setCopied] = useState(false);
   const answer = lesson.sections.find((s) => s.title === '面试回答')?.markdown ?? '';
-  const beginner = lesson.sections.find((s) => s.title.includes('从零')) ?? lesson.sections[1];
+  const beginner =
+    lesson.sections.find((s) => s.title.includes('从零')) ??
+    lesson.sections.find(
+      (s) =>
+        !['面试回答', '选择题', '开放题', '实验代码', '多语言示例', '逐步推演'].includes(s.title),
+    ) ??
+    lesson.sections[0];
   const readingSections = lesson.sections.filter(
     (s) => !['面试回答', '选择题', '开放题'].includes(s.title),
   );
@@ -186,7 +193,11 @@ export function LessonView({
                     <h2 id={`reading-${index}`} tabIndex={-1}>
                       {section.title}
                     </h2>
-                    <Markdown>{section.markdown}</Markdown>
+                    {section.title === '多语言示例' && lesson.languageExamples ? (
+                      <LanguageExamples examples={lesson.languageExamples} />
+                    ) : (
+                      <Markdown>{section.markdown}</Markdown>
+                    )}
                   </section>
                 ))}
                 <button

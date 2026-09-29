@@ -3,7 +3,7 @@ slug: "complexity"
 title: "时间与空间复杂度"
 subject: "数据结构与算法"
 description: "从实际执行次数推导增长阶，分清大 O、最坏情况和额外空间。"
-order: 4
+order: 43
 minutes: 15
 lab: "complexity"
 objectives: ["明确输入规模与基本操作", "从循环次数推导渐近复杂度", "区分时间、空间和不同情况的分析"]

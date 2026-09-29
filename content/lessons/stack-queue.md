@@ -3,7 +3,7 @@ slug: "stack-queue"
 title: "栈与队列"
 subject: "数据结构与算法"
 description: "让同一组数据按两种规则进出，理解后进先出、先进先出和实现边界。"
-order: 6
+order: 47
 minutes: 13
 lab: "stack-queue"
 objectives: ["准确描述栈与队列的操作规则", "逐步跟踪入栈出栈和入队出队", "区分抽象接口与底层实现成本"]

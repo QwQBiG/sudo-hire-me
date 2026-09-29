@@ -3,7 +3,7 @@ slug: "database-indexes"
 title: "索引为什么可能更快"
 description: "沿着一次成绩查询，区分全表扫描、索引定位、读取记录与写入维护成本。"
 subject: "数据库"
-order: 32
+order: 137
 minutes: 20
 lab: "index"
 objectives: ["解释索引减少哪些查找工作", "区分定位记录与读取记录", "理解索引的代价和使用条件"]

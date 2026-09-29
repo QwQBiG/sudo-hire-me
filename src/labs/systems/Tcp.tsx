@@ -1,3 +1,4 @@
+import { SelectField } from '../../components/SelectField';
 import { useState } from 'react';
 import { Send, Timer } from 'lucide-react';
 import { Experiment } from '../../components/Experiment';
@@ -54,25 +55,25 @@ export default function Tcp() {
       <div className="experiment-controls sys-controls">
         <label>
           客户端 ISN
-          <select
+          <SelectField
             value={client}
             disabled={stage !== 0 || entries.length > 0}
             onChange={(event) => setClient(Number(event.target.value))}
           >
             <option>1000</option>
             <option>100</option>
-          </select>
+          </SelectField>
         </label>
         <label>
           服务端 ISN
-          <select
+          <SelectField
             value={server}
             disabled={stage !== 0 || entries.length > 0}
             onChange={(event) => setServer(Number(event.target.value))}
           >
             <option>5000</option>
             <option>9000</option>
-          </select>
+          </SelectField>
         </label>
         <label className="sys-checkbox">
           <input

@@ -3,7 +3,7 @@ slug: "sql-join"
 title: "SQL 左连接"
 subject: "数据库"
 description: "没有成绩的学生去了哪里？从两张小表开始理解 JOIN 与 NULL。"
-order: 29
+order: 130
 minutes: 15
 lab: "sql"
 objectives: ["解释一对多连接结果","保留没有匹配的行","区分 COUNT(*) 与 COUNT(列)"]

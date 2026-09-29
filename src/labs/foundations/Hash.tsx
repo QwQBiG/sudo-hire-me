@@ -1,3 +1,4 @@
+import { SelectField } from '../../components/SelectField';
 import { useState } from 'react';
 import { ArrowRight, Plus, Search } from 'lucide-react';
 import { Experiment } from '../../components/Experiment';
@@ -115,7 +116,7 @@ export default function Hash() {
       <div className="experiment-controls">
         <label>
           桶数
-          <select
+          <SelectField
             value={capacity}
             onChange={(e) => {
               setCapacity(Number(e.target.value));
@@ -125,7 +126,7 @@ export default function Hash() {
           >
             <option value={5}>5</option>
             <option value={10}>10</option>
-          </select>
+          </SelectField>
         </label>
         <output>
           负载因子 α = {entries.length} / {capacity} = {(entries.length / capacity).toFixed(1)}

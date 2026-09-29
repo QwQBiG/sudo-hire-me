@@ -3,7 +3,7 @@ slug: "sql-grouping"
 title: "分组统计与 HAVING"
 description: "从三条成绩记录算出每人的次数和均分，区分过滤原始行、分组、聚合与过滤分组。"
 subject: "数据库"
-order: 28
+order: 129
 minutes: 22
 lab: "sql"
 objectives: ["逐组计算 COUNT 与 AVG", "区分 WHERE 和 HAVING 的作用对象", "说明 NULL 对聚合结果的影响"]

@@ -1,3 +1,4 @@
+import { SelectField } from '../../components/SelectField';
 import { useState } from 'react';
 import { Search, Clock3 } from 'lucide-react';
 import { Experiment } from '../../components/Experiment';
@@ -22,7 +23,7 @@ export default function Dns() {
       <div className="experiment-controls sys-controls">
         <label>
           递归解析器的缓存
-          <select
+          <SelectField
             value={cache}
             onChange={(event) => {
               setCache(event.target.value);
@@ -33,7 +34,7 @@ export default function Dns() {
             <option value="none">没有缓存</option>
             <option value="answer">最终 A 记录 · TTL 300 秒</option>
             <option value="delegation">仅缓存域名委派</option>
-          </select>
+          </SelectField>
         </label>
         <label>
           记录年龄：{age} 秒

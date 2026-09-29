@@ -1,0 +1,137 @@
+.bitwise-mode {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0;
+  margin-bottom: 18px;
+}
+.bitwise-mode button {
+  min-width: 51px;
+  min-height: 42px;
+  padding: 8px 12px;
+  border: 1px solid #d8d0de;
+  border-right: 0;
+  background: #fff;
+  color: #675970;
+  font: 600 15px var(--mono);
+  cursor: pointer;
+}
+.bitwise-mode button:first-child {
+  border-radius: 4px 0 0 4px;
+}
+.bitwise-mode button:last-child {
+  border-right: 1px solid #d8d0de;
+  border-radius: 0 4px 4px 0;
+}
+.bitwise-mode button.active {
+  background: #eaf2f8;
+  color: #285c82;
+}
+.bitwise-mode button:focus-visible,
+.bitwise-cell:focus-visible {
+  outline: 2px solid #346d98;
+  outline-offset: 2px;
+}
+.bitwise-shift {
+  display: grid;
+  grid-template-columns: auto auto minmax(80px, 1fr);
+  align-items: center;
+  gap: 12px;
+  max-width: 450px;
+  margin: 0 0 18px;
+  color: #66556b;
+  font-size: 12px;
+}
+.bitwise-shift output {
+  color: #346d98;
+  font: 600 15px var(--mono);
+}
+.bitwise-board {
+  display: grid;
+  gap: 9px;
+  max-width: 710px;
+}
+.bitwise-indices,
+.bitwise-row {
+  display: grid;
+  grid-template-columns: minmax(74px, 100px) minmax(0, 1fr);
+  align-items: center;
+  gap: 12px;
+}
+.bitwise-indices small {
+  color: #927f96;
+  text-align: center;
+  font: 10px var(--mono);
+}
+.bitwise-row-label {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+.bitwise-row-label strong {
+  color: var(--ink);
+  font-size: 12px;
+}
+.bitwise-row-label code {
+  color: #8c4d74;
+  font: 12px var(--mono);
+}
+.bitwise-cells {
+  display: grid;
+  grid-template-columns: repeat(8, minmax(0, 1fr));
+  gap: 5px;
+}
+.bitwise-cell {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  min-width: 0;
+  height: 39px;
+  padding: 0;
+  border: 1px solid #ddd5e1;
+  border-radius: 3px;
+  background: #f7f4f8;
+  color: #907f95;
+  font: 600 17px var(--mono);
+}
+button.bitwise-cell {
+  cursor: pointer;
+}
+button.bitwise-cell:hover {
+  border-color: #a33e6c;
+}
+.bitwise-cell.on {
+  border-color: #ce9bb8;
+  background: #f5e2ed;
+  color: #8a2f60;
+}
+.bitwise-result {
+  padding-top: 15px;
+  border-top: 1px solid var(--line);
+}
+.bitwise-result .bitwise-cell.on {
+  border-color: #7da9c8;
+  background: #e5f1f9;
+  color: #285c82;
+}
+.bitwise-result .bitwise-cell {
+  border-color: #cbd9e4;
+  background: #f0f5f8;
+}
+@media (max-width: 600px) {
+  .bitwise-indices,
+  .bitwise-row {
+    grid-template-columns: 50px minmax(0, 1fr);
+    gap: 8px;
+  }
+  .bitwise-cells {
+    gap: 3px;
+  }
+  .bitwise-cell {
+    height: 34px;
+    font-size: 14px;
+  }
+  .bitwise-mode button {
+    min-width: 42px;
+    padding-inline: 8px;
+  }
+}

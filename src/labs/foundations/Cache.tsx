@@ -1,3 +1,4 @@
+import { SelectField } from '../../components/SelectField';
 import { useState } from 'react';
 import { StepForward } from 'lucide-react';
 import { Experiment } from '../../components/Experiment';
@@ -28,7 +29,7 @@ export default function Cache() {
       <div className="experiment-controls">
         <label>
           访问序列
-          <select
+          <SelectField
             value={pattern}
             onChange={(e) => {
               setPattern(e.target.value);
@@ -38,7 +39,7 @@ export default function Cache() {
             {Object.keys(patterns).map((name) => (
               <option key={name}>{name}</option>
             ))}
-          </select>
+          </SelectField>
         </label>
         <button className="primary" onClick={() => access(next)} disabled={next === undefined}>
           <StepForward size={17} />

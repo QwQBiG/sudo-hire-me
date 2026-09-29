@@ -1,18 +1,120 @@
 .subject-filter {
   margin-bottom: 20px;
 }
-.subject-filter select {
+.subject-filter .select-field {
   width: 100%;
-  padding: 9px 10px;
-  color: #765d77;
-  background: #fff;
-  border: 1px solid #e9d9e5;
-  border-radius: 5px;
-  font-size: 12px;
 }
-.subject-filter select:focus-visible {
+.select-field {
+  display: inline-block;
+  min-width: 0;
+  max-width: 100%;
+  vertical-align: middle;
+}
+.select-field-trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  min-height: 40px;
+  padding: 8px 11px;
+  border: 1px solid #e0d3df;
+  border-radius: 7px;
+  background: #fff;
+  color: #514453;
+  text-align: left;
+  font-size: 12px;
+  transition:
+    border-color 0.15s ease,
+    background 0.15s ease;
+}
+.select-field-trigger:hover:not(:disabled),
+.select-field-trigger[aria-expanded='true'] {
+  border-color: #bc8eaa;
+  background: #fffbfd;
+}
+.select-field-trigger:focus-visible {
   outline: 3px solid #9471ba;
   outline-offset: 2px;
+}
+.select-field-trigger:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+.select-field-trigger > span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.select-field-trigger > svg {
+  flex: none;
+  color: #936b87;
+  transition: transform 0.18s ease;
+}
+.select-field-trigger[aria-expanded='true'] > svg {
+  transform: rotate(180deg);
+}
+.select-field-list {
+  position: fixed;
+  z-index: 120;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 4px;
+  border: 1px solid #e8d5e1;
+  border-radius: 8px;
+  background: #fff;
+  box-shadow:
+    0 13px 32px #3c263928,
+    0 2px 7px #3c263918;
+  scrollbar-width: thin;
+  scrollbar-color: #cda9bc transparent;
+  animation: select-field-in 0.16s ease-out both;
+}
+.select-field-list [role='option'] {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 35px;
+  padding: 7px 9px;
+  border-radius: 5px;
+  color: #59495c;
+  cursor: pointer;
+  font-size: 12px;
+}
+.select-field-list [role='option'].is-active {
+  background: #f8e8f0;
+  color: #8f3263;
+}
+.select-field-list [role='option'][aria-selected='true'] {
+  font-weight: 650;
+}
+.select-field-list [role='option'][aria-disabled='true'] {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+.select-field-list::-webkit-scrollbar {
+  width: 8px;
+}
+.select-field-list::-webkit-scrollbar-thumb {
+  border: 2px solid #fff;
+  border-radius: 8px;
+  background: #cda9bc;
+}
+@keyframes select-field-in {
+  from {
+    transform: translateY(-4px);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+html[data-motion='reduced'] .select-field-list {
+  animation: none;
+}
+html[data-motion='reduced'] .select-field-trigger,
+html[data-motion='reduced'] .select-field-trigger > svg {
+  transition: none;
 }
 .reading-index {
   display: flex;
@@ -97,8 +199,24 @@
 }
 .code-block-body {
   display: flex;
-  max-height: 420px;
-  overflow: auto;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: thin;
+  scrollbar-color: #bfa7c5 #f0ebf5;
+}
+.code-block-body::-webkit-scrollbar {
+  height: 9px;
+}
+.code-block-body::-webkit-scrollbar-track {
+  background: #f0ebf5;
+}
+.code-block-body::-webkit-scrollbar-thumb {
+  border: 2px solid #f0ebf5;
+  border-radius: 8px;
+  background: #bfa7c5;
+}
+.code-block-body::-webkit-scrollbar-thumb:hover {
+  background: #a77caa;
 }
 .code-gutter {
   display: flex;

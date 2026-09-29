@@ -3,7 +3,7 @@ slug: "http-https"
 title: "HTTP 请求与 HTTPS 保护"
 subject: "计算机网络"
 description: "从输入网址到收到 JSON：哪些规则解释请求，哪些机制保护传输？"
-order: 24
+order: 119
 minutes: 23
 lab: "http"
 objectives: ["读懂请求方法、目标、头部与响应状态","解释 TLS 的保护范围","区分 HTTP 语义与底层传输版本"]

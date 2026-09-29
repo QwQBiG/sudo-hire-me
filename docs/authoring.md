@@ -54,6 +54,26 @@ prerequisites: ["binary-representation"]
 | `dns` / `http` / `http-cache` | DNS 缓存查询、请求响应、HTTP 缓存 |
 | `index` / `transaction` / `isolation` | 索引路径、转账事务、双事务可见性 |
 | `git` / `debug` | 三区快照、边界测试与定位 |
+| `arithmetic` / `endian` | 定宽整数进位、大小端字节读写 |
+| `graph-bfs` / `lower-bound` | 图的队列遍历、二分第一个满足条件的位置 |
+| `arp` | 下一跳与局域网地址解析 |
+| `dispatch` | 声明类型、实际对象与动态派发 |
+| `syscall` / `fd` | 用户态与内核边界、每进程文件描述符表 |
+| `scheduling` / `io-mode` | 进程调度时间线、阻塞与非阻塞 I/O |
+| `bitwise` / `alignment` | 位运算按位结果、结构体成员对齐与填充 |
+| `two-pointers` / `sliding-window` / `prefix-sums` / `union-find` | 指针移动、窗口边界、区间和、集合合并 |
+| `process-state` / `tlb` / `io-buffer` | 进程状态事件、页表/TLB 查询、分层缓冲写入 |
+| `contribution` | 个人贡献、验证结果与开源状态的证据核对 |
+| `identity` / `cstring` / `lifetime` | 对象别名、C 字符串扫描、分配与释放时间线 |
+| `linked-reversal` / `floyd-cycle` / `quick-partition` | 链表重连、快慢指针相遇、原地分区边界 |
+| `kmp-prefix` / `knapsack-grid` / `dijkstra-path` | 前缀表、背包状态表、最短路径松弛过程 |
+| `array-decay` / `move-ownership` / `mutable-default` | C 数组退化、C++ 移动后状态、Python 默认参数共享 |
+| `io-readiness` / `tcp-framing` | I/O 就绪通知、TCP 字节流消息边界 |
+| `bplus-tree` / `wal` | B+ 树查找路径、预写日志恢复 |
+| `boundary-tests` | 挑选边界用例，识别错误实现 |
+| `log-trace` | 筛选交错请求日志，判断结论是否有证据支持 |
+| `cas` / `bounded-queue` / `token-bucket` | 原子更新竞争、有界队列容量、限流令牌累积 |
+| `cache-mapping` / `branch-predict` / `dma-transfer` | 缓存映射冲突、分支预测状态、DMA 传输时序 |
 
 已有实验具有特定含义。新主题没有合适实验时，应扩展类型、校验规则和组件映射，不能随意套用不相关的 `lab`。
 
@@ -96,6 +116,32 @@ prerequisites: ["binary-representation"]
 - `## 选择题`：必需，按下述格式提供一道四选一题。
 
 其他二级标题自由命名。可增加例题、解题过程、错误示例、开放追问和参考资料，不必为每课机械填满相同栏目。
+
+## 多语言示例
+
+确实与语言无关的编程题可用 `## 多语言示例` 展示同一输入和契约。网站把三级标题作为语言切换标签；Markdown 保留所有代码与语言差异说明。支持按 `C`、`C++`、`Python 3`、`Rust`、`Zig`、`Java`、`Kotlin` 顺序编写，每种语言标题下恰好一个完整代码围栏，对应语言标记分别为 `c`、`cpp`、`python`、`rust`、`zig`、`java`、`kotlin`。至少提供两种语言；完整的通用算法示例尽量覆盖这七种语言。
+
+~~~~markdown
+## 多语言示例
+
+同一输入、预期输出和必要的范围假设。
+
+### C
+
+```c
+/* 可以单独编译的简短示例 */
+```
+
+C 中这个边界为什么成立。
+
+### Python 3
+
+```python
+# 可以单独运行的简短示例
+```
+~~~~
+
+不要为凑满语言数把类继承、所有权或指针等专属机制强行等同起来。不同语言对参数、空值、整数范围和错误的处理如果有差异，直接解释差异；没有实际执行的输出应标作预期结果。
 
 ## 选择题格式
 

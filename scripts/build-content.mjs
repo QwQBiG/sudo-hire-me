@@ -51,6 +51,50 @@ const lessonSchema = z
       'git',
       'debug',
       'isolation',
+      'arithmetic',
+      'endian',
+      'graph-bfs',
+      'lower-bound',
+      'arp',
+      'dispatch',
+      'syscall',
+      'fd',
+      'scheduling',
+      'io-mode',
+      'bitwise',
+      'alignment',
+      'two-pointers',
+      'sliding-window',
+      'prefix-sums',
+      'union-find',
+      'process-state',
+      'tlb',
+      'io-buffer',
+      'contribution',
+      'identity',
+      'cstring',
+      'lifetime',
+      'linked-reversal',
+      'floyd-cycle',
+      'quick-partition',
+      'kmp-prefix',
+      'knapsack-grid',
+      'dijkstra-path',
+      'array-decay',
+      'move-ownership',
+      'mutable-default',
+      'io-readiness',
+      'tcp-framing',
+      'bplus-tree',
+      'wal',
+      'boundary-tests',
+      'log-trace',
+      'cas',
+      'bounded-queue',
+      'token-bucket',
+      'cache-mapping',
+      'branch-predict',
+      'dma-transfer',
     ]),
     objectives: z.array(z.string()).min(2).max(4),
     prerequisites: z.array(z.string()).default([]),
@@ -106,9 +150,56 @@ function extractSteps(section, filename, source) {
   return steps.map(({ title, nodes }) => ({ title, markdown: sourceOf(nodes, source) }));
 }
 
+function extractLanguageExamples(section, filename, source) {
+  if (!section) return null;
+  const languages = new Map([
+    ['C', 'c'],
+    ['C++', 'cpp'],
+    ['Python 3', 'python'],
+    ['Rust', 'rust'],
+    ['Zig', 'zig'],
+    ['Java', 'java'],
+    ['Kotlin', 'kotlin'],
+  ]);
+  const introduction = [];
+  const variants = [];
+  for (const node of section.nodes) {
+    if (node.type === 'heading' && node.depth === 3) {
+      const title = plainText(node);
+      if (!languages.has(title) || variants.some((variant) => variant.title === title)) {
+        throw new Error(`Invalid language heading in ${filename}: ${title}`);
+      }
+      variants.push({ title, nodes: [] });
+    } else if (variants.length) {
+      variants.at(-1).nodes.push(node);
+    } else {
+      introduction.push(node);
+    }
+  }
+  if (variants.length < 2)
+    throw new Error(`Language examples need at least two variants in ${filename}`);
+  for (const variant of variants) {
+    const blocks = variant.nodes.filter((node) => node.type === 'code');
+    if (blocks.length !== 1 || blocks[0].lang !== languages.get(variant.title)) {
+      throw new Error(`Expected one ${variant.title} code block in ${filename}`);
+    }
+  }
+  return {
+    introduction: sourceOf(introduction, source),
+    variants: variants.map(({ title, nodes }) => ({ title, markdown: sourceOf(nodes, source) })),
+  };
+}
+
 export function parseLesson(raw, filename) {
   const { data, content } = matter(raw);
-  const metadata = lessonSchema.parse(data);
+  const checked = lessonSchema.safeParse(data);
+  if (!checked.success) {
+    const details = checked.error.issues
+      .map((issue) => `${issue.path.join('.') || 'frontmatter'}: ${issue.message}`)
+      .join('; ');
+    throw new Error(`Invalid metadata in ${filename}: ${details}`);
+  }
+  const metadata = checked.data;
   if (filename !== `${metadata.slug}.md`) throw new Error(`Slug does not match ${filename}`);
   const ast = unified().use(remarkParse).parse(content);
   const validateNode = (node) => {
@@ -141,6 +232,11 @@ export function parseLesson(raw, filename) {
     filename,
     content,
   );
+  const languageExamples = extractLanguageExamples(
+    sections.find((section) => section.title === '多语言示例'),
+    filename,
+    content,
+  );
   if (metadata.lab === 'walkthrough' && !steps.length) {
     throw new Error(`Missing walkthrough in ${filename}`);
   }
@@ -154,6 +250,7 @@ export function parseLesson(raw, filename) {
     quiz,
     sections: sectionsJson,
     steps,
+    languageExamples,
     code: code?.value ?? '',
     source: filename,
     markdown: content,
@@ -188,7 +285,9 @@ export async function buildContent() {
   await writeFile(
     path.join(root, '.generated/lessons.json'),
     `${JSON.stringify(
-      lessons.map(({ quiz, sections, steps, code, markdown, ...summary }) => summary),
+      lessons.map(
+        ({ quiz, sections, steps, languageExamples, code, markdown, ...summary }) => summary,
+      ),
       null,
       2,
     )}\n`,

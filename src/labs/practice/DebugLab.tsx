@@ -1,3 +1,4 @@
+import { SelectField } from '../../components/SelectField';
 import { useState } from 'react';
 import { Play, ListChecks } from 'lucide-react';
 import { Experiment } from '../../components/Experiment';
@@ -52,7 +53,7 @@ export default function DebugLab() {
         </div>
         <label>
           输入用例
-          <select
+          <SelectField
             value={selected}
             onChange={(event) => {
               setSelected(Number(event.target.value));
@@ -64,7 +65,7 @@ export default function DebugLab() {
                 {item.label} {JSON.stringify(item.values)}
               </option>
             ))}
-          </select>
+          </SelectField>
         </label>
       </div>
       <div className="practice-debug-source">

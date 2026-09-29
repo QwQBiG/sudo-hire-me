@@ -1,0 +1,163 @@
+.endian-controls label {
+  flex: 1 1 175px;
+}
+.endian-controls label:first-child {
+  flex-basis: 205px;
+}
+.endian-controls input,
+.endian-controls select {
+  width: 100%;
+}
+.endian-sequence {
+  margin: 8px 0 0;
+  padding: 18px 0 10px;
+  border-top: 1px solid var(--line);
+}
+.endian-sequence-title {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 8px 18px;
+  margin-bottom: 12px;
+  color: var(--muted);
+  font-size: 11px;
+}
+.endian-sequence-title strong {
+  font: 19px var(--mono);
+  color: var(--ink);
+}
+.endian-sequence-title span:last-child {
+  margin-left: auto;
+  color: #935470;
+}
+.endian-source-bytes,
+.endian-memory {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  min-width: 0;
+}
+.endian-source-bytes {
+  gap: 8px;
+}
+.endian-source-bytes span {
+  display: grid;
+  place-items: center;
+  min-height: 38px;
+  border-bottom: 2px solid #d4c6d8;
+  color: #644d63;
+  font: 17px var(--mono);
+}
+.endian-source-bytes span[data-significance='high'] {
+  border-color: #a33e6c;
+}
+.endian-source-bytes span[data-significance='low'] {
+  border-color: #346d98;
+}
+.endian-transfer {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 13px 0;
+  color: var(--muted);
+  font-size: 11px;
+}
+.endian-transfer span {
+  color: #a33e6c;
+  font-size: 20px;
+  line-height: 1;
+}
+.endian-memory {
+  border: 1px solid #d3cfdb;
+}
+.endian-slot {
+  display: grid;
+  justify-items: center;
+  gap: 6px;
+  min-width: 0;
+  padding: 12px 6px;
+  background: #f7f8fa;
+  animation: endian-place 230ms ease both;
+}
+.endian-slot + .endian-slot {
+  border-left: 1px solid #d3cfdb;
+}
+.endian-slot:nth-child(2) {
+  animation-delay: 45ms;
+}
+.endian-slot:nth-child(3) {
+  animation-delay: 90ms;
+}
+.endian-slot:nth-child(4) {
+  animation-delay: 135ms;
+}
+.endian-slot small,
+.endian-slot span {
+  color: #69717e;
+  font-size: 10px;
+  white-space: nowrap;
+}
+.endian-slot strong {
+  color: #2e5c7e;
+  font: 23px var(--mono);
+}
+.endian-readout {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  justify-content: space-between;
+  gap: 8px 20px;
+  padding: 18px 0 4px;
+}
+.endian-readout > div {
+  display: grid;
+  gap: 4px;
+}
+.endian-readout small {
+  color: var(--muted);
+  font-size: 11px;
+}
+.endian-readout strong {
+  font: 23px var(--mono);
+  overflow-wrap: anywhere;
+}
+.endian-readout > span {
+  color: #346d98;
+  font-size: 12px;
+}
+.endian-readout[data-match='false'] > span,
+.endian-error {
+  color: #a33e6c;
+}
+@keyframes endian-place {
+  from {
+    opacity: 0.45;
+    transform: translateY(-7px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@media (max-width: 380px) {
+  .endian-slot {
+    padding: 10px 2px;
+  }
+  .endian-slot strong {
+    font-size: 18px;
+  }
+  .endian-slot small,
+  .endian-slot span {
+    font-size: 9px;
+  }
+  .endian-readout strong {
+    font-size: 20px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .endian-slot {
+    animation: none;
+  }
+}
+[data-reduced-motion='true'] .endian-slot {
+  animation: none;
+}

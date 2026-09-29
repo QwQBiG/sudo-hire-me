@@ -1,3 +1,4 @@
+import { SelectField } from '../../components/SelectField';
 import { useState } from 'react';
 import { ArrowLeftRight, Send, Clock3, FilePenLine } from 'lucide-react';
 import { Experiment } from '../../components/Experiment';
@@ -38,7 +39,7 @@ export default function HttpCache() {
       <div className="experiment-controls sys-controls">
         <label>
           响应策略（切换后清空实验缓存）
-          <select
+          <SelectField
             value={policy}
             onChange={(event) => {
               setPolicy(event.target.value);
@@ -52,7 +53,7 @@ export default function HttpCache() {
             <option value="max-age">Cache-Control: max-age=60</option>
             <option value="no-cache">Cache-Control: no-cache</option>
             <option value="no-store">Cache-Control: no-store</option>
-          </select>
+          </SelectField>
         </label>
         <button onClick={request}>
           <Send size={16} />
