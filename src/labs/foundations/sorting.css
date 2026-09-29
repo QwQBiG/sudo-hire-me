@@ -1,0 +1,144 @@
+.sort-origin {
+  align-self: center;
+  color: var(--muted);
+  font-size: 12px;
+}
+.sort-progress {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 5px;
+  margin: 22px 0;
+}
+.sort-progress span {
+  height: 5px;
+  background: #e8e0ec;
+}
+.sort-progress span[data-done='true'] {
+  background: #b85f8e;
+}
+.sort-lanes {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 26px;
+}
+.sort-lane {
+  min-width: 0;
+  padding-top: 14px;
+  border-top: 3px solid #ad6b90;
+}
+.sort-lane.selection {
+  border-color: #739cb9;
+}
+.sort-lane header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 10px;
+}
+.sort-lane h3 {
+  margin: 0;
+  font-size: 16px;
+}
+.sort-lane header span {
+  color: var(--muted);
+  font-size: 11px;
+}
+.sort-bars {
+  height: 165px;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  align-items: end;
+  gap: 7px;
+  margin: 22px 0 16px;
+  border-bottom: 1px solid #d9cedf;
+}
+.sort-bar {
+  display: grid;
+  align-content: end;
+  min-width: 0;
+  text-align: center;
+}
+.sort-bar > div {
+  width: 100%;
+  border: 1px solid #c894ae;
+  border-bottom: 0;
+  background: #f2dbe7;
+  transition:
+    height 260ms ease,
+    background 260ms ease;
+}
+.sort-lane.selection .sort-bar > div {
+  border-color: #91b1ca;
+  background: #deecf7;
+}
+.sort-bar[data-focus='true'] > div {
+  background: #d788b0;
+}
+.sort-lane.selection .sort-bar[data-focus='true'] > div {
+  background: #8db8d8;
+}
+.sort-bar strong {
+  min-height: 28px;
+  font: 16px var(--mono);
+}
+.sort-bar small {
+  margin-left: 2px;
+  font: 11px var(--mono);
+  color: #6d5367;
+}
+.sort-lane p {
+  min-height: 48px;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.7;
+}
+.sort-metrics {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+  padding: 14px 0;
+  border-block: 1px solid var(--line);
+  font-size: 12px;
+}
+.sort-metrics strong {
+  margin-left: 6px;
+  font: 19px var(--mono);
+}
+.sort-lane output {
+  display: block;
+  min-height: 36px;
+  padding-top: 12px;
+  font-size: 12px;
+  color: #754f6d;
+}
+.sort-actions {
+  margin-top: 24px;
+}
+.sort-actions button {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+@media (max-width: 650px) {
+  .sort-lanes {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 28px;
+  }
+  .sort-lane p {
+    min-height: 0;
+  }
+  .sort-bars {
+    height: 145px;
+  }
+  .sort-bar > div {
+    max-height: 115px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .sort-bar > div {
+    transition: none;
+  }
+}
+[data-reduced-motion='true'] .sort-bar > div {
+  transition: none;
+}

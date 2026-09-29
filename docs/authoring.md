@@ -46,10 +46,11 @@ prerequisites: ["binary-representation"]
 | `ownership` | Rust 所有权教学演示 |
 | `walkthrough` | 从 Markdown 提取的可逐步查看的例题 |
 | `memory` / `cpu` / `cache` | 字节地址格、指令数据通路、缓存行访问 |
-| `complexity` / `sequence` | 操作数量比较、数组与链接的插入差异 |
+| `complexity` / `sequence` / `sorting` / `heap` | 操作数量比较、数组与链接的插入差异、排序稳定性对照、堆顶下沉 |
 | `stack-queue` / `hash` / `recursion` / `tree` | 容器操作、哈希桶、调用栈、树遍历 |
-| `paging` / `race` / `locks` | 地址转换、线程交错、锁资源分配 |
-| `encapsulation` / `transport` / `tcp` | 层间封装、传输差异、连接状态 |
+| `paging` / `replacement` / `race` / `locks` | 地址转换、页面置换、线程交错、锁资源分配 |
+| `encapsulation` / `transport` / `tcp` / `tcp-window` | 层间封装、传输差异、连接状态、累计确认与窗口 |
+| `subnet` | IPv4 掩码与地址范围 |
 | `dns` / `http` / `http-cache` | DNS 缓存查询、请求响应、HTTP 缓存 |
 | `index` / `transaction` / `isolation` | 索引路径、转账事务、双事务可见性 |
 | `git` / `debug` | 三区快照、边界测试与定位 |

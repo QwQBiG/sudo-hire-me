@@ -3,7 +3,7 @@ slug: "tcp-connection"
 title: "TCP 建连与关闭"
 subject: "计算机网络"
 description: "不只背三次和四次：用具体序列号看双方怎样建立状态、结束两个发送方向。"
-order: 17
+order: 21
 minutes: 24
 lab: "tcp"
 objectives: ["计算握手中的序列号和确认号","解释连接关闭的两个方向","说明 TIME_WAIT 与重传的关系"]

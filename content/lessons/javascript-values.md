@@ -3,7 +3,7 @@ slug: "javascript-values"
 title: "变量、值与对象共享"
 description: "跟踪两次赋值和一次对象修改，理解为什么有时另一个变量也看到了变化。"
 subject: "Web 与程序执行"
-order: 27
+order: 36
 minutes: 20
 lab: "javascript"
 objectives: ["区分原始值与对象", "分别追踪对象修改与变量重绑定", "解释 const 和浅拷贝的边界"]

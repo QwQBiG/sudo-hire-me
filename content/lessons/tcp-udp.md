@@ -3,7 +3,7 @@ slug: "tcp-udp"
 title: "TCP、UDP 与消息边界"
 subject: "计算机网络"
 description: "发送两次 hello 和 world，接收方为什么不一定恰好读取两次？"
-order: 16
+order: 20
 minutes: 21
 lab: "transport"
 objectives: ["比较可靠字节流与数据报","识别应用消息边界","区分传输确认与业务成功"]

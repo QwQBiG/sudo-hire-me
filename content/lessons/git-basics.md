@@ -3,7 +3,7 @@ slug: "git-basics"
 title: "工作区、暂存区与提交"
 description: "跟踪同一个文件暂存后再次修改的过程，判断普通提交究竟保存哪个版本。"
 subject: "工程实践"
-order: 32
+order: 44
 minutes: 18
 lab: "git"
 objectives: ["区分工作区暂存区与提交", "解释暂存后再修改的状态", "选择正确的 diff 对比范围"]

@@ -3,7 +3,7 @@ slug: rust-ownership
 title: Rust 所有权
 description: move 之后字符串去哪里了？区分移动、借用和克隆。
 subject: 编程语言
-order: 31
+order: 43
 minutes: 15
 lab: ownership
 objectives: ["解释移动后的使用权限", "区分移动与销毁", "比较借用与克隆"]

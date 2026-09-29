@@ -3,7 +3,7 @@ slug: "javascript-closures"
 title: "闭包如何保留状态"
 description: "跟踪两个计数器和一个函数别名，理解函数返回后为什么还能访问外层变量。"
 subject: "Web 与程序执行"
-order: 28
+order: 38
 minutes: 20
 lab: "javascript"
 objectives: ["解释函数与词法环境的关系", "区分共享计数器和独立计数器", "判断名称可见范围"]

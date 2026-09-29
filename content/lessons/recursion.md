@@ -3,7 +3,7 @@ slug: "recursion"
 title: "递归与调用栈"
 subject: "数据结构与算法"
 description: "从阶乘的进入与返回过程，看清终止条件、独立调用状态和栈空间。"
-order: 9
+order: 10
 minutes: 15
 lab: "recursion"
 objectives: ["设计终止条件与规模递减规则", "跟踪递归调用的进入和返回", "区分递归次数、最大深度与空间成本"]

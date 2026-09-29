@@ -3,7 +3,7 @@ slug: "http-caching"
 title: "HTTP 缓存与条件请求"
 subject: "计算机网络"
 description: "同一个页面再次打开，什么时候不联网，什么时候返回 304，什么时候必须重新下载？"
-order: 20
+order: 26
 minutes: 23
 lab: "http-cache"
 objectives: ["区分新鲜度判断与条件验证","根据请求头和响应头推演 200 与 304","正确比较 no-cache 和 no-store"]

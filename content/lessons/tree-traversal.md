@@ -3,7 +3,7 @@ slug: "tree-traversal"
 title: "二叉树与三种遍历"
 subject: "数据结构与算法"
 description: "沿着同一棵树改变访问时机，真正区分前序、中序、后序与递归调用。"
-order: 10
+order: 11
 minutes: 16
 lab: "tree"
 objectives: ["辨认根、子树与叶节点", "推导前序、中序、后序的访问顺序", "分析遍历的时间与调用栈空间"]
