@@ -5,7 +5,7 @@ description: "用一个空队列和两个消费者，理解 wait 的释放再加
 subject: "操作系统"
 order: 90
 minutes: 19
-lab: "walkthrough"
+lab: "workbench"
 objectives: ["解释条件变量等待的是共享谓词而非通知次数", "说明 wait 如何与互斥锁配合", "推演为何醒来后必须重新检查条件"]
 prerequisites: ["synchronization", "mutex-vs-semaphore"]
 ---

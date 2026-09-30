@@ -5,7 +5,7 @@ description: "用两个计数器和一个别名，看清类的定义、对象创
 subject: "编程基础与面向对象"
 order: 17
 minutes: 15
-lab: "walkthrough"
+lab: "workbench"
 objectives: ["区分类的定义与运行中的对象", "追踪两个实例和引用别名的状态", "辨别实例成员与类级成员"]
 prerequisites: ["function-arguments"]
 ---

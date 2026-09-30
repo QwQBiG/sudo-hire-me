@@ -5,7 +5,7 @@ description: "创建两个计数器后分别修改实例值，观察类级创建
 subject: "编程基础与面向对象"
 order: 26
 minutes: 15
-lab: "walkthrough"
+lab: "workbench"
 objectives: ["判断字段属于类还是对象", "推导两个实例和一个静态计数器的值", "解释静态方法缺少隐式实例接收者"]
 prerequisites: ["oop-classes-objects", "constructor-initialization"]
 ---

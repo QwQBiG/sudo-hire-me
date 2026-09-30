@@ -5,7 +5,7 @@ description: "从一次新版本错误率上升，理解小范围发布、停止
 subject: "工程实践"
 order: 178
 minutes: 18
-lab: "walkthrough"
+lab: "workbench"
 objectives: ["解释渐进发布与对照组", "知道什么时候暂停或回滚", "指出代码回滚未必回滚数据"]
 prerequisites: ["build-artifact-release", "metrics-tracing-basics"]
 ---

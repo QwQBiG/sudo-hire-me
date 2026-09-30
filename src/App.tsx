@@ -257,7 +257,7 @@ export default function App() {
                         <span>
                           {route === 'review'
                             ? `${record?.bookmark ? '已收藏 · ' : ''}练习 ${record?.attempts ?? 0} 次`
-                            : `${item.minutes} 分钟 · ${item.lab === 'walkthrough' ? '例题推演' : '交互实验'}`}
+                            : `${item.minutes} 分钟 · 交互实验`}
                         </span>
                         <ArrowRight size={19} />
                       </div>

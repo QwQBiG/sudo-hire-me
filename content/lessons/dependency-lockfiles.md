@@ -5,7 +5,7 @@ description: "区分声明允许的版本范围、实际解析出的依赖图，
 subject: "工程实践"
 order: 172
 minutes: 18
-lab: "walkthrough"
+lab: "workbench"
 objectives: ["区分直接与传递依赖", "说明声明文件和锁文件的不同角色", "说清锁定版本与字节级可复现之间的边界"]
 prerequisites: ["build-artifact-release"]
 ---

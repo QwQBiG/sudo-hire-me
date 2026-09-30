@@ -5,7 +5,7 @@ description: "沿一次登录与后续请求，分清浏览器存储/传送、�
 subject: "计算机网络"
 order: 125
 minutes: 17
-lab: "walkthrough"
+lab: "workbench"
 objectives: ["按登录请求追踪 Cookie 与服务端会话", "说明 Token 可通过 Cookie 等位置传送", "解释安全属性与失效策略的边界"]
 prerequisites: ["http-https", "http-status-codes"]
 ---

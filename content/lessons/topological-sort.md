@@ -5,7 +5,7 @@ subject: "数据结构与算法"
 description: "把依赖关系画成有向图，用零入度队列安排先后，并用处理数量识别环。"
 order: 63
 minutes: 21
-lab: "walkthrough"
+lab: "workbench"
 objectives: ["解释有向边和入度代表的先修关系", "逐轮执行 Kahn 算法", "判断环与多种合法拓扑序"]
 prerequisites: ["graph-bfs", "graph-dfs"]
 ---

@@ -5,7 +5,7 @@ description: "手算服务 A 和 B 的剩余时间，区分每次调用超时与
 subject: "并发与系统设计"
 order: 157
 minutes: 17
-lab: "walkthrough"
+lab: "workbench"
 objectives: ["计算端到端剩余预算", "区别相对超时与绝对截止时间", "说明超时并不等于远端一定停止"]
 prerequisites: ["blocking-nonblocking-io"]
 ---

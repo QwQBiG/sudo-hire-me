@@ -5,7 +5,7 @@ description: "计算指数退避和抖动，理解重试预算、放大流量与
 subject: "并发与系统设计"
 order: 158
 minutes: 18
-lab: "walkthrough"
+lab: "workbench"
 objectives: ["手算前三次退避间隔", "解释抖动避免同步重试", "把重试限制在总截止时间与幂等边界内"]
 prerequisites: ["timeouts-deadlines"]
 ---

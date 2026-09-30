@@ -5,7 +5,7 @@ subject: "数据结构与算法"
 description: "用每次走一阶或两阶的爬楼梯问题，写清状态、转移、初始值和边界。"
 order: 74
 minutes: 19
-lab: "walkthrough"
+lab: "workbench"
 objectives: ["定义恰好到达第 i 阶的方案数", "推导并填写 dp[0] 到 dp[5] 的状态表", "解释初始值、时间空间成本和输入边界"]
 prerequisites: ["recursion", "complexity"]
 ---

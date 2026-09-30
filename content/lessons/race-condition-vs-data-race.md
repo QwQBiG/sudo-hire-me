@@ -5,7 +5,7 @@ description: "比较无同步读写与分开上锁的检查后执行，识别两
 subject: "并发与系统设计"
 order: 152
 minutes: 18
-lab: "walkthrough"
+lab: "workbench"
 objectives: ["识别同一内存位置的无序冲突访问", "构造没有数据竞争却仍有竞态的例子", "说明检测器与业务测试各能发现什么"]
 prerequisites: ["synchronization"]
 ---

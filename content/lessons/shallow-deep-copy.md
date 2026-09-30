@@ -5,7 +5,7 @@ description: "用嵌套列表的对象图判断哪些容器是新的、哪些子
 subject: "编程基础与面向对象"
 order: 27
 minutes: 17
-lab: "walkthrough"
+lab: "workbench"
 objectives: ["区分别名、浅拷贝和深拷贝", "沿对象图预测一次嵌套修改的影响", "说明深拷贝的边界与成本"]
 prerequisites: ["pointer-reference-basics", "oop-classes-objects"]
 ---

@@ -5,7 +5,7 @@ description: "从数组左端逐个比较，解释为什么第一个匹配下标
 subject: "数据结构与算法"
 order: 46
 minutes: 18
-lab: "walkthrough"
+lab: "workbench"
 objectives: ["按下标逐次追踪顺序查找", "解释首次匹配与未找到的返回值", "分析最好与最坏时间复杂度"]
 prerequisites: ["array-linked-list", "complexity"]
 ---

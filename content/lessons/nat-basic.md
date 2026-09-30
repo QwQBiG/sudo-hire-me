@@ -5,7 +5,7 @@ description: "用两台内网机器访问同一服务器的映射表，推演出
 subject: "计算机网络"
 order: 109
 minutes: 19
-lab: "walkthrough"
+lab: "workbench"
 objectives: ["区分基本 NAT 与 NAPT", "从两条源地址端口映射判断回包归属", "解释未建立映射的入站流量为何不能凭空找到内网主机"]
 prerequisites: ["mac-ip-port", "network-layers"]
 ---

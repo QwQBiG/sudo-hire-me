@@ -5,7 +5,7 @@ description: "用数组边界和有符号溢出区分未定义、未指定与实
 subject: "C 语言机制"
 order: 182
 minutes: 18
-lab: "walkthrough"
+lab: "workbench"
 objectives: ["区分三类标准术语", "判断越界读取为何没有固定输出", "为数组访问写出有效索引条件"]
 prerequisites: ["array-bounds-slices", "integer-overflow"]
 ---

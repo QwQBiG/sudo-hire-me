@@ -5,7 +5,7 @@ description: "从开发、测试到生产的差异，理解可公开配置、敏
 subject: "工程实践"
 order: 177
 minutes: 18
-lab: "walkthrough"
+lab: "workbench"
 objectives: ["区分普通配置与密钥", "说明最小权限和轮换的意义", "解释泄露后为什么只删文件不够"]
 prerequisites: ["ci-pipeline-basic"]
 ---

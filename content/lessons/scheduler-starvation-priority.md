@@ -5,7 +5,7 @@ description: "用到达时间线看清饥饿的条件、与死锁的区别，以
 subject: "操作系统"
 order: 85
 minutes: 16
-lab: "walkthrough"
+lab: "workbench"
 objectives: ["按优先级和到达时刻追踪就绪队列", "说出饥饿成立的条件与老化的作用", "区分饥饿、死锁和优先级反转"]
 prerequisites: ["cpu-scheduling"]
 ---

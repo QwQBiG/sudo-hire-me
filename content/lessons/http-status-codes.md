@@ -5,7 +5,7 @@ description: "沿创建资源、读取缓存和访问受限资源的请求，分
 subject: "计算机网络"
 order: 124
 minutes: 20
-lab: "walkthrough"
+lab: "workbench"
 objectives: ["由请求结果选择 200、201、204、304", "区分 401、403 和 404", "解释 500、502、503 指向的故障层次"]
 prerequisites: ["http-https", "http-methods", "http-caching"]
 ---

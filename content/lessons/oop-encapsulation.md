@@ -5,7 +5,7 @@ description: "用账户余额的不变量，理解为什么对象要把有效操
 subject: "编程基础与面向对象"
 order: 19
 minutes: 16
-lab: "walkthrough"
+lab: "workbench"
 objectives: ["说明封装、访问控制和不变量的联系", "追踪非法操作是否保持原状态", "识别暴露可变内部对象的反例"]
 prerequisites: ["oop-classes-objects"]
 ---

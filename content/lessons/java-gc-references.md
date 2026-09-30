@@ -5,7 +5,7 @@ description: "沿强引用、弱引用和可达性走一遍对象命运，区分
 subject: "Java 语言机制"
 order: 191
 minutes: 17
-lab: "walkthrough"
+lab: "workbench"
 objectives: ["解释强可达与仅弱可达的差别", "说清取消变量引用不等于立刻回收", "识别集合长期保留对象的逻辑泄漏"]
 prerequisites: ["stack-vs-heap", "object-identity-equality"]
 ---

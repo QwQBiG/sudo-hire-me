@@ -12,7 +12,7 @@ export interface Lesson {
     | 'javascript'
     | 'sql'
     | 'ownership'
-    | 'walkthrough'
+    | 'workbench'
     | 'memory'
     | 'cpu'
     | 'cache'

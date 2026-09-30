@@ -5,7 +5,7 @@ description: "用两次请求沿同一 TCP 连接读完响应，理解默认持�
 subject: "计算机网络"
 order: 121
 minutes: 18
-lab: "walkthrough"
+lab: "workbench"
 objectives: ["说明 HTTP/1.1 默认持久连接的条件", "解释复用前为何必须确定前一响应何时结束", "区分连接复用与 HTTP/2 多路复用"]
 prerequisites: ["http-https", "http-methods", "tcp-connection"]
 ---

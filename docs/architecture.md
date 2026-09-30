@@ -21,11 +21,11 @@ Markdown 的 YAML frontmatter 保存课程元数据。解析器通过 schema 验
 
 面试回答、选择题及其解释、实验代码均从正文提取，避免在组件里维护另一份内容。`src/types.ts` 定义页面使用的数据类型；`lab` 字段只选择内置实验，不能引入任意组件代码。
 
-`walkthrough` 课程的“逐步推演”小节由 AST 按三级标题提取成三至六个步骤，保留 Markdown 表格和代码。目录 JSON 不包含正文或步骤；进入课程后才加载相应数据。构建检查先修关系中的未知引用和循环，测试检查先修课程排在当前课程之前。
+课程的“逐步推演”小节由 AST 按三级标题提取，保留 Markdown 表格和代码，用于原理阅读。目录 JSON 不包含正文；进入课程后才加载相应数据。构建检查先修关系中的未知引用和循环，测试检查先修课程排在当前课程之前。
 
 “多语言示例”小节按语言标题提取并逐个验证代码围栏；页面只显示当前选中的语言，偏好保存在本机。`LessonView` 随课程页按需加载，首页不必先下载 Markdown 渲染器。
 
-交互实验由 `src/components/Lab.tsx` 按 `lab` 标识按需加载。基础与算法、系统与网络、数据库与工程实践分别放在 `src/labs/foundations/`、`src/labs/systems/`、`src/labs/practice/`。适合操纵状态的课使用专属模型和界面；需要顺序推演的课使用 `walkthrough`。`Experiment` 只统一标题、间距和重置入口，不规定实验内部结构。
+交互实验由 `src/components/Lab.tsx` 按 `lab` 标识按需加载。基础实验分布于 `src/labs/foundations/`、`src/labs/systems/`、`src/labs/practice/`。`workbench` 课程通过 `src/domain/workbench-catalog.mjs` 显式映射到 `src/labs/workbenches/` 中的机制实验，再按需加载对应组件。构建时拒绝没有映射的课程，不提供文字翻页兜底。`Experiment` 与 `Bench` 统一标题、重置与反馈，实验内部使用对象图、栈、依赖网格、报文、版本链等适合概念的布局。
 
 可变输入与状态转换的教学模型位于 `src/domain/` 的对应模块，使用纯函数测试。模型只处理已声明的有限场景，不实现完整 CPU、操作系统、网络协议栈或数据库引擎。Markdown 保留概念、例题和模型假设，即使不打开网页也能独立理解；修改模型时应同步检查相应正文。
 

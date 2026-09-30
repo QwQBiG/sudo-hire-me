@@ -5,7 +5,7 @@ description: "按工作区、暂存区、本地提交和已共享提交，判断
 subject: "工程实践"
 order: 167
 minutes: 20
-lab: "walkthrough"
+lab: "workbench"
 objectives: ["区分工作区、暂存区和提交历史", "说明 restore、reset、revert 分别改变什么", "避免误删未提交改动或改写他人依赖的历史"]
 prerequisites: ["git-basics", "git-branch-merge-rebase"]
 ---

@@ -5,7 +5,7 @@ description: "把接收窗口与拥塞窗口放进同一算例，算清未确认
 subject: "计算机网络"
 order: 113
 minutes: 19
-lab: "walkthrough"
+lab: "workbench"
 objectives: ["区分接收端容量限制和网络拥塞限制", "用 rwnd 与 cwnd 计算教学模型中的在途上限", "避免把窗口上限误当作每次必定发送的字节数"]
 prerequisites: ["tcp-reliability"]
 ---

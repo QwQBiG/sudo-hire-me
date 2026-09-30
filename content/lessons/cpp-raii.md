@@ -5,7 +5,7 @@ description: "从异常离开作用域的执行顺序看构造与析构如何自
 subject: "C++ 语言机制"
 order: 183
 minutes: 17
-lab: "walkthrough"
+lab: "workbench"
 objectives: ["解释资源为何应绑定对象生命周期", "推导异常退出时析构的时机", "指出 RAII 不等于只能管理堆内存"]
 prerequisites: ["constructor-initialization", "memory-leak-use-after-free"]
 ---

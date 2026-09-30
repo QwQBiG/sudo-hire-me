@@ -5,7 +5,7 @@ subject: "数据结构与算法"
 description: "流式读入六个数，维护容量为 K 的小顶堆，理解堆顶为何是当前第 K 大。"
 order: 59
 minutes: 19
-lab: "walkthrough"
+lab: "workbench"
 objectives: ["区分小顶堆的堆顶与整个堆的顺序", "逐项更新容量为 K 的候选集合", "解释 O(n log K) 及 K 的边界"]
 prerequisites: ["heap-priority-queue", "sorting-stability"]
 ---

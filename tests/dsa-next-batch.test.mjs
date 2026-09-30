@@ -97,7 +97,7 @@ test('all eight lessons parse with answers, valid prerequisites and genuine walk
     assert.equal(lesson.slug, slug);
     assert.equal(lesson.quiz.options.length, 4);
     assert.ok(lesson.languageExamples?.variants.length >= 2);
-    if (lesson.lab === 'walkthrough') assert.ok(lesson.steps.length >= 3);
+    if (lesson.lab === 'workbench') assert.ok(lesson.steps.length >= 3);
     for (const prerequisite of lesson.prerequisites) {
       await readFile(new URL(`../content/lessons/${prerequisite}.md`, import.meta.url), 'utf8');
     }

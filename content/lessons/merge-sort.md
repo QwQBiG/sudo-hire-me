@@ -5,7 +5,7 @@ subject: "数据结构与算法"
 description: "让两个相同键带着原编号参与归并，观察稳定性来自相等时先取左边。"
 order: 54
 minutes: 20
-lab: "walkthrough"
+lab: "workbench"
 objectives: ["手算拆分和两路合并", "解释相等键时的稳定性条件", "说明 O(n log n) 时间与 O(n) 辅助空间"]
 prerequisites: ["sorting-stability", "recursion"]
 ---

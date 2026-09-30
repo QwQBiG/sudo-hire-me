@@ -5,7 +5,7 @@ description: "用每秒进出量手算积压，理解限速、阻塞与丢弃各
 subject: "并发与系统设计"
 order: 156
 minutes: 18
-lab: "walkthrough"
+lab: "workbench"
 objectives: ["按入队出队速度计算积压", "解释有界缓冲不能消除长期速率差", "比较阻塞、拒绝和降载"]
 prerequisites: ["producer-consumer-queue"]
 ---

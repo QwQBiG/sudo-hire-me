@@ -5,7 +5,7 @@ description: "用发布标记说明可见性与 happens-before，不把原子性
 subject: "并发与系统设计"
 order: 151
 minutes: 19
-lab: "walkthrough"
+lab: "workbench"
 objectives: ["区分单次原子写与跨线程可见性", "沿同步关系推断发布后的数据", "说明结论必须依赖语言内存模型"]
 prerequisites: ["atomic-cas-basics", "synchronization"]
 ---

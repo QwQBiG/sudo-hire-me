@@ -5,7 +5,7 @@ description: "把两条有读后写依赖的指令排进五级流水线，理解
 subject: "计算机基础"
 order: 41
 minutes: 18
-lab: "walkthrough"
+lab: "workbench"
 objectives: ["说明流水线主要提高吞吐而非单条指令必然更快", "识别读后写数据相关", "区分数据、控制与结构冒险"]
 prerequisites: ["cpu-execution"]
 ---

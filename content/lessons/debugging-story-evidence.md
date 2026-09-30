@@ -5,7 +5,7 @@ description: "从现象、最小复现和根因，到修复与回归测试，讲
 subject: "项目与面试表达"
 order: 197
 minutes: 18
-lab: "walkthrough"
+lab: "workbench"
 objectives: ["按事实和假设重建排障顺序", "说明最小复现怎样定位根因", "用回归测试而非主观感觉说明修复"]
 prerequisites: ["testing-debugging", "personal-contribution-evidence"]
 ---

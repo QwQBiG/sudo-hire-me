@@ -5,7 +5,7 @@ description: "沿同一个幂等键追踪首次执行、响应丢失与重复请
 subject: "并发与系统设计"
 order: 159
 minutes: 18
-lab: "walkthrough"
+lab: "workbench"
 objectives: ["解释幂等是重复操作的最终业务效果", "用请求键识别重复副作用", "说明键范围、参数冲突和保存期限"]
 prerequisites: ["retry-exponential-backoff", "database-transactions"]
 ---

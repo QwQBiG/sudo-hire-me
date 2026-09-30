@@ -5,7 +5,7 @@ description: "沿 ClientHello、ServerHello、证书验证和 Finished 追踪密
 subject: "计算机网络"
 order: 126
 minutes: 22
-lab: "walkthrough"
+lab: "workbench"
 objectives: ["区分密钥协商与证书身份验证", "追踪 TLS 1.3 完整握手的关键消息", "说明 HTTPS 中 TCP 建连与 TLS 握手不是同一件事"]
 prerequisites: ["http-https", "tcp-connection"]
 ---

@@ -5,7 +5,7 @@ description: "从 String? 到安全调用与 Elvis 默认值，推导可空输�
 subject: "Kotlin 语言机制"
 order: 192
 minutes: 17
-lab: "walkthrough"
+lab: "workbench"
 objectives: ["区分 String 与 String?", "推导 ?. 与 ?: 组合的结果", "指出 !! 和 Java 平台类型仍可能产生运行时空值错误"]
 prerequisites: ["null-option-absence"]
 ---

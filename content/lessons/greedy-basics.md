@@ -5,7 +5,7 @@ subject: "数据结构与算法"
 description: "用区间调度理解何为有证明的局部选择，比较最早开始和最早结束两种规则。"
 order: 72
 minutes: 21
-lab: "walkthrough"
+lab: "workbench"
 objectives: ["从反例否定最早开始规则", "按最早结束顺序选出最多不重叠活动", "用交换论证解释正确性与适用范围"]
 prerequisites: ["sorting-stability", "two-pointers-basic"]
 ---

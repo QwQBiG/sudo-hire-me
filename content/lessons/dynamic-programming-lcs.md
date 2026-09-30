@@ -5,7 +5,7 @@ subject: "数据结构与算法"
 description: "从两串前缀的状态表找出公共子序列，并看懂并列最优时答案为何不唯一。"
 order: 76
 minutes: 22
-lab: "walkthrough"
+lab: "workbench"
 objectives: ["区分子序列和子串", "填出 LCS 状态表并回溯一个答案", "说明时间空间复杂度和并列最优"]
 prerequisites: ["dynamic-programming-intro", "array-linked-list"]
 ---

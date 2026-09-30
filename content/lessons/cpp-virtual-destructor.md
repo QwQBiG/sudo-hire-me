@@ -5,7 +5,7 @@ description: "沿 Base 指针删除 Derived 对象，推导两个析构函数的
 subject: "C++ 语言机制"
 order: 185
 minutes: 16
-lab: "walkthrough"
+lab: "workbench"
 objectives: ["判断经基类指针 delete 时的前提", "推导派生类与基类析构顺序", "解释没有虚析构时不能猜测输出"]
 prerequisites: ["oop-polymorphism", "cpp-raii"]
 ---

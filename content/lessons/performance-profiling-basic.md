@@ -5,7 +5,7 @@ description: "用一个慢接口解释基线、剖析、吞吐量和延迟，避
 subject: "工程实践"
 order: 176
 minutes: 19
-lab: "walkthrough"
+lab: "workbench"
 objectives: ["区分延迟与吞吐量", "解释基线和性能剖析的作用", "设计可比较的前后实验"]
 prerequisites: ["complexity", "metrics-tracing-basics"]
 ---

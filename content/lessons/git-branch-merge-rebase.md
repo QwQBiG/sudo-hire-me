@@ -5,7 +5,7 @@ description: "用一张提交图理解合并和变基各怎样处理分叉历史
 subject: "工程实践"
 order: 166
 minutes: 20
-lab: "walkthrough"
+lab: "workbench"
 objectives: ["读懂两个分支从同一提交分叉", "说明 merge 与 rebase 对提交历史的不同影响", "判断什么时候不应改写已共享的提交"]
 prerequisites: ["git-basics"]
 ---

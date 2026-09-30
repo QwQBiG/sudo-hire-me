@@ -5,7 +5,7 @@ description: "固定同一缓存行连续写两次再淘汰，追踪缓存值、
 subject: "计算机基础"
 order: 40
 minutes: 17
-lab: "walkthrough"
+lab: "workbench"
 objectives: ["区分写直达与写回的更新时点", "推导脏位何时置位与清除", "分清缓存写策略与断电持久化"]
 prerequisites: ["cache-locality"]
 ---

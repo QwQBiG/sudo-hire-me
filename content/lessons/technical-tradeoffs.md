@@ -5,7 +5,7 @@ description: "先列约束与备选方案，再用可验证依据解释选择和
 subject: "项目与面试表达"
 order: 196
 minutes: 19
-lab: "walkthrough"
+lab: "workbench"
 objectives: ["把选型问题转成明确的约束", "比较至少两个真实可行的方案", "区分估计、实验结果和仍未验证的判断"]
 prerequisites: ["project-explanation-structure"]
 ---

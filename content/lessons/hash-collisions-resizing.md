@@ -5,7 +5,7 @@ subject: "数据结构与算法"
 description: "用四个整数亲手看链式哈希表的冲突和重新散列，区分期望常数与最坏线性。"
 order: 49
 minutes: 20
-lab: "walkthrough"
+lab: "workbench"
 objectives: ["解释冲突不等于键相等", "手算扩容前后的桶位置", "带着哈希分布前提表述查找复杂度"]
 prerequisites: ["hash-table", "amortized-dynamic-array"]
 ---

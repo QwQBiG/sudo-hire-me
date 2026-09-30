@@ -5,7 +5,7 @@ description: "比较高选择性和低选择性条件的命中数量，理解优
 subject: "数据库"
 order: 142
 minutes: 17
-lab: "walkthrough"
+lab: "workbench"
 objectives: ["按数据分布计算条件命中比例", "说出索引查找之外的取行成本", "解释统计信息与实际计划的关系"]
 prerequisites: ["database-indexes", "database-explain-plan"]
 ---

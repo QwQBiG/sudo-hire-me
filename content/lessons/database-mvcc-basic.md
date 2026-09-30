@@ -5,7 +5,7 @@ description: "用 PostgreSQL 的 Repeatable Read 快照追踪两次更新前后�
 subject: "数据库"
 order: 147
 minutes: 19
-lab: "walkthrough"
+lab: "workbench"
 objectives: ["按事务快照判断版本可见性", "区分 Read Committed 与 Repeatable Read 的再次读取", "说明旧版本需要适时回收"]
 prerequisites: ["database-transactions", "database-isolation"]
 ---

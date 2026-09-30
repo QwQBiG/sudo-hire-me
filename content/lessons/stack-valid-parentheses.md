@@ -5,7 +5,7 @@ subject: "数据结构与算法"
 description: "逐字符处理三种括号，看到为什么仅统计数量无法保证嵌套顺序正确。"
 order: 68
 minutes: 16
-lab: "walkthrough"
+lab: "workbench"
 objectives: ["用栈记录尚未闭合的左括号", "手算一组合法与非法嵌套", "处理空栈、剩余左括号和非法字符"]
 prerequisites: ["stack-queue"]
 ---

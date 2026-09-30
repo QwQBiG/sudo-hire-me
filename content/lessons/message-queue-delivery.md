@@ -5,7 +5,7 @@ description: "以 SQS 标准队列的可见性超时为例，追踪重复投递�
 subject: "并发与系统设计"
 order: 155
 minutes: 19
-lab: "walkthrough"
+lab: "workbench"
 objectives: ["区分收到消息、完成副作用和确认删除", "解释至少一次投递下的重复处理", "说出幂等处理与死信队列的作用"]
 prerequisites: ["producer-consumer-queue"]
 ---

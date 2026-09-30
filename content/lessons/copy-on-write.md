@@ -5,7 +5,7 @@ description: "用父子进程的两页内存推演写时复制，区分逻辑地
 subject: "操作系统"
 order: 95
 minutes: 20
-lab: "walkthrough"
+lab: "workbench"
 objectives: ["解释 fork 后父子为何读到相同初值", "指出首次写入何时需要复制物理页", "区分 COW 保护故障与真正的非法访问"]
 prerequisites: ["process-thread", "virtual-memory"]
 ---

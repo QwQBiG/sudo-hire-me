@@ -5,7 +5,7 @@ description: "用队列的入队、出队契约，分清对外行为与数组或
 subject: "编程基础与面向对象"
 order: 20
 minutes: 15
-lab: "walkthrough"
+lab: "workbench"
 objectives: ["定义抽象与契约", "用队列操作推导行为", "区分抽象和封装"]
 prerequisites: ["oop-encapsulation"]
 ---

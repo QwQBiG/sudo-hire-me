@@ -5,7 +5,7 @@ description: "跟踪局部名字和调用方数据，分清值传递、引用、
 subject: "编程基础与面向对象"
 order: 4
 minutes: 22
-lab: "walkthrough"
+lab: "workbench"
 objectives: ["区分形参与实参", "判断重绑定局部变量和修改共享数据的效果", "解释七种语言示例的传参差异与前提"]
 prerequisites: ["program-compile-run"]
 ---

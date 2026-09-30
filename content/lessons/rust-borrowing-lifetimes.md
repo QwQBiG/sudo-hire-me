@@ -5,7 +5,7 @@ description: "沿共享借用到可变借用的切换过程，理解引用有效
 subject: "Rust 语言机制"
 order: 188
 minutes: 19
-lab: "walkthrough"
+lab: "workbench"
 objectives: ["区分共享引用与可变引用", "根据最后一次使用判断借用是否重叠", "解释返回局部变量引用为何无效"]
 prerequisites: ["rust-ownership", "pointer-reference-basics"]
 ---

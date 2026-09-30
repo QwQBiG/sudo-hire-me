@@ -5,7 +5,7 @@ description: "把项目介绍从技术名词堆砌改成可追踪的数据流、
 subject: "项目与面试表达"
 order: 194
 minutes: 18
-lab: "walkthrough"
+lab: "workbench"
 objectives: ["用目标和输入输出界定项目", "画出一条请求或数据的主要路径", "区分已经实现、验证过和仍是设想的部分"]
 prerequisites: ["self-introduction-technical"]
 ---

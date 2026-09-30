@@ -5,7 +5,7 @@ description: "在 Python 3 的半开区间里逐个取值，并对照 C、Java�
 subject: "编程基础与面向对象"
 order: 8
 minutes: 18
-lab: "walkthrough"
+lab: "workbench"
 objectives: ["计算半开切片区间", "区分单元素越界与切片边界裁剪", "说明不同语言的越界语义"]
 prerequisites: ["function-arguments"]
 ---

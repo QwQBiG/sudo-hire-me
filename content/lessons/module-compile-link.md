@@ -5,7 +5,7 @@ description: "给一个 C 函数写头文件并让两个源文件共享声明，
 subject: "编程基础与面向对象"
 order: 15
 minutes: 18
-lab: "walkthrough"
+lab: "workbench"
 objectives: ["区分声明和定义", "解释 #include 与翻译单元", "判断缺定义和重复定义的后果"]
 prerequisites: ["program-compile-run"]
 ---

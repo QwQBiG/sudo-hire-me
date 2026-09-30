@@ -5,7 +5,7 @@ subject: "数据结构与算法"
 description: "用队列分清每层的边界，解释为什么必须在处理当前层之前固定队列长度。"
 order: 61
 minutes: 18
-lab: "walkthrough"
+lab: "workbench"
 objectives: ["按左到右输出每一层节点", "用队列长度固定当前层边界", "分析空树、时间和最大队列空间"]
 prerequisites: ["tree-traversal", "stack-queue", "graph-bfs"]
 ---

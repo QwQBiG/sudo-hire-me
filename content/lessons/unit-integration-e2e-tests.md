@@ -5,7 +5,7 @@ description: "用同一笔订单追踪三种测试的边界、能发现的错误
 subject: "工程实践"
 order: 169
 minutes: 19
-lab: "walkthrough"
+lab: "workbench"
 objectives: ["按真实依赖划分三种测试范围", "为同一业务流程给出每层具体断言", "解释快而窄与慢而广的取舍"]
 prerequisites: ["testing-debugging"]
 ---

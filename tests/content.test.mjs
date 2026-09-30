@@ -43,7 +43,7 @@ const steps =
   '\n\n## 逐步推演\n\n### Read\n\nValue is 1.\n\n### Add\n\nValue is 2.\n\n### Write\n\nValue is 2.';
 
 test('walkthrough extracts ordered Markdown steps without duplicating headings', () => {
-  const lesson = parseLesson(fixture(body + steps, { lab: 'walkthrough' }), 'test-lesson.md');
+  const lesson = parseLesson(fixture(body + steps, { lab: 'workbench' }), 'test-lesson.md');
   assert.deepEqual(
     lesson.steps.map((step) => step.title),
     ['Read', 'Add', 'Write'],
@@ -51,15 +51,18 @@ test('walkthrough extracts ordered Markdown steps without duplicating headings',
   assert.equal(lesson.steps[1].markdown, 'Value is 2.');
 });
 
-test('walkthrough rejects missing, empty, too few or ambiguously prefaced steps', () => {
+test('mechanism experiments do not require textual walkthroughs', () => {
+  assert.deepEqual(parseLesson(fixture(body, { lab: 'workbench' }), 'test-lesson.md').steps, []);
+});
+
+test('walkthrough rejects empty, too few or ambiguously prefaced steps', () => {
   for (const suffix of [
-    '',
     steps.replace('Value is 2.\n\n### Write', '### Write'),
     steps.replace('### Write\n\nValue is 2.', ''),
     steps.replace('### Read', 'Unassigned paragraph\n\n### Read'),
   ]) {
     assert.throws(
-      () => parseLesson(fixture(body + suffix, { lab: 'walkthrough' }), 'test-lesson.md'),
+      () => parseLesson(fixture(body + suffix, { lab: 'workbench' }), 'test-lesson.md'),
       /[Ww]alkthrough/,
     );
   }

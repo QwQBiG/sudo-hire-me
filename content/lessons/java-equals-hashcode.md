@@ -5,7 +5,7 @@ description: "用两个独立的同值键走一遍 HashSet 查找，解释相等
 subject: "Java 语言机制"
 order: 190
 minutes: 18
-lab: "walkthrough"
+lab: "workbench"
 objectives: ["区分对象身份与 equals 语义", "说明相等对象哈希值必须相同", "解释只覆写 equals 或修改键字段的风险"]
 prerequisites: ["object-identity-equality"]
 ---

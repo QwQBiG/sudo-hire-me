@@ -5,7 +5,7 @@ description: "用两名工作线程和两格队列，分清执行、排队与拒
 subject: "并发与系统设计"
 order: 153
 minutes: 18
-lab: "walkthrough"
+lab: "workbench"
 objectives: ["按工作线程和有界队列追踪任务", "说明线程池限制资源并复用线程", "辨别队列满与任务执行失败"]
 prerequisites: ["process-thread", "cpu-scheduling"]
 ---

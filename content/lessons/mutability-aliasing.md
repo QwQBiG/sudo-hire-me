@@ -5,7 +5,7 @@ description: "用 C 中两次指针传参追踪共享写入，分清别名、值
 subject: "编程基础与面向对象"
 order: 12
 minutes: 16
-lab: "walkthrough"
+lab: "workbench"
 objectives: ["识别两个指针是否为同一对象的别名", "推导顺序写入的最终值", "区分别名风险与并发数据竞争"]
 prerequisites: ["pointer-reference-basics", "function-arguments"]
 ---

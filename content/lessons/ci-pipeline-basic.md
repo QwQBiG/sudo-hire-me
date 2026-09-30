@@ -5,7 +5,7 @@ description: "从一次提交的触发、构建、测试和产物，读懂失败
 subject: "工程实践"
 order: 173
 minutes: 18
-lab: "walkthrough"
+lab: "workbench"
 objectives: ["解释 CI 的触发和检查对象", "根据失败阶段判断下一步排查范围", "区分测试通过、可部署和已部署"]
 prerequisites: ["build-artifact-release", "unit-integration-e2e-tests"]
 ---

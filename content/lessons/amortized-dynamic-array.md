@@ -5,7 +5,7 @@ subject: "数据结构与算法"
 description: "逐次记录容量翻倍和旧元素搬迁，用总成本解释一次慢、长期仍快。"
 order: 45
 minutes: 20
-lab: "walkthrough"
+lab: "workbench"
 objectives: ["手算连续追加时的扩容与搬迁次数", "区别单次最坏和均摊复杂度", "说清倍增策略的空间代价与适用前提"]
 prerequisites: ["array-linked-list", "complexity"]
 ---

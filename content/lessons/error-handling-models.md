@@ -5,7 +5,7 @@ description: "用解析端口号的成功、非法文本和越界输入，比较
 subject: "编程基础与面向对象"
 order: 16
 minutes: 19
-lab: "walkthrough"
+lab: "workbench"
 objectives: ["区分正常返回值与失败信号", "追踪调用方在三种错误模型中的处理路径", "解释错误传播和资源清理的责任"]
 prerequisites: ["function-arguments"]
 ---

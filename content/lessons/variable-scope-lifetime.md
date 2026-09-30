@@ -5,7 +5,7 @@ description: "用 C 同名局部变量、静态局部变量和 Java 对象引用
 subject: "编程基础与面向对象"
 order: 6
 minutes: 17
-lab: "walkthrough"
+lab: "workbench"
 objectives: ["区分词法作用域与对象存储期", "按块规则判断同名变量遮蔽", "解释名字结束不等于对象立即消失"]
 prerequisites: ["function-arguments", "stack-vs-heap"]
 ---

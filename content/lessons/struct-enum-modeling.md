@@ -5,7 +5,7 @@ description: "用位置与移动方向的 C 小程序，理解把相关字段合
 subject: "编程基础与面向对象"
 order: 10
 minutes: 16
-lab: "walkthrough"
+lab: "workbench"
 objectives: ["区分结构体记录与枚举取值集合", "推导一次方向移动后的字段", "说明枚举不能自动验证外部整数"]
 prerequisites: ["pointer-reference-basics"]
 ---

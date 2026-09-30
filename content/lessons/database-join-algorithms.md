@@ -5,7 +5,7 @@ description: "用三行和四行手算嵌套循环、哈希连接与归并连接
 subject: "数据库"
 order: 143
 minutes: 20
-lab: "walkthrough"
+lab: "workbench"
 objectives: ["手算小表嵌套循环比较次数", "解释哈希连接与排序归并的适用条件", "明确 SQLite 与其他引擎实现不同"]
 prerequisites: ["sql-join", "database-explain-plan"]
 ---

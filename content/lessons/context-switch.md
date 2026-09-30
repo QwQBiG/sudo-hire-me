@@ -5,7 +5,7 @@ description: "从线程 A 阻塞、B 运行到 A 恢复，分清执行现场、�
 subject: "操作系统"
 order: 82
 minutes: 20
-lab: "walkthrough"
+lab: "workbench"
 objectives: ["说出线程恢复执行所需的关键现场", "区分同进程线程切换与跨进程切换", "解释系统调用不必然导致上下文切换"]
 prerequisites: ["process-thread", "system-call"]
 ---

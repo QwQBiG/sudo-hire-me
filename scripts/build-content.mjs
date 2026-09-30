@@ -5,6 +5,7 @@ import matter from 'gray-matter';
 import { unified } from 'unified';
 import remarkParse from 'remark-parse';
 import { z } from 'zod';
+import { workbenchFor } from '../src/domain/workbench-catalog.mjs';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
 const lessonSchema = z
@@ -22,7 +23,7 @@ const lessonSchema = z
       'javascript',
       'sql',
       'ownership',
-      'walkthrough',
+      'workbench',
       'memory',
       'cpu',
       'cache',
@@ -237,9 +238,6 @@ export function parseLesson(raw, filename) {
     filename,
     content,
   );
-  if (metadata.lab === 'walkthrough' && !steps.length) {
-    throw new Error(`Missing walkthrough in ${filename}`);
-  }
   const quiz = extractQuiz(
     sections.find((section) => section.title === '选择题'),
     filename,
@@ -272,6 +270,9 @@ export async function buildContent() {
     throw new Error('Duplicate lesson order');
   }
   for (const lesson of lessons) {
+    if (lesson.lab === 'workbench' && !workbenchFor(lesson.slug)) {
+      throw new Error(`Missing interactive workbench: ${lesson.slug}`);
+    }
     for (const prerequisite of lesson.prerequisites) {
       if (!slugs.has(prerequisite) || prerequisite === lesson.slug) {
         throw new Error(`Invalid prerequisite in ${lesson.slug}`);

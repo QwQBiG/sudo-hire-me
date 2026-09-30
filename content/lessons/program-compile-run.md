@@ -5,7 +5,7 @@ description: "用一个跨文件函数调用辨清编译、链接、装载和执
 subject: "编程基础与面向对象"
 order: 3
 minutes: 16
-lab: "walkthrough"
+lab: "workbench"
 objectives: ["区分源码、目标文件和可执行程序", "解释编译错误与链接错误的不同", "说明解释器与编译器不是绝对对立的运行方式"]
 prerequisites: ["cpu-execution"]
 ---

@@ -5,7 +5,7 @@ description: "从汽车和发动机的关系出发，再用正方形反例检查
 subject: "编程基础与面向对象"
 order: 22
 minutes: 17
-lab: "walkthrough"
+lab: "workbench"
 objectives: ["区分 is-a 与 has-a 的建模关系", "说明继承与组合的代码耦合差别", "通过可变矩形反例检查行为可替代性"]
 prerequisites: ["oop-classes-objects", "oop-encapsulation"]
 ---

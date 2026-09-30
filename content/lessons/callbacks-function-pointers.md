@@ -5,7 +5,7 @@ description: "用 C 函数指针把筛选规则交给通用遍历，追踪调用
 subject: "编程基础与面向对象"
 order: 11
 minutes: 17
-lab: "walkthrough"
+lab: "workbench"
 objectives: ["解释回调的调用方向", "读懂 C 函数指针形参", "计算同一遍历更换规则后的结果"]
 prerequisites: ["function-arguments", "pointer-reference-basics"]
 ---

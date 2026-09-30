@@ -5,7 +5,7 @@ description: "从十进制 1/10 出发，逐步得到 IEEE 754 binary32 的位�
 subject: "计算机基础"
 order: 34
 minutes: 17
-lab: "walkthrough"
+lab: "workbench"
 objectives: ["说明 binary32 正规有限数的符号、指数和尾数字段", "推导 0.1 在二进制中无法有限写完的原因", "区分输入的十进制值、存储的近似值与显示文本"]
 prerequisites: ["binary-representation", "endianness"]
 ---

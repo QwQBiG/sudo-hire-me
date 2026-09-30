@@ -5,7 +5,7 @@ description: "用 Java 父子类与 C++ 成员初始化两个小例子，分清�
 subject: "编程基础与面向对象"
 order: 18
 minutes: 18
-lab: "walkthrough"
+lab: "workbench"
 objectives: ["解释构造器和字段初始化的不同职责", "推导 Java 父子类的实例初始化顺序", "说明 C++ 成员按声明顺序初始化"]
 prerequisites: ["oop-classes-objects"]
 ---

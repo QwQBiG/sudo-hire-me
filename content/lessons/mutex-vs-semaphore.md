@@ -5,7 +5,7 @@ description: "以单个临界区和三个数据库连接名额为例，辨别所
 subject: "操作系统"
 order: 89
 minutes: 18
-lab: "walkthrough"
+lab: "workbench"
 objectives: ["说出互斥锁与计数信号量各自维护的状态", "用三个资源名额推演 wait/post", "识别二值信号量不等同于互斥锁的边界"]
 prerequisites: ["synchronization"]
 ---

@@ -5,7 +5,7 @@ description: "从两个文件描述符和一段字节流出发，推演读写、
 subject: "操作系统"
 order: 98
 minutes: 18
-lab: "walkthrough"
+lab: "workbench"
 objectives: ["区分匿名管道的读端与写端", "解释管道是字节流而非消息队列", "判断读到 EOF 和写入 EPIPE 的条件"]
 prerequisites: ["process-thread", "file-descriptor"]
 ---

@@ -5,7 +5,7 @@ description: "用同一个 show 名称追踪参数类型选签名，再看子类
 subject: "编程基础与面向对象"
 order: 24
 minutes: 17
-lab: "walkthrough"
+lab: "workbench"
 objectives: ["按参数列表区分重载", "判断何时符合重写签名", "分两阶段计算同名方法调用"]
 prerequisites: ["oop-polymorphism"]
 ---

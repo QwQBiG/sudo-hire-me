@@ -5,7 +5,7 @@ description: "从单次请求与整体趋势两种视角理解指标、日志和
 subject: "工程实践"
 order: 175
 minutes: 18
-lab: "walkthrough"
+lab: "workbench"
 objectives: ["区分指标、日志与调用链的用途", "解释延迟分位数与统计窗口", "从一条慢请求定位值得调查的阶段"]
 prerequisites: ["structured-logging-levels"]
 ---

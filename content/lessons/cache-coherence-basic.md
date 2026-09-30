@@ -5,7 +5,7 @@ description: "用两核同一缓存行的读写请求理解失效式一致性，
 subject: "计算机基础"
 order: 101
 minutes: 18
-lab: "walkthrough"
+lab: "workbench"
 objectives: ["描述共享副本被写入时的失效动作", "按两核请求推导缓存行状态", "说明缓存一致性不等于数据竞争代码正确"]
 prerequisites: ["cache-locality", "cache-write-through-back", "process-thread"]
 ---

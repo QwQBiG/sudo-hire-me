@@ -5,7 +5,7 @@ description: "用可计价对象的共同能力与形状的共享状态，区分
 subject: "编程基础与面向对象"
 order: 25
 minutes: 17
-lab: "walkthrough"
+lab: "workbench"
 objectives: ["说明 Java 接口和抽象类的成员能力", "根据是否需要共享基类状态选择边界", "解释默认方法并不等于实例字段"]
 prerequisites: ["oop-abstraction", "oop-inheritance-composition"]
 ---

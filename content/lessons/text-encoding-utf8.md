@@ -5,7 +5,7 @@ description: "把 A中🙂 拆成码点和字节，理解为何字符数、码�
 subject: "计算机基础"
 order: 36
 minutes: 17
-lab: "walkthrough"
+lab: "workbench"
 objectives: ["区分字符、码点、码元与字节", "计算给定码点的 UTF-8 字节序列", "解释字符串长度为何依赖计数单位"]
 prerequisites: ["binary-representation", "memory-units"]
 ---

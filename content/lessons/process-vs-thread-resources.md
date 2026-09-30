@@ -5,7 +5,7 @@ description: "用一个全局变量与文件偏移量，区分同进程线程共
 subject: "操作系统"
 order: 86
 minutes: 21
-lab: "walkthrough"
+lab: "workbench"
 objectives: ["列出同进程线程共享与私有的典型状态", "解释 fork 后内存值分离", "识别不同进程仍可能共享打开文件描述的偏移量"]
 prerequisites: ["process-thread", "file-descriptor"]
 ---

@@ -5,7 +5,7 @@ description: "分别沿成功与错误路径推导错误联合类型、try 传�
 subject: "Zig 语言机制"
 order: 189
 minutes: 19
-lab: "walkthrough"
+lab: "workbench"
 objectives: ["读懂 error{Negative}!i32 的两种结果", "解释 try 的成功和错误分支", "区分 defer 与 errdefer 的触发条件"]
 prerequisites: ["error-handling-models"]
 ---

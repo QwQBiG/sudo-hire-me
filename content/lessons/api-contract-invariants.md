@@ -5,7 +5,7 @@ description: "用容量为二的令牌状态演算前置条件、成功与失败
 subject: "编程基础与面向对象"
 order: 21
 minutes: 18
-lab: "walkthrough"
+lab: "workbench"
 objectives: ["分清调用者与实现者的责任", "逐步检查成功和拒绝路径的后置条件", "用具体范围写出可检查的不变量"]
 prerequisites: ["function-arguments", "oop-encapsulation"]
 ---

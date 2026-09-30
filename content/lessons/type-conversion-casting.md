@@ -5,7 +5,7 @@ description: "用 Java 的扩大与缩小数值转换算出实际值，区分允
 subject: "编程基础与面向对象"
 order: 7
 minutes: 17
-lab: "walkthrough"
+lab: "workbench"
 objectives: ["区分隐式与显式转换", "手算 double 到 int 及 int 到 byte 的结果", "指出显式强转不等于范围检查"]
 prerequisites: ["memory-units", "binary-representation"]
 ---

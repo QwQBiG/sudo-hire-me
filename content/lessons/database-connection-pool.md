@@ -5,7 +5,7 @@ description: "手动追踪容量为二的连接池，理解借出、等待、归
 subject: "数据库"
 order: 149
 minutes: 17
-lab: "walkthrough"
+lab: "workbench"
 objectives: ["按容量追踪连接借还和等待", "区分连接复用与并发共享", "说明未结束事务和会话状态的风险"]
 prerequisites: ["database-transactions"]
 ---

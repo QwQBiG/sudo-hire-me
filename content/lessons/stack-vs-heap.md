@@ -5,7 +5,7 @@ description: "用 C 函数局部变量和动态分配对象，分清指针存放
 subject: "编程基础与面向对象"
 order: 5
 minutes: 18
-lab: "walkthrough"
+lab: "workbench"
 objectives: ["区分调用帧与动态分配区域", "追踪自动对象与动态对象的生命周期", "解释悬空指针、泄漏与语言实现差异"]
 prerequisites: ["program-compile-run", "memory-units"]
 ---

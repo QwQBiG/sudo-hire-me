@@ -5,7 +5,7 @@ subject: "数据结构与算法"
 description: "用 A、B、C 的全排列看清做选择、递归、撤销选择和必要的去重边界。"
 order: 73
 minutes: 20
-lab: "walkthrough"
+lab: "workbench"
 objectives: ["用 path 和 used 描述部分排列", "手算选择与撤销后的状态", "解释输出规模、重复值和剪枝的区别"]
 prerequisites: ["recursion", "graph-dfs"]
 ---

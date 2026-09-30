@@ -5,7 +5,7 @@ subject: "数据结构与算法"
 description: "在有环和孤立点的无向图中手算 DFS 的访问与回退，区分可达性和最短路径。"
 order: 62
 minutes: 20
-lab: "walkthrough"
+lab: "workbench"
 objectives: ["写出有环图的 DFS 访问顺序", "解释已访问标记和递归回退", "区分 DFS 可达性与 BFS 最短边数"]
 prerequisites: ["graph-bfs", "recursion"]
 ---

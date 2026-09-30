@@ -5,7 +5,7 @@ description: "在不装懂的前提下，澄清条件、利用已知原理、标
 subject: "项目与面试表达"
 order: 199
 minutes: 16
-lab: "walkthrough"
+lab: "workbench"
 objectives: ["识别题目中缺失的条件", "区分知道的事实、推断和未知细节", "给出具体可执行的验证路径"]
 prerequisites: ["complexity", "self-introduction-technical"]
 ---

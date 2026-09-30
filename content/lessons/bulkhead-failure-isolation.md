@@ -5,7 +5,7 @@ description: "把四个并发位拆成两组，追踪故障隔离能保护谁、
 subject: "并发与系统设计"
 order: 164
 minutes: 18
-lab: "walkthrough"
+lab: "workbench"
 objectives: ["按共享与隔离并发位计算影响范围", "区分隔离仓与熔断器的作用", "说明隔离会牺牲部分资源弹性"]
 prerequisites: ["thread-pool-basics", "circuit-breaker-basics"]
 ---

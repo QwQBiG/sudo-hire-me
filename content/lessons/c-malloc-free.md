@@ -5,7 +5,7 @@ description: "亲手追踪一次动态数组分配、初始化、使用和释放
 subject: "C 语言机制"
 order: 181
 minutes: 17
-lab: "walkthrough"
+lab: "workbench"
 objectives: ["写出 malloc 成功和失败两条路径", "解释未初始化存储不能直接当成有效值读取", "指出 free 后指针与对象的不同状态"]
 prerequisites: ["stack-vs-heap", "memory-leak-use-after-free"]
 ---

@@ -5,7 +5,7 @@ description: "用一个整数和一个数组追踪 C 指针的地址与解引用
 subject: "编程基础与面向对象"
 order: 9
 minutes: 20
-lab: "walkthrough"
+lab: "workbench"
 objectives: ["区分指针变量、地址值和被指对象", "解释取地址与解引用", "区分 C 指针、C++ 引用及其他语言的引用语义"]
 prerequisites: ["function-arguments", "memory-units"]
 ---

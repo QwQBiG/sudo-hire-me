@@ -5,7 +5,7 @@ description: "逐次追踪关闭、打开和半开状态，区分熔断与重试
 subject: "并发与系统设计"
 order: 160
 minutes: 18
-lab: "walkthrough"
+lab: "workbench"
 objectives: ["按失败阈值追踪三态转换", "说明打开状态直接拒绝的目的", "区分熔断、超时和重试"]
 prerequisites: ["retry-exponential-backoff", "timeouts-deadlines"]
 ---

@@ -5,7 +5,7 @@ description: "按帧和流编号追踪两个请求，理解多路复用改善什
 subject: "计算机网络"
 order: 122
 minutes: 16
-lab: "walkthrough"
+lab: "workbench"
 objectives: ["区分连接、流与帧", "按流编号重组交错帧", "解释 HTTP/2 仍受 TCP 丢包影响"]
 prerequisites: ["http-https", "tcp-reliability"]
 ---

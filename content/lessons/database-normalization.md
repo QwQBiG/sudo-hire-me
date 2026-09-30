@@ -5,7 +5,7 @@ description: "用订单和商品明细逐步找出重复值、部分依赖和传
 subject: "数据库"
 order: 136
 minutes: 23
-lab: "walkthrough"
+lab: "workbench"
 objectives: ["指出多值单元格和重复组的问题", "沿复合键找出部分依赖", "沿客户编号找出传递依赖并拆表"]
 prerequisites: ["sql-basics", "sql-join"]
 ---

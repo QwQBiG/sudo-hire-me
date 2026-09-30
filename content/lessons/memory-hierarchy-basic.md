@@ -5,7 +5,7 @@ description: "跟踪一个文件字节从持久存储到 CPU 运算的路径，�
 subject: "计算机基础"
 order: 38
 minutes: 18
-lab: "walkthrough"
+lab: "workbench"
 objectives: ["说出常见存储层次各自职责", "区分 CPU 缓存缺失与磁盘 I/O", "区分易失主存和持久存储"]
 prerequisites: ["cpu-execution", "cache-locality"]
 ---

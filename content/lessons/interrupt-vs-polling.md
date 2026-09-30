@@ -5,7 +5,7 @@ description: "用 7 毫秒到达的事件对比周期轮询与中断通知，理
 subject: "计算机基础"
 order: 102
 minutes: 17
-lab: "walkthrough"
+lab: "workbench"
 objectives: ["按时间线计算周期轮询的检测延迟", "说明中断通知并非零成本或绝对实时", "解释高事件率下为何会混合中断与批量轮询"]
 prerequisites: ["interrupt-exception-trap", "cpu-execution"]
 ---

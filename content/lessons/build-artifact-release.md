@@ -5,7 +5,7 @@ description: "沿 C 程序的编译、链接、测试与打包路径，分清构
 subject: "工程实践"
 order: 171
 minutes: 18
-lab: "walkthrough"
+lab: "workbench"
 objectives: ["说明源码到目标文件再到可执行文件的路径", "区分编译/链接错误与测试失败", "解释为什么发布要指向确定的产物版本"]
 prerequisites: ["program-compile-run", "unit-integration-e2e-tests"]
 ---

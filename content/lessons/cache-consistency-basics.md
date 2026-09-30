@@ -5,7 +5,7 @@ description: "按 Cache-Aside 时间线看读命中、写库、删缓存和并�
 subject: "并发与系统设计"
 order: 161
 minutes: 20
-lab: "walkthrough"
+lab: "workbench"
 objectives: ["追踪旁路缓存的读写流程", "指出删缓存失败和并发回填的旧值窗口", "说出 TTL、版本校验等缓解方式的边界"]
 prerequisites: ["cache-locality", "database-transactions"]
 ---

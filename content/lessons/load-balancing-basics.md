@@ -5,7 +5,7 @@ description: "用三台服务与当前连接数手算转发选择，理解健康
 subject: "并发与系统设计"
 order: 162
 minutes: 17
-lab: "walkthrough"
+lab: "workbench"
 objectives: ["按轮询顺序选实例", "按活跃连接数选实例", "说明健康检查和粘性会话对选择的影响"]
 prerequisites: ["http-https", "database-connection-pool"]
 ---

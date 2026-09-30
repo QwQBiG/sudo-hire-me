@@ -5,7 +5,7 @@ description: "按秒追踪缓存剩余 TTL，理解权威更新、缓存过期�
 subject: "计算机网络"
 order: 118
 minutes: 15
-lab: "walkthrough"
+lab: "workbench"
 objectives: ["按缓存时间算出 TTL 剩余量", "解释权威记录更新不强制刷新已缓存答案", "识别 TTL 与客户端连接行为的边界"]
 prerequisites: ["dns-resolution"]
 ---

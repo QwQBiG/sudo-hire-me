@@ -5,7 +5,7 @@ description: "用定时器、非法指令和系统调用三个事件，分清外
 subject: "操作系统"
 order: 87
 minutes: 18
-lab: "walkthrough"
+lab: "workbench"
 objectives: ["按事件来源区分中断与同步异常", "解释系统调用为何是主动受控进入内核", "说明 trap 术语在不同体系结构中的用法差异"]
 prerequisites: ["cpu-execution", "user-kernel-mode", "system-call"]
 ---

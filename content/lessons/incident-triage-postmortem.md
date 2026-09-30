@@ -5,7 +5,7 @@ description: "用一个错误率突增的案例区分影响范围、临时缓解
 subject: "工程实践"
 order: 179
 minutes: 19
-lab: "walkthrough"
+lab: "workbench"
 objectives: ["描述故障处置的优先顺序", "区分触发因素与系统性原因", "写出可验证的复盘行动项"]
 prerequisites: ["structured-logging-levels", "deployment-rollback"]
 ---

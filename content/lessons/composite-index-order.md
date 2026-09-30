@@ -5,7 +5,7 @@ description: "从 (部门, 分数) 的有序索引推演两种筛选，认识左
 subject: "数据库"
 order: 138
 minutes: 19
-lab: "walkthrough"
+lab: "workbench"
 objectives: ["画出两列索引的字典序", "辨别从左侧列定位的连续范围", "结合执行计划和数据分布评价索引"]
 prerequisites: ["database-indexes"]
 ---

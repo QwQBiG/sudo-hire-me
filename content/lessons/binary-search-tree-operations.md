@@ -5,7 +5,7 @@ subject: "数据结构与算法"
 description: "在一棵具体的搜索树上追踪比较路径与删除三种节点情况，理解复杂度为何依赖树高。"
 order: 57
 minutes: 24
-lab: "walkthrough"
+lab: "workbench"
 objectives: ["用左小右大不变量追踪查找与插入", "区分删除叶子、单孩子、双孩子", "解释普通 BST 退化与平衡树的不同"]
 prerequisites: ["tree-traversal", "binary-search-boundary"]
 ---

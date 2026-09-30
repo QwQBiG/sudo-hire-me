@@ -5,7 +5,7 @@ description: "用两个路径指向同一 inode 的删除过程，解释名字�
 subject: "操作系统"
 order: 96
 minutes: 20
-lab: "walkthrough"
+lab: "workbench"
 objectives: ["说明目录项和 inode 的不同职责", "跟踪硬链接计数与 unlink 后的文件可见性", "解释无名字但仍被打开的文件为何可继续访问"]
 prerequisites: ["file-descriptor"]
 ---

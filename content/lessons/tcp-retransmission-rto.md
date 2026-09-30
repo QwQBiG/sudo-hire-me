@@ -5,7 +5,7 @@ description: "设定 2 秒 RTO 和一段丢失数据，算出第一次重传、�
 subject: "计算机网络"
 order: 112
 minutes: 20
-lab: "walkthrough"
+lab: "workbench"
 objectives: ["区分 RTT 测量和 RTO 等待时间", "手算超时后的指数退避时刻", "说明重传段的 ACK 为什么有 RTT 样本歧义"]
 prerequisites: ["tcp-reliability"]
 ---

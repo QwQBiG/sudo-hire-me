@@ -6,7 +6,7 @@ const BinarySearch = lazy(() => import('../labs/BinarySearch'));
 const Process = lazy(() => import('../labs/Process'));
 const CodeLab = lazy(() => import('../labs/CodeLab'));
 const Ownership = lazy(() => import('../labs/Ownership'));
-const Walkthrough = lazy(() => import('../labs/Walkthrough'));
+const Workbench = lazy(() => import('../labs/workbenches/Workbench'));
 const registry = {
   bits: Bits,
   'binary-search': BinarySearch,
@@ -14,7 +14,7 @@ const registry = {
   javascript: CodeLab,
   sql: CodeLab,
   ownership: Ownership,
-  walkthrough: Walkthrough,
+  workbench: Workbench,
   memory: lazy(() => import('../labs/foundations/Memory')),
   cpu: lazy(() => import('../labs/foundations/Cpu')),
   cache: lazy(() => import('../labs/foundations/Cache')),

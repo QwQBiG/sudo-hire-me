@@ -5,7 +5,7 @@ description: "查找偶数时分清没有结果和结果恰好为零，对照 nu
 subject: "编程基础与面向对象"
 order: 30
 minutes: 18
-lab: "walkthrough"
+lab: "workbench"
 objectives: ["区分缺失和合法零值", "理解 Rust Option 的 Some/None", "说明 null 与异常、Result 的问题维度不同"]
 prerequisites: ["generic-programming-basics", "error-handling-models"]
 ---

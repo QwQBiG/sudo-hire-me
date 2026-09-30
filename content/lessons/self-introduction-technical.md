@@ -5,7 +5,7 @@ description: "用方向、做过的事和可追问的证据，组织一段不夸
 subject: "项目与面试表达"
 order: 193
 minutes: 16
-lab: "walkthrough"
+lab: "workbench"
 objectives: ["用一段话交代方向和技术基础", "区分事实证据与笼统形容", "为面试官留下可深入追问的具体入口"]
 prerequisites: []
 ---

@@ -5,7 +5,7 @@ description: "让同一个 first 函数服务整数和字符串数组，理解�
 subject: "编程基础与面向对象"
 order: 29
 minutes: 18
-lab: "walkthrough"
+lab: "workbench"
 objectives: ["说清类型参数与具体类型", "通过例子判断泛型函数需要什么能力", "区分泛型、模板、trait 与运行时多态"]
 prerequisites: ["function-arguments", "oop-polymorphism"]
 ---
