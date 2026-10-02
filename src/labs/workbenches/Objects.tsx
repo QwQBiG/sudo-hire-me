@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useId, useState } from 'react';
 import { ArrowRight, Box, Link2, Scissors, Trash2 } from 'lucide-react';
 import type { LabProps } from '../../types';
 import { Bench, Choice, Feedback } from './Bench';
@@ -42,6 +42,7 @@ const setups: Record<string, { title: string; names: string[]; intro: string }> 
 };
 
 export default function Objects({ lesson }: LabProps) {
+  const markerId = useId();
   const config = setups[lesson.slug];
   const gc = lesson.slug === 'java-gc-references';
   const statics = lesson.slug === 'oop-static-instance-members';
@@ -112,6 +113,7 @@ export default function Objects({ lesson }: LabProps) {
             <button
               className={`object-reference ${active === i ? 'selected' : ''}`}
               aria-pressed={active === i}
+              aria-label={`选择引用 ${name}`}
               key={name}
               onClick={() => setActive(i)}
             >
@@ -121,6 +123,38 @@ export default function Objects({ lesson }: LabProps) {
             </button>
           ))}
         </div>
+        <svg
+          className="object-cables"
+          viewBox="0 0 100 248"
+          preserveAspectRatio="none"
+          aria-hidden="true"
+        >
+          <defs>
+            <marker
+              id={markerId}
+              markerWidth="7"
+              markerHeight="7"
+              refX="6"
+              refY="3.5"
+              orient="auto"
+            >
+              <path d="M0 0 L7 3.5 L0 7" fill="none" stroke="context-stroke" strokeWidth="1.3" />
+            </marker>
+          </defs>
+          {refs.map((target, index) =>
+            target === null ? null : (
+              <path
+                key={index}
+                className={active === index ? 'selected' : ''}
+                d={`M0 ${86 + index * 112} C50 ${86 + index * 112},50 ${86 + target * 112},100 ${86 + target * 112}`}
+                markerEnd={`url(#${markerId})`}
+                fill="none"
+                strokeWidth="1.5"
+                vectorEffect="non-scaling-stroke"
+              />
+            ),
+          )}
+        </svg>
         <div className="object-heap">
           <div className="bench-label">
             <Box size={16} /> {copying ? '内部列表' : '对象存储'}
@@ -129,6 +163,7 @@ export default function Objects({ lesson }: LabProps) {
             <button
               key={i}
               disabled={value === null}
+              aria-label={`将 ${config.names[active]} 绑定到对象 ${i + 1}`}
               className={`object-cell ${refs[active] === i ? 'pointed' : ''} ${value === null ? 'collected' : ''}`}
               onClick={() => {
                 setRefs((all) => all.map((ref, index) => (index === active ? i : ref)));

@@ -1,5 +1,5 @@
 import { useId, useState } from 'react';
-import { CornerUpLeft } from 'lucide-react';
+import { Check, CornerUpLeft, LockKeyhole, Route } from 'lucide-react';
 import type { LabProps } from '../../types';
 import { Bench, Feedback } from './Bench';
 
@@ -26,7 +26,10 @@ export default function Traversal({ lesson }: LabProps) {
       ]
     : treePoints;
   const [cycle, setCycle] = useState(false);
-  const [hint, setHint] = useState(false);
+  const [hint, setHint] = useState(true);
+  const [hovered, setHovered] = useState<number | null>(null);
+  const [fault, setFault] = useState<number | null>(null);
+  const [attempt, setAttempt] = useState(0);
   const [visited, setVisited] = useState<number[]>([]);
   const [frontier, setFrontier] = useState([0]);
   const [note, setNote] = useState(
@@ -48,10 +51,13 @@ export default function Traversal({ lesson }: LabProps) {
     setVisited([]);
     setFrontier([0]);
     setNote('图与工作队列已重置。');
+    setFault(null);
   }
   function choose(n: number) {
     if (visited.includes(n)) return setNote('该节点已经处理过，不重复输出。');
-    if (!candidates.includes(n))
+    if (!candidates.includes(n)) {
+      setFault(n);
+      setAttempt((value) => value + 1);
       return setNote(
         topo
           ? `${String.fromCharCode(65 + n)} 仍有 ${indegree(n)} 条来自未处理节点的入边，前置任务尚未完成。`
@@ -59,6 +65,8 @@ export default function Traversal({ lesson }: LabProps) {
             ? '这不是当前栈顶的未访问邻居。没有可走邻居时应回退。'
             : `队首是 ${String.fromCharCode(65 + frontier[0])}，按层遍历要先处理队首。`,
       );
+    }
+    setFault(null);
     setVisited([...visited, n]);
     if (!topo) {
       if (dfs) setFrontier(visited.length ? [...frontier, n] : [n]);
@@ -109,19 +117,28 @@ export default function Traversal({ lesson }: LabProps) {
           </label>
         )}
       </div>
+      <div className="scene-score">
+        <span>
+          <Route size={16} />
+          {topo ? '依赖网络' : dfs ? '深度搜索' : '层序遍历'}
+        </span>
+        <span>
+          已完成 <b>{visited.length} / 6</b>
+        </span>
+      </div>
       <div className="traversal-map">
         <svg viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
           <defs>
             <marker
               id={markerId}
-              markerWidth="4"
-              markerHeight="4"
-              refX="2"
-              refY="2"
+              markerWidth="2.4"
+              markerHeight="2.4"
+              refX="1.2"
+              refY="1.2"
               orient="auto"
               markerUnits="userSpaceOnUse"
             >
-              <path d="M0 0 L4 2 L0 4 Z" fill="#769bb5" />
+              <path d="M0 0 L2.4 1.2 L0 2.4 Z" fill="#769bb5" />
             </marker>
           </defs>
           {edges.map(([a, b]) => (
@@ -129,8 +146,9 @@ export default function Traversal({ lesson }: LabProps) {
               key={`${a}-${b}`}
               points={`${points[a].x},${points[a].y} ${(points[a].x + points[b].x) / 2},${(points[a].y + points[b].y) / 2} ${points[b].x},${points[b].y}`}
               fill="none"
+              className={`graph-edge ${visited.includes(a) ? 'removed' : ''} ${hovered === a || hovered === b ? 'highlighted' : ''}`}
               markerMid={topo || dfs ? `url(#${markerId})` : undefined}
-              stroke={visited.includes(a) ? '#e3dce5' : '#9fb9cb'}
+              stroke="currentColor"
               strokeWidth=".5"
               strokeDasharray={topo ? '2 1' : undefined}
             />
@@ -139,13 +157,31 @@ export default function Traversal({ lesson }: LabProps) {
         {points.map((p, i) => (
           <button
             key={i}
-            className={`traversal-node ${visited.includes(i) ? 'visited' : ''} ${hint && candidates.includes(i) ? 'candidate' : ''}`}
+            className={`traversal-node ${visited.includes(i) ? 'visited' : ''} ${hint && candidates.includes(i) ? 'candidate' : ''} ${fault === i ? 'rejected' : ''}`}
             style={{ left: `${p.x}%`, top: `${p.y}%` }}
             onClick={() => choose(i)}
+            onPointerEnter={() => setHovered(i)}
+            onPointerLeave={() => setHovered(null)}
+            onFocus={() => setHovered(i)}
+            onBlur={() => setHovered(null)}
             aria-label={`访问节点 ${String.fromCharCode(65 + i)}${topo ? `，入度 ${indegree(i)}` : ''}`}
           >
+            {visited.includes(i) ? <Check className="node-check" size={15} /> : null}
             <b>{String.fromCharCode(65 + i)}</b>
-            {topo && <small>入度 {indegree(i)}</small>}
+            <small>
+              {visited.includes(i)
+                ? '已完成'
+                : topo
+                  ? `入度 ${indegree(i)}`
+                  : hint && candidates.includes(i)
+                    ? '可访问'
+                    : '待访问'}
+            </small>
+            {fault === i && (
+              <span className="node-fault" key={attempt}>
+                <LockKeyhole size={13} />
+              </span>
+            )}
           </button>
         ))}
       </div>
@@ -155,8 +191,8 @@ export default function Traversal({ lesson }: LabProps) {
             {topo ? '可执行任务' : dfs ? '当前路径栈' : '工作队列：队首 → 队尾'}
           </div>
           <div className="bench-tokens">
-            {(topo ? candidates : frontier).map((n, i) => (
-              <span className="bench-token" key={i}>
+            {(topo ? candidates : frontier).map((n) => (
+              <span className="bench-token" key={n}>
                 {String.fromCharCode(65 + n)}
               </span>
             ))}
@@ -191,7 +227,7 @@ export default function Traversal({ lesson }: LabProps) {
           </button>
         </div>
       )}
-      <Feedback good={!(topo && candidates.length === 0 && visited.length < 6)}>
+      <Feedback good={fault === null && !(topo && candidates.length === 0 && visited.length < 6)}>
         {topo && candidates.length === 0 && visited.length < 6
           ? '还剩节点却没有零入度节点，存在有向环，无法完成拓扑排序。'
           : visited.length === 6

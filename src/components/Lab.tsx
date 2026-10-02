@@ -1,5 +1,8 @@
 import { lazy, Suspense } from 'react';
 import type { LabProps, Lesson } from '../types';
+import { useLabMotion } from './useLabMotion';
+import { workbenchFor } from '../domain/workbench-catalog.mjs';
+import '../styles/lab-polish.css';
 
 const Bits = lazy(() => import('../labs/Bits'));
 const BinarySearch = lazy(() => import('../labs/BinarySearch'));
@@ -90,16 +93,23 @@ const registry = {
 } satisfies Record<Lesson['lab'], React.ComponentType<LabProps>>;
 
 export function Lab(props: LabProps) {
+  const root = useLabMotion(props.lesson.slug);
   const Component = registry[props.lesson.lab];
   return (
-    <Suspense
-      fallback={
-        <div className="lab-loading" role="status">
-          实验加载中…
-        </div>
-      }
+    <div
+      className="lab-surface"
+      ref={root}
+      data-lab-family={workbenchFor(props.lesson.slug) ?? props.lesson.lab}
     >
-      <Component {...props} />
-    </Suspense>
+      <Suspense
+        fallback={
+          <div className="lab-loading" role="status">
+            实验加载中…
+          </div>
+        }
+      >
+        <Component {...props} />
+      </Suspense>
+    </div>
   );
 }

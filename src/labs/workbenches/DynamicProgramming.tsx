@@ -17,6 +17,9 @@ export default function DynamicProgramming({ lesson }: LabProps) {
   const [cell, setCell] = useState<[number, number]>(lcs ? [1, 1] : [0, 2]);
   const [answer, setAnswer] = useState('');
   const [incorrect, setIncorrect] = useState(false);
+  const solved =
+    table.flat().filter((value) => value !== null).length - (lcs ? rows + cols - 1 : 2);
+  const total = lcs ? (rows - 1) * (cols - 1) : cols - 2;
   const [note, setNote] = useState('选择空格，使用已完成的依赖计算它的值。');
   const a = 'ABCD';
   const b = 'ACBDEF';
@@ -63,9 +66,21 @@ export default function DynamicProgramming({ lesson }: LabProps) {
         setNote('网格已清空，边界条件保留。');
       }}
     >
+      <div className="scene-score">
+        <span>
+          已解子问题{' '}
+          <b>
+            {solved} / {total}
+          </b>
+        </span>
+        <span>
+          {lcs ? '最终 LCS 长度' : '到达第 6 级的方案数'}{' '}
+          <b data-readout>{table[rows - 1][cols - 1] ?? '?'}</b>
+        </span>
+      </div>
       <div
         className="dp-board"
-        style={{ gridTemplateColumns: `38px repeat(${cols},minmax(28px,1fr))` }}
+        style={{ gridTemplateColumns: `28px repeat(${cols},minmax(0,1fr))` }}
       >
         <span />
         {Array.from({ length: cols }, (_, c) => (
@@ -87,12 +102,26 @@ export default function DynamicProgramming({ lesson }: LabProps) {
                   setIncorrect(false);
                 }}
                 aria-label={`dp ${r} ${c}，${v ?? '待填'}`}
+                data-readout
               >
                 {v ?? '?'}
               </button>
             ))}
           </div>
         ))}
+      </div>
+      <div className="dp-dependencies">
+        {dependencies.map(([r, c]) => (
+          <span key={`${r}-${c}`} className={table[r]?.[c] === null ? 'missing' : ''}>
+            <small>{lcs ? `dp[${r}][${c}]` : `ways[${c}]`}</small>
+            <strong>{table[r]?.[c] ?? '?'}</strong>
+          </span>
+        ))}
+        <CornerDownRight size={19} />
+        <span className="target">
+          <small>{lcs ? `dp[${i}][${j}]` : `ways[${j}]`}</small>
+          <strong>{table[i][j] ?? '?'}</strong>
+        </span>
       </div>
       <div className="dp-equation">
         <CornerDownRight size={20} />
@@ -112,9 +141,15 @@ export default function DynamicProgramming({ lesson }: LabProps) {
             );
           }
           setIncorrect(false);
-          setTable((t) =>
-            t.map((row, r) => row.map((v, c) => (r === i && c === j ? expected : v))),
+          const nextTable = table.map((row, r) =>
+            row.map((v, c) => (r === i && c === j ? expected : v)),
           );
+          setTable(nextTable);
+          const next = nextTable
+            .flatMap((row, r) => row.map((value, c) => ({ value, r, c })))
+            .find((entry) => entry.value === null);
+          if (next) setCell([next.r, next.c]);
+          setAnswer('');
           setNote(
             `${lcs ? `dp[${i}][${j}]` : `ways[${j}]`} = ${expected} 已写入，它可以被更大的子问题复用。`,
           );

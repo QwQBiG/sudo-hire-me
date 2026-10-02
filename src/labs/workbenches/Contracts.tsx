@@ -280,6 +280,65 @@ export default function Contracts({ lesson }: LabProps) {
           <pre className="bench-code">{result.code}</pre>
         </div>
       </div>
+      {lesson.slug === 'callbacks-function-pointers' && result.ok && (
+        <div className="callback-conveyor" aria-label="逐项回调结果">
+          {input
+            .split(',')
+            .slice(0, 8)
+            .map((item, index) => (
+              <div className="callback-row" key={index}>
+                <code>{Number(item)}</code>
+                <ArrowRight size={16} />
+                <span>{mode === 'double' ? '× 2' : mode === 'square' ? 'x²' : '−x'}</span>
+                <ArrowRight size={16} />
+                <output>
+                  {mode === 'double'
+                    ? Number(item) * 2
+                    : mode === 'square'
+                      ? Number(item) ** 2
+                      : -Number(item)}
+                </output>
+              </div>
+            ))}
+        </div>
+      )}
+      {lesson.slug === 'java-equals-hashcode' && (
+        <div className="contract-buckets">
+          <div className="contract-key-pair">
+            <span>A · Key({input})</span>
+            <span>B · Key({input})</span>
+            <code>equals(A, B) = true</code>
+          </div>
+          <div className="contract-bucket">
+            <small>模型哈希桶 3</small>
+            <span>A</span>
+            {mode !== 'broken' && <span>B → 相等，复用 A</span>}
+          </div>
+          <div className={`contract-bucket ${mode === 'broken' ? 'conflict' : 'empty'}`}>
+            <small>模型哈希桶 7</small>
+            <span>{mode === 'broken' ? 'B → 被当作另一个条目' : '空'}</span>
+          </div>
+        </div>
+      )}
+      {['null-option-absence', 'kotlin-null-safety'].includes(lesson.slug) && (
+        <div className="absence-branches">
+          <div className={input ? 'chosen' : ''}>
+            <span>存在值</span>
+            <code>{input ? JSON.stringify(input) : '—'}</code>
+          </div>
+          <div className={!input ? 'chosen' : ''}>
+            <span>缺失值</span>
+            <code>{lesson.slug === 'kotlin-null-safety' ? 'null' : 'None'}</code>
+          </div>
+          <ArrowRight size={20} />
+          <div className={`branch-result ${result.ok ? '' : 'failed'}`}>
+            <small>
+              {mode === 'unwrap' || mode === 'bang' ? '直接取值 / 断言' : '明确处理分支'}
+            </small>
+            <output>{result.value}</output>
+          </div>
+        </div>
+      )}
       <div className={`contract-result ${result.ok ? '' : 'rejected'}`}>
         {result.ok ? <Check size={24} /> : <X size={24} />}
         <div>

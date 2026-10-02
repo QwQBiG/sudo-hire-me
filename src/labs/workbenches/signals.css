@@ -1,0 +1,172 @@
+.signal-route {
+  --route-color: #62b3cd;
+  background: #30333f;
+  color: #e5edf4;
+  padding: 22px 24px 17px;
+  margin-block: 22px;
+  min-width: 0;
+}
+.signal-route.blocked {
+  --route-color: #f0a49a;
+}
+.signal-route.cached {
+  --route-color: #e4a0c5;
+}
+.signal-nodes {
+  display: grid;
+  gap: 15px;
+}
+.signal-nodes > div {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-size: 11px;
+  min-width: 0;
+}
+.signal-nodes > div:last-child {
+  justify-content: flex-end;
+}
+.signal-nodes > div:not(:first-child):not(:last-child) {
+  justify-content: center;
+}
+.signal-nodes small {
+  color: #91a5b8;
+  font: 10px var(--mono);
+}
+.signal-nodes span {
+  overflow-wrap: anywhere;
+}
+.signal-rail {
+  position: relative;
+  height: 34px;
+  margin: 18px 5px 15px;
+  background: linear-gradient(#536070, #536070) center / 100% 1px no-repeat;
+}
+.signal-rail > i {
+  position: absolute;
+  top: 13px;
+  width: 8px;
+  height: 8px;
+  border: 2px solid #87a1b6;
+  background: #30333f;
+  border-radius: 2px;
+}
+.signal-rail > i:first-child {
+  left: 0;
+}
+.signal-rail > i:nth-child(2) {
+  left: calc(50% - 4px);
+}
+.signal-rail > i:nth-child(3) {
+  right: 0;
+}
+.signal-packet {
+  position: absolute;
+  top: 4px;
+  left: 0;
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 26px;
+  border: 1px solid var(--route-color);
+  background: #30333f;
+  box-shadow: 0 0 14px #78bed126;
+  color: var(--route-color);
+  border-radius: 4px;
+  animation: signal-send 1.15s cubic-bezier(0.3, 0.7, 0.25, 1) both;
+}
+.reply .signal-packet {
+  animation-name: signal-reply;
+}
+.blocked .signal-packet {
+  animation-name: signal-blocked;
+}
+.cached .signal-packet {
+  animation-name: signal-cached;
+}
+.signal-receipt {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-top: 1px solid #4b5362;
+  padding-top: 14px;
+  font-size: 11px;
+  color: var(--route-color);
+  min-height: 33px;
+}
+.signal-receipt code {
+  overflow-wrap: anywhere;
+}
+@keyframes signal-send {
+  0% {
+    left: 0;
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  48% {
+    left: calc(50% - 17px);
+  }
+  85% {
+    left: calc(100% - 34px);
+    opacity: 1;
+  }
+  100% {
+    left: calc(100% - 34px);
+    opacity: 0.3;
+  }
+}
+@keyframes signal-reply {
+  0% {
+    left: calc(100% - 34px);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  48% {
+    left: calc(50% - 17px);
+  }
+  85%,
+  100% {
+    left: 0;
+  }
+}
+@keyframes signal-blocked {
+  0% {
+    left: 0;
+  }
+  40%,
+  60% {
+    left: calc(50% - 17px);
+  }
+  100% {
+    left: 0;
+  }
+}
+@keyframes signal-cached {
+  0% {
+    left: 0;
+  }
+  50% {
+    left: calc(50% - 17px);
+  }
+  100% {
+    left: 0;
+  }
+}
+@media (max-width: 720px) {
+  .signal-route {
+    padding: 20px 14px 14px;
+  }
+  .signal-nodes {
+    gap: 8px;
+  }
+  .signal-nodes small {
+    display: none;
+  }
+  .signal-nodes span {
+    font-size: 10px;
+  }
+}

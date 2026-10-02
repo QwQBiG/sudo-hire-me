@@ -10,6 +10,7 @@ import {
 } from 'lucide-react';
 import { Bench, Choice, Feedback } from './Bench';
 import { applyAccount, MAX_BALANCE } from '../../domain/account-workbench.mjs';
+import { SignalRoute, type Signal } from './SignalRoute';
 
 export default function Account() {
   const [balance, setBalance] = useState(100);
@@ -22,6 +23,7 @@ export default function Account() {
     '账户已有 100 分。尝试扣款 120 分，观察返回值与余额是否一起变化。',
   );
   const [revision, setRevision] = useState(0);
+  const [signal, setSignal] = useState<Signal | null>(null);
   const valid = balance >= 0;
   function reset() {
     setBalance(100);
@@ -29,6 +31,7 @@ export default function Account() {
     setHistory([]);
     setMessage('账户已恢复到 100 分。');
     setRevision(0);
+    setSignal(null);
   }
   function run(operation: 'withdraw' | 'deposit') {
     const result = applyAccount(
@@ -51,6 +54,11 @@ export default function Account() {
     setBalance(result.balance);
     setMessage(result.reason);
     setRevision((n) => n + 1);
+    setSignal({
+      id: revision + 1,
+      kind: result.accepted ? 'send' : 'blocked',
+      label: `${operation}(${amount}) → ${result.accepted} · cents = ${result.balance}`,
+    });
   }
   return (
     <Bench
@@ -124,6 +132,10 @@ export default function Account() {
           </div>
         </div>
       </div>
+      <SignalRoute
+        signal={signal}
+        nodes={['调用方', mode === 'guarded' ? '参数与状态校验' : '缺失校验', 'Account.cents']}
+      />
       <Feedback good={valid}>{message}</Feedback>
       <div className="account-ledger">
         <div className="bench-label">

@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { ArrowRight, Clock3, Globe, Laptop, Send, Server, ShieldCheck, Unplug } from 'lucide-react';
 import type { LabProps } from '../../types';
 import { Bench, Choice, Feedback, Meter } from './Bench';
+import { SignalRoute, type Signal } from './SignalRoute';
 
 const titles: Record<string, string> = {
   'nat-basic': '把返回包送回正确的内网主机',
@@ -31,6 +32,11 @@ export default function Network({ lesson }: LabProps) {
   const [mappings, setMappings] = useState<string[]>([]);
   const [logs, setLogs] = useState<string[]>([]);
   const [note, setNote] = useState('发起操作，观察链路两端和中间状态。');
+  const sequence = useRef(0);
+  const [signal, setSignal] = useState<Signal | null>(null);
+  function transfer(label: string, kind: Signal['kind'] = 'send') {
+    setSignal({ id: ++sequence.current, label, kind });
+  }
   function record(line: string) {
     setNote(line);
     setLogs((xs) => [line, ...xs].slice(0, 5));
@@ -48,6 +54,7 @@ export default function Network({ lesson }: LabProps) {
     setMappings([]);
     setLogs([]);
     setNote('链路状态已重置。');
+    setSignal(null);
   }
   let body;
   if (s === 'nat-basic')
@@ -79,6 +86,9 @@ export default function Network({ lesson }: LabProps) {
               key={ip}
               onClick={() => {
                 if (!mappings.includes(ip)) setMappings([...mappings, ip]);
+                transfer(
+                  `${ip}:5000 → 203.0.113.8:${40000 + (mappings.includes(ip) ? mappings.indexOf(ip) : mappings.length)}`,
+                );
                 record(
                   `${ip}:5000 发出连接，公网源端口分配为 ${40000 + (mappings.includes(ip) ? mappings.indexOf(ip) : mappings.length)}。`,
                 );
@@ -105,11 +115,12 @@ export default function Network({ lesson }: LabProps) {
                 <td>
                   <button
                     className="text-button"
-                    onClick={() =>
+                    onClick={() => {
+                      transfer(`198.51.100.20:443 → ${ip}:5000`, 'reply');
                       record(
                         `返回目的端口 ${40000 + i} 命中映射，转换为 ${ip}:5000；共同的公网 IP 本身不足以区分这两条连接。`,
-                      )
-                    }
+                      );
+                    }}
                   >
                     送回此端口 <ArrowRight size={14} />
                   </button>
@@ -135,6 +146,7 @@ export default function Network({ lesson }: LabProps) {
             disabled={flag}
             onClick={() => {
               setFlag(true);
+              transfer('SEQ 0 · 数据段发送，等待 ACK');
               setTime(0);
               record('发送数据段并启动计时器。模拟 ACK 尚未到达。');
             }}
@@ -150,6 +162,7 @@ export default function Network({ lesson }: LabProps) {
                 setTime(0);
                 setRto(Math.min(64000, rto * 2));
                 setCount(count + 1);
+                transfer(`超时重传 #${count + 1} · 新 RTO ${Math.min(64000, rto * 2)} ms`);
                 record('计时器到期，重传最早未确认段，并将 RTO 加倍。本例未计算新的 RTT 样本。');
               } else {
                 setTime(next);
@@ -165,6 +178,7 @@ export default function Network({ lesson }: LabProps) {
             disabled={!flag}
             onClick={() => {
               setFlag(false);
+              transfer('ACK 确认全部未确认数据', 'reply');
               setTime(0);
               record('确认全部未确认数据，停止重传计时器。重传段的歧义 ACK 不用于普通 RTT 采样。');
             }}
@@ -216,6 +230,7 @@ export default function Network({ lesson }: LabProps) {
             disabled={flight >= limit}
             onClick={() => {
               setFlight(flight + 1);
+              transfer(`数据段发出 · 在途 ${flight + 1}/${limit}`);
               record('新数据占用在途额度，ACK 到达后才释放。接收窗口与网络拥塞窗口解决不同约束。');
             }}
           >
@@ -226,6 +241,7 @@ export default function Network({ lesson }: LabProps) {
             disabled={!flight}
             onClick={() => {
               setFlight(flight - 1);
+              transfer(`ACK 到达 · 在途 ${flight - 1}/${limit}`, 'reply');
               record('确认 1 段，释放一个在途位置。这里固定 cwnd，不模拟拥塞算法增长。');
             }}
           >
@@ -261,9 +277,11 @@ export default function Network({ lesson }: LabProps) {
           <button
             className="primary"
             onClick={() => {
-              if (cache && time < cache.until)
+              if (cache && time < cache.until) {
+                transfer(`app.example → ${cache.ip} · 缓存命中`, 'cached');
                 record(`返回缓存 ${cache.ip}，尚未到期，不查询权威服务器。`);
-              else {
+              } else {
+                transfer(`app.example → ${ip} · 查询权威记录`);
                 setCache({ ip, until: time + 30 });
                 record(`缓存已过期或为空，取得 ${ip}，TTL 从现在计 30 秒。`);
               }
@@ -321,6 +339,7 @@ export default function Network({ lesson }: LabProps) {
             disabled={count >= 8}
             onClick={() => {
               setCount(count + 1);
+              transfer(`HTTP 请求 R${count + 1} · ${flag ? '复用连接' : '新建连接'}`);
               if (!flag) {
                 setOther(other + 1);
               }
@@ -371,6 +390,7 @@ export default function Network({ lesson }: LabProps) {
                   if (i) setOther(other + 1);
                   else setCount(count + 1);
                   setMappings([...mappings, `${i ? 3 : 1}.${n + 1}`]);
+                  transfer(`Stream ${i ? 3 : 1} · Frame ${n + 1}`);
                   record('这一帧写入共同的 TCP 字节流，Stream ID 让 HTTP/2 接收端区分响应。');
                 }}
               >
@@ -392,6 +412,10 @@ export default function Network({ lesson }: LabProps) {
             className="secondary"
             onClick={() => {
               setFlag(!flag);
+              transfer(
+                flag ? '重传完成 · 字节流恢复交付' : 'TCP 字节缺口 · 各流交付受阻',
+                flag ? 'send' : 'blocked',
+              );
               record(
                 flag
                   ? '缺失字节补齐，TCP 可以继续有序交付。'
@@ -590,6 +614,25 @@ export default function Network({ lesson }: LabProps) {
   return (
     <Bench title={titles[s]} subtitle="协议行为模型；不发送真实网络请求。" onReset={reset}>
       {body}
+      {[
+        'nat-basic',
+        'tcp-retransmission-rto',
+        'tcp-flow-congestion',
+        'dns-cache-ttl',
+        'http1-keepalive',
+        'http2-multiplexing',
+      ].includes(s) && (
+        <SignalRoute
+          signal={signal}
+          nodes={
+            s === 'dns-cache-ttl'
+              ? ['客户端查询', '递归缓存', '权威记录']
+              : s === 'nat-basic'
+                ? ['内网端点', 'NAT 转换', '远端服务器']
+                : ['发送端', s === 'http2-multiplexing' ? 'TCP 字节流' : '传输链路', '接收端']
+          }
+        />
+      )}
       <Feedback>{note}</Feedback>
       <ol className="bench-log">
         {logs.map((line, i) => (

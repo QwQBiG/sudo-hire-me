@@ -14,6 +14,7 @@ export default function Queues({ lesson }: LabProps) {
   const [count, setCount] = useState(0);
   const [rejected, setRejected] = useState(0);
   const [loads, setLoads] = useState([0, 0, 0]);
+  const [completed, setCompleted] = useState<string[]>([]);
   const [arrival, setArrival] = useState(5);
   const [capacity, setCapacity] = useState(2);
   const [note, setNote] = useState('增加请求，观察处理位置、等待空间与拒绝结果。');
@@ -23,6 +24,7 @@ export default function Queues({ lesson }: LabProps) {
     setCount(0);
     setRejected(0);
     setLoads([0, 0, 0]);
+    setCompleted([]);
     setNote('服务队列已清空。');
   }
   const title = back
@@ -186,6 +188,8 @@ export default function Queues({ lesson }: LabProps) {
     }
   }
   function finish(index: number) {
+    const done = running[index];
+    if (done) setCompleted((jobs) => [...jobs, done].slice(-8));
     const next = queue[0] ?? null;
     setRunning((xs) => xs.map((v, i) => (i === index ? next : v)));
     setQueue(queue.slice(1));
@@ -222,7 +226,13 @@ export default function Queues({ lesson }: LabProps) {
             <small>
               {bulk && mode === 'isolate' ? (i === 2 ? 'B 专用' : 'A 专用') : `Worker ${i + 1}`}
             </small>
-            <strong>{job ?? '空闲'}</strong>
+            <strong data-token-id={job ?? undefined}>{job ?? '空闲'}</strong>
+            <div className="worker-process" aria-hidden="true">
+              <i />
+              <i />
+              <i />
+              <i />
+            </div>
             <span>{job ? '点击完成' : '等待任务'}</span>
           </button>
         ))}
@@ -232,7 +242,11 @@ export default function Queues({ lesson }: LabProps) {
           <div className="bench-label">等待队列 · {queue.length} / 4</div>
           <div className="bench-tokens">
             {Array.from({ length: 4 }, (_, i) => (
-              <span className={`bench-token ${queue[i] ? 'active' : ''}`} key={i}>
+              <span
+                className={`bench-token ${queue[i] ? 'active' : ''}`}
+                key={queue[i] ?? `empty-${i}`}
+                data-token-id={queue[i]}
+              >
                 {queue[i] ?? '·'}
               </span>
             ))}
@@ -249,6 +263,23 @@ export default function Queues({ lesson }: LabProps) {
             快下游 B 请求
           </button>
         )}
+      </div>
+      <div className="completed-jobs">
+        <div className="bench-label">
+          已完成 · {completed.length}
+          {completed.length === 8 ? '（最近 8 个）' : ''}
+        </div>
+        <div className="bench-tokens">
+          {completed.length ? (
+            completed.map((job) => (
+              <span className="bench-token done" key={job} data-token-id={job}>
+                {job}
+              </span>
+            ))
+          ) : (
+            <span className="queue-empty">等待任务完成</span>
+          )}
+        </div>
       </div>
       <Feedback good={!rejected}>
         {note} 累计拒绝 {rejected} 次。

@@ -4,6 +4,7 @@ import { workbenchFor, workbenchGroups } from '../../domain/workbench-catalog.mj
 import './objects.css';
 import './diagrams.css';
 import './practice.css';
+import './scenes.css';
 
 const components: Record<keyof typeof workbenchGroups, ComponentType<LabProps>> = {
   account: lazy(() => import('./Account')),

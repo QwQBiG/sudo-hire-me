@@ -1,5 +1,5 @@
 import { RotateCcw, Activity, Check, CircleAlert } from 'lucide-react';
-import type { ReactNode } from 'react';
+import { useLayoutEffect, useRef, useState, type ReactNode } from 'react';
 import './workbenches.css';
 
 export function Bench({
@@ -81,8 +81,29 @@ export function Choice({
   onChange: (value: string) => void;
   label: string;
 }) {
+  const group = useRef<HTMLDivElement>(null);
+  const [indicator, setIndicator] = useState({ left: 0, top: 0, width: 0, height: 0 });
+  useLayoutEffect(() => {
+    const element = group.current;
+    if (!element) return;
+    const measure = () => {
+      const selected = element.querySelector<HTMLButtonElement>('[aria-pressed="true"]');
+      if (selected)
+        setIndicator({
+          left: selected.offsetLeft,
+          top: selected.offsetTop,
+          width: selected.offsetWidth,
+          height: selected.offsetHeight,
+        });
+    };
+    measure();
+    const resize = new ResizeObserver(measure);
+    resize.observe(element);
+    return () => resize.disconnect();
+  }, [value]);
   return (
-    <div className="bench-switch" role="group" aria-label={label}>
+    <div className="bench-switch" role="group" aria-label={label} ref={group}>
+      <span className="bench-switch-indicator" aria-hidden="true" style={indicator} />
       {options.map(([id, name]) => (
         <button key={id} aria-pressed={value === id} onClick={() => onChange(id)}>
           {name}
