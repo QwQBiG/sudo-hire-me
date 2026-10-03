@@ -1,4 +1,24 @@
 export const workbenchGroups = {
+  'algorithm-practice': [
+    'short-circuit-evaluation',
+    'loop-invariants',
+    'lru-cache',
+    'monotonic-stack',
+  ],
+  'c-mechanics': ['c-const-pointer', 'c-static-extern', 'c-sizeof-strlen'],
+  'cpp-mechanics': ['cpp-smart-pointers', 'cpp-value-categories', 'cpp-vector-invalidation'],
+  'runtime-mechanics': [
+    'python-iterators-generators',
+    'python-gil-concurrency',
+    'java-jvm-memory',
+    'java-volatile-synchronized',
+    'kotlin-val-collections',
+  ],
+  'rust-sharing': ['rust-send-sync', 'rust-rc-arc-weak'],
+  'zig-memory': ['zig-allocator-ownership', 'zig-comptime-basics'],
+  'unix-basics': ['linux-zombie-orphan', 'linux-permissions-umask', 'memory-mapped-files'],
+  'security-basics': ['authentication-authorization', 'encoding-encryption-hashing'],
+  'sql-parameters': ['sql-injection-parameters'],
   account: ['oop-encapsulation', 'api-contract-invariants'],
   objects: [
     'oop-classes-objects',

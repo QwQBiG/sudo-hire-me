@@ -7,6 +7,15 @@ import './practice.css';
 import './scenes.css';
 
 const components: Record<keyof typeof workbenchGroups, ComponentType<LabProps>> = {
+  'algorithm-practice': lazy(() => import('../expansion/Algorithms')),
+  'c-mechanics': lazy(() => import('../expansion/CMechanics')),
+  'cpp-mechanics': lazy(() => import('../expansion/CppMechanics')),
+  'runtime-mechanics': lazy(() => import('../expansion/Runtime')),
+  'rust-sharing': lazy(() => import('../expansion/RustSharing')),
+  'zig-memory': lazy(() => import('../expansion/ZigMemory')),
+  'unix-basics': lazy(() => import('../expansion/Unix')),
+  'security-basics': lazy(() => import('../expansion/Security')),
+  'sql-parameters': lazy(() => import('../expansion/SqlParameters')),
   account: lazy(() => import('./Account')),
   objects: lazy(() => import('./Objects')),
   lifetime: lazy(() => import('./Lifetime')),

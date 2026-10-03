@@ -14,7 +14,7 @@ prerequisites: ["error-handling-models"]
 
 ## 先读返回类型
 
-以 Zig 0.14.0 官方语言文档为范围，错误联合类型（Error Union Type）`error{Negative}!i32` 表示函数返回一个 `i32`，**或者**错误 `Negative`，而不是同时返回两个值。`try expression` 在成功时取出值，在错误时把错误从当前函数返回；因此使用 `try` 的函数本身要能返回兼容错误。`defer` 在离开当前作用域时执行，`errdefer` 只在错误退出路径执行；同一作用域里待执行的延迟语句按逆序运行。[Zig 0.14.0：Errors、defer、errdefer](https://ziglang.org/documentation/0.14.0/#Errors)
+以 Zig 0.15.2 官方语言文档为范围，错误联合类型（Error Union Type）`error{Negative}!i32` 表示函数返回一个 `i32`，**或者**错误 `Negative`，而不是同时返回两个值。`try expression` 在成功时取出值，在错误时把错误从当前函数返回；因此使用 `try` 的函数本身要能返回兼容错误。`defer` 在离开当前作用域时执行，`errdefer` 只在错误退出路径执行；同一作用域里待执行的延迟语句按逆序运行。[Zig 0.15.2：Errors、defer、errdefer](https://ziglang.org/documentation/0.15.2/#Errors)
 
 ## 一份代码跑两条路径
 
@@ -43,7 +43,7 @@ pub fn main() void {
 }
 ```
 
-`std.debug.print` 写标准错误；按 0.14.0 语义，预期输出依次为 `value=7`、`defer`、`errdefer`、`defer`、`caught=Negative`，每项一行。`step(7)` 成功，`errdefer` 不运行；`step(-1)` 的 `try` 传播 `Negative`，先运行后注册的 `errdefer`，再运行先注册的普通 `defer`，最后调用方 `catch` 打印错误名。示例不依赖错误整数编码。[Zig 0.14.0：try 与延迟语句](https://ziglang.org/documentation/0.14.0/#Errors)
+`std.debug.print` 写标准错误；按 0.15.2 语义，预期输出依次为 `value=7`、`defer`、`errdefer`、`defer`、`caught=Negative`，每项一行。`step(7)` 成功，`errdefer` 不运行；`step(-1)` 的 `try` 传播 `Negative`，先运行后注册的 `errdefer`，再运行先注册的普通 `defer`，最后调用方 `catch` 打印错误名。示例不依赖错误整数编码。[Zig 0.15.2：try 与延迟语句](https://ziglang.org/documentation/0.15.2/#Errors)
 
 ## 逐步推演
 
@@ -67,6 +67,12 @@ pub fn main() void {
 
 Zig 的 `E!T` 是“错误 E 或成功值 T”的错误联合；`try` 成功时解包，出错时把错误从当前函数传播。`defer` 对正常和错误离开当前作用域都执行，`errdefer` 只对错误退出执行，多个延迟操作按逆注册顺序执行。清理逻辑应按真实作用域和错误路径推导，不能把 `errdefer` 说成任何退出都会运行。
 
+## 追问：错误被 catch 处理后还触发 errdefer 吗
+
+如果 catch 把错误转换为正常值，当前作用域随后正常退出，那么该作用域的 errdefer 不因“曾经发生错误”而触发。关键是**如何离开注册它的作用域**，不是是否曾调用失败函数。登记清理之前就已经 return 的路径，也不会执行还没登记的 defer。
+
+内层块正常结束后，其 errdefer 的作用范围也已经结束；外层后来返回错误，不会回头执行已结束内层的错误清理。资源申请和清理登记应放在匹配的作用域，并明确成功时是释放还是转交拥有权。
+
 ## 选择题
 
 示例中 `step(-1)` 内，调用方打印 `caught=Negative` **之前**的两行顺序是什么？
@@ -80,4 +86,4 @@ Zig 的 `E!T` 是“错误 E 或成功值 T”的错误联合；`try` 成功时�
 
 ## 参考资料
 
-- [Zig 0.14.0 官方语言文档：Errors、defer 与 errdefer](https://ziglang.org/documentation/0.14.0/#Errors)
+- [Zig 0.15.2 官方语言文档：Errors、defer 与 errdefer](https://ziglang.org/documentation/0.15.2/#Errors)

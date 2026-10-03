@@ -13,7 +13,7 @@ test('all mechanism lessons have an explicit unique mapping and no text paginato
   );
   const mapped = Object.values(workbenchGroups).flat();
   assert.equal(new Set(mapped).size, mapped.length);
-  assert.equal(mapped.length, 106);
+  assert.equal(mapped.length, lessons.filter((lesson) => lesson.lab === 'workbench').length);
   for (const lesson of lessons) {
     assert.notEqual(lesson.lab, 'walkthrough');
     assert.equal(Boolean(workbenchFor(lesson.slug)), lesson.lab === 'workbench', lesson.slug);

@@ -57,7 +57,19 @@ ORDER BY s.id;
 
 SQL 的逻辑结果除了 TRUE 和 FALSE，还有 UNKNOWN。`NULL` 表示未知或缺失，不能用 `= NULL` 判断；应使用 `IS NULL`。`WHERE` 只保留条件为 TRUE 的行，FALSE 和 UNKNOWN 都不会出现。这不是“NULL 等于所有值”，恰好相反：与未知值做普通相等比较，无法得出真或假。[SQLite 官方文档：NULL Values](https://www.sqlite.org/lang_expr.html)
 
-## 常见误区
+## 把三值逻辑展开一次
+
+`3 IN (1,NULL)` 可理解为 `(3=1) OR (3=NULL)`，即 FALSE OR UNKNOWN，结果 UNKNOWN；对它取 NOT 仍是 UNKNOWN。`1 IN (1,NULL)` 则是 TRUE OR UNKNOWN，结果 TRUE，所以 `1 NOT IN (...)` 为 FALSE。不是“有 NULL 就把所有比较都变 UNKNOWN”，已确定为真的匹配仍影响整体结果。
+
+| p | NOT p | TRUE AND p | FALSE OR p |
+| --- | --- | --- | --- |
+| TRUE | FALSE | TRUE | TRUE |
+| FALSE | TRUE | FALSE | FALSE |
+| UNKNOWN | UNKNOWN | UNKNOWN | UNKNOWN |
+
+如果业务保证右侧键非空，可用显式 `WHERE student_id IS NOT NULL` 去除未知值；但仍要看外层 id 是否可能 NULL、是否符合要表达的关系。改写不是因为 EXISTS 关键字更“高级”，而是为了精确表达“无匹配行”。
+
+## 误区辨析
 
 - **“`NOT IN` 和 `NOT EXISTS` 永远互换。”** 右侧可能有 NULL 时结果可能不同；还要注意关联条件、重复行和空集合边界。
 - **“`NULL = NULL` 是 TRUE。”** 普通等号比较得到 UNKNOWN，判断缺失用 `IS NULL`。
