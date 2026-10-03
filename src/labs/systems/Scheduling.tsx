@@ -3,6 +3,7 @@ import { ArrowLeft, ArrowRight, Minus, Plus } from 'lucide-react';
 import { Experiment } from '../../components/Experiment';
 import { schedulingJobs, simulateScheduling } from '../../domain/scheduling.mjs';
 import './scheduling.css';
+import './systems-quality.css';
 
 const initialBursts = [5, 2, 1];
 
@@ -110,6 +111,15 @@ export default function Scheduling() {
           <span>
             {revealed} / {result.slices.length} 段
           </span>
+        </div>
+        <div className="sched-current-queue" aria-label="最近运行段与下一轮就绪队列">
+          <span>最近运行</span>
+          <b data-running={Boolean(current?.queue.length)}>{current?.job ?? '尚未开始'}</b>
+          <span>下一轮就绪</span>
+          {(current?.queue ?? schedulingJobs).map((job) => (
+            <b key={job}>{job}</b>
+          ))}
+          {current?.queue.length === 0 && <span>全部任务结束</span>}
         </div>
         <div className="sched-scroll">
           <div

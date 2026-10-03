@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Undo2, Check, Play } from 'lucide-react';
 import type { LabProps } from '../../types';
 import { Bench, Feedback } from './Bench';
+import './workbench-quality.css';
 
 export default function Sequences({ lesson }: LabProps) {
   const slug = lesson.slug;
@@ -47,7 +48,8 @@ export default function Sequences({ lesson }: LabProps) {
                 {xs.map((v, i) => (
                   <button
                     key={v}
-                    className="bench-token"
+                    className={`bench-token ${i === 0 && (!(side ? left : right).length || v <= (side ? left : right)[0]) ? 'active' : ''}`}
+                    data-token-id={`merge-${v}`}
                     disabled={i > 0}
                     onClick={() => {
                       const other = side ? left : right;
@@ -72,11 +74,21 @@ export default function Sequences({ lesson }: LabProps) {
           <span>合并结果</span>
           <div className="bench-tokens">
             {output.map((v) => (
-              <span className="bench-token done" key={v}>
+              <span className="bench-token done" key={v} data-token-id={`merge-${v}`}>
                 {v}
               </span>
             ))}
           </div>
+        </div>
+        <div className="quality-path">
+          <code>左首项 = {left[0] ?? '已取完'}</code>
+          <code>右首项 = {right[0] ?? '已取完'}</code>
+          <output>
+            下一项 ={' '}
+            {left.length || right.length
+              ? Math.min(left[0] ?? Infinity, right[0] ?? Infinity)
+              : '合并完成'}
+          </output>
         </div>
         <Feedback>
           {output.length === 6
@@ -145,6 +157,21 @@ export default function Sequences({ lesson }: LabProps) {
             </span>
           ))}
         </div>
+        <div className="quality-lattice" aria-label="排列搜索空间">
+          {['123', '132', '213', '231', '312', '321'].map((path) => (
+            <button
+              key={path}
+              className={saved.includes(path) ? 'active' : ''}
+              onClick={() => {
+                setOutput(Array.from(path, Number));
+                setNote(`查看完整分支 ${path}；仍需保存才能记录为已探索解。`);
+              }}
+            >
+              <code>{path.split('').join(' → ')}</code>
+              <small>{saved.includes(path) ? '已记录' : '尚未记录'}</small>
+            </button>
+          ))}
+        </div>
         <Feedback>
           已找到 {saved.length} / 6。{note}
         </Feedback>
@@ -195,7 +222,7 @@ export default function Sequences({ lesson }: LabProps) {
               if (!pair[char] || stack.at(-1) !== pair[char]) {
                 setFailed(true);
                 setNote(
-                  `右括号 ${char} 与当前栈顶 ${stack.at(-1) ?? '空'} 不匹配，已经可以判定失败。`,
+                  `字符 ${char} 与当前栈顶 ${stack.at(-1) ?? '空'} 不匹配，或不是合法括号，已经可以判定失败。`,
                 );
               } else {
                 setStack(stack.slice(0, -1));
@@ -209,7 +236,23 @@ export default function Sequences({ lesson }: LabProps) {
           处理当前字符
         </button>
       </div>
-      <Feedback good={!failed}>
+      <div className="quality-observation">
+        <div>
+          <small>已处理 / 总字符</small>
+          <output>
+            {position} / {text.length}
+          </output>
+        </div>
+        <div>
+          <small>当前栈深度</small>
+          <output>{stack.length}</output>
+        </div>
+        <div>
+          <small>右括号应匹配的栈顶</small>
+          <output>{stack.at(-1) ?? '空'}</output>
+        </div>
+      </div>
+      <Feedback good={!failed && !(position === text.length && stack.length > 0)}>
         {failed
           ? note
           : position === text.length

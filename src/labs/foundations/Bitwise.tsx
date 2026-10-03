@@ -39,6 +39,7 @@ export default function Bitwise() {
               key={7 - index}
               onClick={() => change(toggleBit8(value, 7 - index))}
               aria-label={`切换${label}第${7 - index}位，当前为${bit}`}
+              aria-pressed={Boolean(bit)}
               title={`${label} 第 ${7 - index} 位：点击切换`}
             >
               {bit}
@@ -112,6 +113,22 @@ export default function Bitwise() {
             ))}
           </div>
         </div>
+      </div>
+      <div className="foundation-state-strip" aria-live="polite">
+        <span>
+          A <strong>{left}</strong>
+        </span>
+        {!isShift && (
+          <span>
+            B <strong>{right}</strong>
+          </span>
+        )}
+        <span>
+          运算 <strong>{operations.find(({ id }) => id === operation)?.label}</strong>
+        </span>
+        <span>
+          结果 <strong>{result.result}</strong> / {hex(result.result)}
+        </span>
       </div>
       <p className="experiment-status" role="status">
         {isShift

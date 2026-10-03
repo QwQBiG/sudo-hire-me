@@ -38,7 +38,10 @@ export default function LowerBound() {
     <Experiment
       title="把边界夹到同一个位置"
       subtitle="中点颜色和下标状态随每轮比较变化；右端 n 可以是答案，但不是可读取的元素。"
-      onReset={reset}
+      onReset={() => {
+        setTargetText('3');
+        reset();
+      }}
     >
       <div className="experiment-controls lb-controls">
         <label>
@@ -63,6 +66,7 @@ export default function LowerBound() {
             type="number"
             step="any"
             value={targetText}
+            aria-invalid={!valid}
             onChange={(event) => {
               setTargetText(event.target.value);
               reset();
@@ -157,7 +161,9 @@ export default function LowerBound() {
           </div>
         </>
       ) : (
-        <p className="lb-invalid">目标值不能为空，且必须是有限数值。</p>
+        <p className="lb-invalid" role="alert">
+          目标值不能为空，且必须是有限数值。
+        </p>
       )}
       <p className="experiment-status lb-outcome" role="status">
         {outcome}

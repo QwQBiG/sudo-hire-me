@@ -3,6 +3,7 @@ import { RotateCcw, StepForward } from 'lucide-react';
 import { Experiment } from '../../components/Experiment';
 import { beginEntrySearch, createCycleState, stepCycle } from '../../domain/floyd-cycle.mjs';
 import './pointer-workbenches.css';
+import { MechanismLinks } from './MechanismLinks';
 
 const presets = [
   { key: 'cyclic', label: '尾部接回 C' },
@@ -32,6 +33,12 @@ export default function FloydCycle() {
           </button>
         ))}
       </div>
+      <MechanismLinks
+        nodes={state.nodes}
+        links={state.next}
+        active={[state.slow, state.fast, state.seeker]}
+        label={`链表后继：${state.nodes.map((node: string) => `${node} 指向 ${state.next[node] ?? 'null'}`).join('；')}`}
+      />
       <div className="cycle-nodes" role="group" aria-label="链表节点和后继">
         {state.nodes.length ? (
           state.nodes.map((node: string) => (

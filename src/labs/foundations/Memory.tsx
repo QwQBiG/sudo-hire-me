@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { Experiment } from '../../components/Experiment';
 import { memoryLayout } from '../../domain/foundations.mjs';
 import './foundations.css';
+import './foundations-quality.css';
 
 export default function Memory() {
   const [width, setWidth] = useState(4);
@@ -53,6 +54,7 @@ export default function Memory() {
             className={`f-byte f-color-${cell.element} ${selected === cell.element ? 'selected' : ''}`}
             onClick={() => setSelected(cell.element)}
             aria-pressed={selected === cell.element}
+            data-offset={cell.offset}
             aria-label={`地址 ${cell.address}，元素 a[${cell.element}] 的第 ${cell.offset + 1} 字节`}
           >
             <small>{cell.address}</small>
@@ -60,6 +62,18 @@ export default function Memory() {
             <span>{cell.offset === 0 ? '起点' : `+${cell.offset}`}</span>
           </button>
         ))}
+      </div>
+      <div className="foundation-state-strip" aria-live="polite">
+        <code>&amp;a[{selected}]</code>
+        <span>
+          → 起点 <strong>{start}</strong>
+        </span>
+        <span>
+          末字节 <strong>{start + width - 1}</strong>
+        </span>
+        <span>
+          跨度 <strong>{width} B</strong>
+        </span>
       </div>
       <div className="f-address-equation" aria-live="polite">
         <span>

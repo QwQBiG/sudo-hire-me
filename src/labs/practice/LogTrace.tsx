@@ -4,6 +4,7 @@ import { Experiment } from '../../components/Experiment';
 import { assessTraceClaim, traceClaims, visibleTraceEvents } from '../../domain/log-trace.mjs';
 import type { LabProps } from '../../types';
 import './log-trace.css';
+import './practice-quality.css';
 
 export default function LogTrace(_props: LabProps) {
   const [request, setRequest] = useState('all');
@@ -12,6 +13,16 @@ export default function LogTrace(_props: LabProps) {
   const events = visibleTraceEvents(request);
   const selectedEvent = events.find((item) => `${item.at}-${item.request}` === focused);
   const result = claim ? assessTraceClaim(claim) : null;
+  function isEvidence(item: (typeof events)[number]) {
+    if (!claim) return false;
+    if (claim === 'validated') return item.request === 'R17' && item.event === 'order.validated';
+    if (claim === 'all-failed')
+      return item.request === 'R18' && item.event === 'order.store.completed';
+    return (
+      (item.request === 'R17' && ['order.validated', 'order.store.failed'].includes(item.event)) ||
+      (item.request === 'R18' && item.event === 'order.store.completed')
+    );
+  }
   return (
     <Experiment
       className="log-trace-lab"
@@ -55,7 +66,7 @@ export default function LogTrace(_props: LabProps) {
                 <button
                   key={key}
                   type="button"
-                  className={`${focused === key ? 'is-focused' : ''} level-${item.level.toLowerCase()}`}
+                  className={`${focused === key ? 'is-focused' : ''} ${isEvidence(item) ? 'is-evidence' : ''} level-${item.level.toLowerCase()}`}
                   aria-pressed={focused === key}
                   onClick={() => setFocused(key)}
                 >
@@ -90,6 +101,17 @@ export default function LogTrace(_props: LabProps) {
               </button>
             ))}
           </div>
+          {claim && (
+            <button
+              className="log-trace-evidence-link"
+              onClick={() => {
+                setRequest('all');
+                setFocused('');
+              }}
+            >
+              <Filter size={14} /> 显示全部相关证据
+            </button>
+          )}
           <div
             className={`log-trace-feedback ${result?.supported ? 'is-supported' : ''}`}
             aria-live="polite"

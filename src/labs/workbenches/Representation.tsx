@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import type { LabProps } from '../../types';
 import { Bench, Choice, Feedback } from './Bench';
+import './workbench-quality.css';
 
 export default function Representation({ lesson }: LabProps) {
   const slug = lesson.slug;
@@ -20,6 +21,13 @@ export default function Representation({ lesson }: LabProps) {
   }
   if (slug === 'text-encoding-utf8') {
     const chars = Array.from(text);
+    const graphemes = Array.from(
+      new Intl.Segmenter('zh', { granularity: 'grapheme' }).segment(text),
+    );
+    const hasUnpairedSurrogate = chars.some((char) => {
+      const point = char.codePointAt(0)!;
+      return point >= 0xd800 && point <= 0xdfff;
+    });
     return (
       <Bench
         title="拆开文本的三层表示"
@@ -30,6 +38,13 @@ export default function Representation({ lesson }: LabProps) {
           输入文本
           <input value={text} maxLength={40} onChange={(e) => setText(e.target.value)} />
         </label>
+        <div className="bench-actions">
+          {['A中🙂', 'e\u0301', '👨‍👩‍👧', ''].map((example) => (
+            <button className="secondary" key={example} onClick={() => setText(example)}>
+              {example || '空文本'}
+            </button>
+          ))}
+        </div>
         <div className="encoding-strips">
           {chars.map((char, i) => (
             <div className="encoding-char" key={i}>
@@ -45,6 +60,14 @@ export default function Representation({ lesson }: LabProps) {
         </div>
         <div className="bench-grid">
           <div className="bench-stat">
+            <small>用户感知字符（字素簇）</small>
+            <strong>{graphemes.length}</strong>
+          </div>
+          <div className="bench-stat">
+            <small>UTF-16 代码单元</small>
+            <strong>{text.length}</strong>
+          </div>
+          <div className="bench-stat">
             <small>Unicode 码点</small>
             <strong>{chars.length}</strong>
           </div>
@@ -54,6 +77,8 @@ export default function Representation({ lesson }: LabProps) {
           </div>
         </div>
         <Feedback>
+          {hasUnpairedSurrogate &&
+            '输入含孤立代理项，TextEncoder 会把它替换为 U+FFFD；以下不是对该代理项直接编码。'}
           ASCII 字符占 1 字节，“中”占 3 字节，示例表情占 4
           字节。修改文本时，码点数量和字节数量会各自变化，不能用字符数量直接计算 UTF-8 缓冲区大小。
         </Feedback>
@@ -133,10 +158,12 @@ export default function Representation({ lesson }: LabProps) {
     const validInteger = valid && Number.isSafeInteger(number);
     const integer = Math.trunc(number);
     const byte = ((integer % 256) + 256) % 256;
+    const javaInt = validInteger && integer >= -2147483648 && integer <= 2147483647;
+    const signedByte = byte < 128 ? byte : byte - 256;
     return (
       <Bench
         title="把一个整数装进 8 个比特"
-        subtitle="假定存在 8 位 uint8_t；演示整数转无符号类型的模 256 结果。"
+        subtitle="保留整数低 8 位：C uint8_t 按无符号解释，Java byte 按有符号解释。Java int 输入限于 32 位范围。"
         onReset={reset}
       >
         <label>
@@ -149,15 +176,34 @@ export default function Representation({ lesson }: LabProps) {
             onChange={(e) => setText(e.target.value)}
           />
         </label>
+        <div className="bench-actions">
+          {[130, 255, 256, 300, -1].map((example) => (
+            <button key={example} className="secondary" onClick={() => setText(String(example))}>
+              {example}
+            </button>
+          ))}
+        </div>
         <div className="bit-ribbon">
           {(validInteger ? byte.toString(2).padStart(8, '0') : '????????')
             .split('')
             .map((bit, i) => (
-              <div key={i} className={bit === '1' ? 'set' : ''}>
+              <button
+                key={i}
+                className={bit === '1' ? 'set' : ''}
+                disabled={!validInteger}
+                aria-label={`翻转第 ${7 - i} 位，权重 ${2 ** (7 - i)}`}
+                aria-pressed={bit === '1'}
+                onClick={() => setText(String(byte ^ (1 << (7 - i))))}
+              >
                 <small>2^{7 - i}</small>
                 <strong>{bit}</strong>
-              </div>
+              </button>
             ))}
+        </div>
+        <div className="quality-path">
+          <code>源整数 mod 256</code>
+          <span>→</span>
+          <output>{validInteger ? byte : '输入无效'}</output>
         </div>
         <div className="bench-grid">
           <div className="bench-stat">
@@ -168,13 +214,19 @@ export default function Representation({ lesson }: LabProps) {
             <small>uint8_t</small>
             <strong>{validInteger ? byte : '无效'}</strong>
           </div>
+          <div className="bench-stat">
+            <small>Java (byte) int</small>
+            <strong>
+              {!validInteger ? '无效整数输入' : javaInt ? signedByte : 'int 输入越界'}
+            </strong>
+          </div>
         </div>
         <Feedback good={valid && Number.isSafeInteger(number)}>
           {!valid || !Number.isSafeInteger(number)
             ? '请输入 JavaScript 可精确表示范围内的整数，避免把输入舍入误差当成转换结果。'
             : integer === byte
-              ? '当前值在 0..255 内，能够完整表示。试试 256、300 或 -1。'
-              : `${integer} 与 ${byte} 模 256 同余，高位信息没有保留下来。不能反向从 ${byte} 恢复原整数；这个规则也不能直接套到 C 的所有有符号窄化转换。`}
+              ? `当前值在 uint8_t 的 0..255 范围内，按无符号解释没有丢值；${javaInt && integer > 127 ? `但 Java byte 同一位串解释为 ${signedByte}，并不能保留这个正整数。` : 'Java byte 的正数范围只到 127。'} 试试 130、256、300 或 -1。`
+              : `${integer} 与无符号值 ${byte} 模 256 同余，高位信息没有保留下来。${javaInt ? `同一位串按 Java byte 解释为 ${signedByte}。` : '此值不能作为 Java int 输入。'} 不能从 8 位结果恢复原整数，也不能把 Java 规则套到 C 的所有有符号转换。`}
         </Feedback>
       </Bench>
     );
@@ -207,18 +259,43 @@ export default function Representation({ lesson }: LabProps) {
         十进制输入
         <input value={text} onChange={(e) => setText(e.target.value)} />
       </label>
+      <div className="bench-actions">
+        {['0.1', '0.5', '16777217', '1e40'].map((example) => (
+          <button key={example} className="secondary" onClick={() => setText(example)}>
+            {example}
+          </button>
+        ))}
+      </div>
       <div className="float-fields">
         <div>
           <small>符号</small>
-          <code>{bits[0]}</code>
+          <code>{valid ? bits[0] : '—'}</code>
         </div>
         <div>
           <small>阶码</small>
-          <code>{bits.slice(1, single ? 9 : 12)}</code>
+          <code>{valid ? bits.slice(1, single ? 9 : 12) : '—'}</code>
         </div>
         <div>
           <small>尾数字段</small>
-          <code>{bits.slice(single ? 9 : 12)}</code>
+          <code>{valid ? bits.slice(single ? 9 : 12) : '—'}</code>
+        </div>
+      </div>
+      <div className="quality-observation">
+        <div>
+          <small>相对浏览器已解析输入的误差</small>
+          <output>
+            {valid
+              ? Number.isFinite(actual)
+                ? (actual - number).toPrecision(8)
+                : '目标格式溢出为无穷'
+              : '—'}
+          </output>
+        </div>
+        <div>
+          <small>字段宽度</small>
+          <output>
+            1 / {single ? 8 : 11} / {single ? 23 : 52} bit
+          </output>
         </div>
       </div>
       <div className="bench-stat">

@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { ArrowLeft, ArrowRight, GitBranch, Pause, Play, RotateCcw } from 'lucide-react';
 import { binarySearchSteps } from '../domain/search.mjs';
 import type { LabProps } from '../types';
+import './foundations/foundations-quality.css';
 
 export default function BinarySearch({ reducedMotion }: LabProps) {
   const [values, setValues] = useState([2, 5, 8, 12, 16, 23, 38]);
@@ -37,6 +38,15 @@ export default function BinarySearch({ reducedMotion }: LabProps) {
       setError((err as Error).message);
     }
   }
+  function example(nextTarget: number) {
+    setValues([2, 5, 8, 12, 16, 23, 38]);
+    setInput('2, 5, 8, 12, 16, 23, 38');
+    setTarget(nextTarget);
+    setTargetInput(String(nextTarget));
+    setIndex(0);
+    setPlaying(false);
+    setError('');
+  }
   const message =
     step.comparison === 'found'
       ? `命中：a[${step.mid}] = ${target}，返回下标 ${step.mid}。`
@@ -46,7 +56,7 @@ export default function BinarySearch({ reducedMotion }: LabProps) {
           ? `${step.value} < ${target}，下一步 left = mid + 1。`
           : `${step.value} > ${target}，下一步 right = mid - 1。`;
   return (
-    <section className="lab" aria-label="二分查找实验">
+    <section className="lab foundation-search" aria-label="二分查找实验">
       <header className="lab-heading">
         <span>
           <GitBranch size={18} />
@@ -71,6 +81,12 @@ export default function BinarySearch({ reducedMotion }: LabProps) {
           应用
         </button>
       </div>
+      <div className="foundation-search-cases" role="group" aria-label="查找边界示例">
+        <button onClick={() => example(2)}>最左元素</button>
+        <button onClick={() => example(38)}>最右元素</button>
+        <button onClick={() => example(15)}>区间内未命中</button>
+        <button onClick={() => example(50)}>大于最大值</button>
+      </div>
       {error && (
         <p className="lab-error" role="alert">
           {error}
@@ -84,19 +100,34 @@ export default function BinarySearch({ reducedMotion }: LabProps) {
               className={`array-item ${i < step.left || i > step.right ? 'eliminated' : ''} ${i === step.mid ? 'current' : ''} ${step.comparison === 'found' && i === step.mid ? 'found' : ''}`}
             >
               <span className="array-pointer">
-                {i === step.mid
-                  ? 'mid'
-                  : i === step.left
-                    ? 'left'
-                    : i === step.right
-                      ? 'right'
-                      : ''}
+                {[
+                  i === step.left ? 'L' : '',
+                  i === step.mid ? 'M' : '',
+                  i === step.right ? 'R' : '',
+                ]
+                  .filter(Boolean)
+                  .join(' · ')}
               </span>
               <strong>{value}</strong>
               <span>{i}</span>
             </div>
           ))}
         </div>
+      </div>
+      <div
+        className="foundation-search-interval"
+        aria-label={`待搜索区间 [${step.left}, ${step.right}]，${Math.max(0, step.right - step.left + 1)} 个候选`}
+      >
+        {values.map((_, i) => (
+          <i
+            key={i}
+            data-candidate={i >= step.left && i <= step.right}
+            data-middle={i === step.mid}
+          />
+        ))}
+        <span>
+          候选 {Math.max(0, step.right - step.left + 1)} / {values.length}
+        </span>
       </div>
       <div className="search-variables">
         <span>
@@ -121,6 +152,9 @@ export default function BinarySearch({ reducedMotion }: LabProps) {
             onClick={() => {
               setIndex(0);
               setPlaying(false);
+              setInput(values.join(', '));
+              setTargetInput(String(target));
+              setError('');
             }}
           >
             <RotateCcw size={16} />

@@ -8,6 +8,7 @@ import {
   searchBplus,
 } from '../../domain/bplus-tree.mjs';
 import './mechanism-labs.css';
+import './systems-quality.css';
 
 export default function BplusTree() {
   const [state, setState] = useState(() => createBplusState());
@@ -21,7 +22,12 @@ export default function BplusTree() {
       title="B+ 树路径与叶链"
       subtitle="固定三片叶的概念树：先定位，再按键顺序走"
       className="bplus-lab"
-      onReset={() => setState(createBplusState())}
+      onReset={() => {
+        setState(createBplusState());
+        setKey(25);
+        setStart(20);
+        setEnd(45);
+      }}
     >
       <div className="bplus-tree">
         <div className="bplus-root" data-active={state.visited.includes('root')}>
@@ -37,7 +43,13 @@ export default function BplusTree() {
           {bplusLeaves.map((leaf) => (
             <div key={leaf.id} data-active={state.visited.includes(leaf.id)}>
               <small>{leaf.id} 叶</small>
-              <strong>{leaf.keys.join(' · ')}</strong>
+              <div className="system-tokens" aria-label={`${leaf.id} 叶中的键`}>
+                {leaf.keys.map((value) => (
+                  <span key={value} data-current={state.results.includes(value)}>
+                    {value}
+                  </span>
+                ))}
+              </div>
             </div>
           ))}
         </div>
@@ -48,8 +60,9 @@ export default function BplusTree() {
           等值键{' '}
           <input
             type="number"
-            value={key}
-            onChange={(event) => setKey(Number(event.target.value))}
+            value={Number.isFinite(key) ? key : ''}
+            aria-invalid={!validKey}
+            onChange={(event) => setKey(event.target.valueAsNumber)}
           />
         </label>
         <button disabled={!validKey} onClick={() => setState(searchBplus(key))}>
@@ -59,22 +72,29 @@ export default function BplusTree() {
           下界{' '}
           <input
             type="number"
-            value={start}
-            onChange={(event) => setStart(Number(event.target.value))}
+            value={Number.isFinite(start) ? start : ''}
+            aria-invalid={!validRange}
+            onChange={(event) => setStart(event.target.valueAsNumber)}
           />
         </label>
         <label>
           上界{' '}
           <input
             type="number"
-            value={end}
-            onChange={(event) => setEnd(Number(event.target.value))}
+            value={Number.isFinite(end) ? end : ''}
+            aria-invalid={!validRange}
+            onChange={(event) => setEnd(event.target.valueAsNumber)}
           />
         </label>
         <button disabled={!validRange} onClick={() => setState(rangeBplus(start, end))}>
           <Route size={15} /> 范围扫描
         </button>
       </div>
+      {(!validKey || !validRange) && (
+        <p className="experiment-status" role="alert">
+          查找键必须为整数；范围上下界必须为整数，且下界不能大于上界。
+        </p>
+      )}
       <div className="mechanism-result" aria-live="polite">
         <strong>
           {state.mode === 'idle' ? '等待查询' : state.mode === 'equal' ? '等值查找' : '范围扫描'}

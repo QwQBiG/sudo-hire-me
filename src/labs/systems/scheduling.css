@@ -1,6 +1,10 @@
 .scheduling-lab .experiment-body {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: 18px;
+}
+.scheduling-lab .experiment-body > * {
+  min-width: 0;
 }
 .sched-controls,
 .sched-quantum,

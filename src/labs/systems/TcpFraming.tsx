@@ -10,6 +10,7 @@ import {
   pushFramingChunk,
 } from '../../domain/tcp-framing.mjs';
 import './mechanism-labs.css';
+import './systems-quality.css';
 
 function hex(bytes: number[]) {
   return bytes.map((byte) => byte.toString(16).padStart(2, '0').toUpperCase()).join(' ');
@@ -55,6 +56,13 @@ export default function TcpFraming() {
         <section>
           <strong>未消费缓冲区</strong>
           <code>{hex(state.buffer) || '∅'}</code>
+          <div className="system-tokens" aria-label="前两字节为长度头，其余为当前未消费数据">
+            {state.buffer.map((byte, index) => (
+              <span key={index} data-current={index < 2}>
+                {byte.toString(16).padStart(2, '0').toUpperCase()}
+              </span>
+            ))}
+          </div>
           <small>
             {expected === null ? '头部还不足 2 字节' : `当前帧正文需要 ${expected} 字节`}
           </small>

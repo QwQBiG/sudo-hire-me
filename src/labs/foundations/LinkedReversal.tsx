@@ -3,6 +3,7 @@ import { ArrowLeft, Bookmark, StepForward } from 'lucide-react';
 import { Experiment } from '../../components/Experiment';
 import { createReversalState, listFromHead, stepReversal } from '../../domain/linked-reversal.mjs';
 import './pointer-workbenches.css';
+import { MechanismLinks } from './MechanismLinks';
 
 interface ReversalState {
   preset: string;
@@ -46,6 +47,12 @@ export default function LinkedReversal() {
           </button>
         ))}
       </div>
+      <MechanismLinks
+        nodes={state.nodes}
+        links={state.next}
+        active={[state.curr, state.prev]}
+        label={`当前 next 链接：${state.nodes.map((node) => `${node} 指向 ${state.next[node] ?? 'null'}`).join('；')}`}
+      />
       <div className="reverse-nodes" role="group" aria-label="节点与当前 next 链接">
         {state.nodes.length ? (
           state.nodes.map((node) => (

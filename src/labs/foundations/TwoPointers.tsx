@@ -33,7 +33,10 @@ export default function TwoPointers() {
     <Experiment
       title="每次排除一整排候选"
       subtitle="先比较两端之和，再决定移动哪一端；错误移动不会改变数组状态。"
-      onReset={() => setState(createPointerState(state.dataset, state.target))}
+      onReset={() => {
+        setTargetText(String(state.target));
+        setState(createPointerState(state.dataset, state.target));
+      }}
     >
       <div className="experiment-controls algo-controls">
         <div className="algo-segments" role="group" aria-label="有序数组预设">

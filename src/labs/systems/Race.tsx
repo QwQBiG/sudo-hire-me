@@ -3,6 +3,7 @@ import { Play } from 'lucide-react';
 import { Experiment } from '../../components/Experiment';
 import { advanceRace, initialRace } from '../../domain/systems.mjs';
 import './systems.css';
+import './systems-quality.css';
 
 export default function Race() {
   const [locked, setLocked] = useState(false);

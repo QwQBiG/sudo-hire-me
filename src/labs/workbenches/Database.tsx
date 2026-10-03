@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Database as DatabaseIcon, KeyRound, Plus } from 'lucide-react';
 import type { LabProps } from '../../types';
 import { Bench, Choice, Feedback, Meter } from './Bench';
+import './workbench-quality.css';
 
 const titles: Record<string, string> = {
   'database-normalization': '改一次客户信息，会漏掉几处副本',
@@ -29,6 +30,7 @@ export default function Database({ lesson }: LabProps) {
     setCity('杭州');
     setCities(['杭州', '杭州', '上海']);
     setMatches(3);
+    setAge(25);
     setVersions([{ id: 1, value: 100 }]);
     setSnapshot(null);
     setPending(false);
@@ -61,6 +63,7 @@ export default function Database({ lesson }: LabProps) {
           <button
             className="primary"
             onClick={() => {
+              if (!city.trim()) return setNote('城市不能为空；无效输入不会修改已有行。');
               setCities((xs) =>
                 xs.map((v, i) => (i === 0 || (mode === 'normalized' && i === 1) ? city : v)),
               );
@@ -98,6 +101,14 @@ export default function Database({ lesson }: LabProps) {
             ))}
           </tbody>
         </table>
+        <div className="quality-path">
+          <code>order_id → customer_id</code>
+          <span>→</span>
+          <code>customer_id → city</code>
+          <output className={cities[0] !== cities[1] ? 'blocked' : ''}>
+            {cities[0] === cities[1] ? '同一客户信息一致' : '相同客户出现冲突城市'}
+          </output>
+        </div>
         <p className="object-caption">
           固定函数依赖：customer_id →
           city。此例演示传递依赖造成的冗余；完整范式判断还需列出候选键与全部函数依赖。
@@ -157,6 +168,27 @@ export default function Database({ lesson }: LabProps) {
             );
           })}
         </div>
+        <div className="quality-observation">
+          <div>
+            <small>范围候选条目</small>
+            <output>
+              {
+                rows.filter(([c, a]) => (mode === 'first' ? c === city && a >= age : a >= age))
+                  .length
+              }
+            </output>
+          </div>
+          <div>
+            <small>最终匹配条目</small>
+            <output>{rows.filter(([c, a]) => c === city && a >= age).length}</output>
+          </div>
+          <div>
+            <small>范围内被过滤</small>
+            <output>
+              {rows.filter(([c, a]) => a >= age && c !== city).length * (mode === 'first' ? 0 : 1)}
+            </output>
+          </div>
+        </div>
         <Feedback>
           {mode === 'first'
             ? 'city 等值前缀定位到一段，再在该段内按 age 范围扫描。'
@@ -184,6 +216,21 @@ export default function Database({ lesson }: LabProps) {
               {i + 1}
             </span>
           ))}
+        </div>
+        <div className="quality-rail" aria-label="路径成本比较">
+          <div>
+            <span>索引路径</span>
+            <i
+              style={{ '--portion': `${(indexCost / 82) * 100}%` } as React.CSSProperties}
+              className={indexCost > 20 ? 'warning' : ''}
+            />
+            <output>{indexCost} 单位</output>
+          </div>
+          <div>
+            <span>全表扫描</span>
+            <i style={{ '--portion': `${(20 / 82) * 100}%` } as React.CSSProperties} />
+            <output>20 单位</output>
+          </div>
         </div>
         <div className="bench-grid">
           <div className="bench-stat">
@@ -256,6 +303,31 @@ export default function Database({ lesson }: LabProps) {
         </div>
         {count > 0 && (
           <>
+            <div className="join-comparison-grid" aria-label="每对连接键是否相等">
+              <span />
+              <b>B1 · 1</b>
+              <b>B2 · 2</b>
+              <b>B3 · 3</b>
+              {[1, 1, 3].map((leftKey, i) => (
+                <div className="join-comparison-row" key={i}>
+                  <b>
+                    A{i + 1} · {leftKey}
+                  </b>
+                  {[1, 2, 3].map((rightKey, j) => (
+                    <span
+                      className={leftKey === rightKey ? 'match' : mode === 'hash' ? 'skipped' : ''}
+                      key={j}
+                    >
+                      {leftKey === rightKey
+                        ? `A${i + 1}–B${j + 1}`
+                        : mode === 'hash'
+                          ? '非候选桶'
+                          : '不匹配'}
+                    </span>
+                  ))}
+                </div>
+              ))}
+            </div>
             <pre className="bench-code">
               A1 ↔ B1{String.fromCharCode(10)}A2 ↔ B1{String.fromCharCode(10)}A3 ↔ B3
             </pre>
@@ -300,6 +372,21 @@ export default function Database({ lesson }: LabProps) {
               </span>
             </div>
           ))}
+        </div>
+        <div className="quality-path">
+          <code>
+            读者快照{' '}
+            {mode === 'first'
+              ? '每条语句更新'
+              : snapshot === null
+                ? '首次读取时建立'
+                : `v${snapshot}`}
+          </code>
+          <span>→</span>
+          <output>
+            可见 v{visible.id} = {visible.value}
+          </output>
+          {pending && <code className="blocked">未提交 = {current.value + 20}，不可见</code>}
         </div>
         <div className="bench-actions">
           <button
@@ -395,6 +482,20 @@ export default function Database({ lesson }: LabProps) {
           </button>
         </div>
         <Meter label="已借出连接" value={leases.filter(Boolean).length} max={3} />
+        <div className="quality-observation">
+          <div>
+            <small>空闲连接</small>
+            <output>{leases.filter((lease) => lease === null).length}</output>
+          </div>
+          <div>
+            <small>等待请求</small>
+            <output>{waiting.length} / 6</output>
+          </div>
+          <div>
+            <small>最先接力的请求</small>
+            <output>{waiting[0] ?? '无人等待'}</output>
+          </div>
+        </div>
       </>
     );
   return (

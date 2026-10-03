@@ -131,6 +131,23 @@ export default function Complexity() {
         <code>{curve.code}</code>
         <strong>{counts[selected]} 次</strong>
       </div>
+      <div className="foundation-state-strip" aria-live="polite">
+        <span>
+          输入 <strong>{n}</strong> → <strong>{n <= 32 ? n * 2 : '超出范围'}</strong>
+        </span>
+        <span>
+          操作 <strong>{counts[selected]}</strong> → <strong>{doubling ?? '—'}</strong>
+        </span>
+        <span>
+          倍数{' '}
+          <strong>
+            {doubling !== null && counts[selected] > 0
+              ? (doubling / counts[selected]).toFixed(2)
+              : '—'}
+          </strong>
+        </span>
+        <span>{curve.order} 描述增长阶，不是这次测得的时间</span>
+      </div>
       <p className="experiment-status" aria-live="polite">
         {selected === 'pairs'
           ? `${n} × (${n} − 1) / 2 = ${counts.pairs}，不是 n² 次；但它与 n² 同阶。`

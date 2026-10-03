@@ -4,6 +4,7 @@ import { Download, ArrowRight } from 'lucide-react';
 import { Experiment } from '../../components/Experiment';
 import { translateAddress } from '../../domain/systems.mjs';
 import './systems.css';
+import './systems-quality.css';
 
 export default function Paging() {
   const [address, setAddress] = useState(2500);
@@ -29,8 +30,9 @@ export default function Paging() {
             type="number"
             min={0}
             max={8191}
-            value={address}
-            onChange={(event) => setAddress(Number(event.target.value))}
+            value={Number.isFinite(address) ? address : ''}
+            aria-invalid={result.kind === 'invalid'}
+            onChange={(event) => setAddress(event.target.valueAsNumber)}
           />
         </label>
         <label>

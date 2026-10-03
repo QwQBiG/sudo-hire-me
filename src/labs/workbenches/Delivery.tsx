@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { ArrowRight, Database, Inbox, Wallet } from 'lucide-react';
 import type { LabProps } from '../../types';
 import { Bench, Choice, Feedback } from './Bench';
+import './workbench-quality.css';
 
 export default function Delivery({ lesson }: LabProps) {
   const caching = lesson.slug === 'cache-consistency-basics';
@@ -101,6 +102,20 @@ export default function Delivery({ lesson }: LabProps) {
             完成旧回填
           </button>
         </div>
+        <div className="quality-path">
+          <code>数据库 = {balance}</code>
+          <span>↔</span>
+          <code className={cached !== null && cached !== balance ? 'blocked' : ''}>
+            缓存 = {cached ?? 'MISS'}
+          </code>
+          <output>
+            {cached === null
+              ? '普通读将回源'
+              : cached === balance
+                ? '当前副本一致'
+                : `陈旧差值 ${balance - cached}`}
+          </output>
+        </div>
         <Feedback good={cached === null || cached === balance}>{note}</Feedback>
       </Bench>
     );
@@ -152,8 +167,25 @@ export default function Delivery({ lesson }: LabProps) {
           <span>已处理记录：{mode === 'dedupe' && processed ? 'K1' : '无'}</span>
         </div>
       </div>
+      <div className="quality-lattice" aria-label="投递与业务提交分别记录">
+        <div className={processed ? 'active' : ''}>
+          <small>业务副作用执行次数</small>
+          <output>{(100 - balance) / 10}</output>
+          <span>扣款总额 {100 - balance}</span>
+        </div>
+        <div className={mode === 'dedupe' && processed ? 'active' : ''}>
+          <small>持久化业务键</small>
+          <output>{mode === 'dedupe' && processed ? 'K1 → 已提交结果' : '无去重记录'}</output>
+          <span>与业务更新在同一原子提交中</span>
+        </div>
+        <div className={ack ? 'active' : ''}>
+          <small>发送方已知状态</small>
+          <output>{ack ? '确认已送达' : deliveries ? '结果不确定' : '尚未发送'}</output>
+          <span>未知结果不等于业务未执行</span>
+        </div>
+      </div>
       <div className="bench-actions">
-        <button className="primary" onClick={deliver}>
+        <button className="primary" disabled={message && ack} onClick={deliver}>
           {deliveries ? '重投 / 重试同一个 K1' : '提交 K1'}
         </button>
         <button

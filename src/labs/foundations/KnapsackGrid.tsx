@@ -9,6 +9,7 @@ import {
   stepKnapsack,
 } from '../../domain/knapsack-grid.mjs';
 import './advanced-algorithms.css';
+import './foundations-quality.css';
 
 export default function KnapsackGrid() {
   const [state, setState] = useState(() => createKnapsackState());
@@ -66,6 +67,13 @@ export default function KnapsackGrid() {
                     key={w}
                     data-current={!state.done && state.row === i && state.capacity === w}
                     data-focused={Boolean(active && active.row === i && active.capacity === w)}
+                    data-source={Boolean(
+                      active &&
+                        item &&
+                        i === active.row - 1 &&
+                        (w === active.capacity ||
+                          (active.capacity >= item.weight && w === active.capacity - item.weight)),
+                    )}
                   >
                     <button
                       type="button"
@@ -82,6 +90,19 @@ export default function KnapsackGrid() {
           </tbody>
         </table>
       </div>
+      {active && item && (
+        <div className="foundation-dependency" aria-label="当前格的两个来源">
+          <span>
+            不选：dp[{active.row - 1}][{active.capacity}] = {skip}
+          </span>
+          <strong>max</strong>
+          <span>
+            {take === null
+              ? `重量 ${item.weight} 超过容量 ${active.capacity}`
+              : `选：${item.value} + dp[${active.row - 1}][${active.capacity - item.weight}] = ${take}`}
+          </span>
+        </div>
+      )}
       <div className="advanced-readout" aria-live="polite">
         {active && item ? (
           <>

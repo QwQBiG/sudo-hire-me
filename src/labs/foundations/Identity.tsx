@@ -44,6 +44,31 @@ export default function Identity() {
           </button>
         ))}
       </div>
+      <svg
+        className="foundation-identity-cables"
+        viewBox="0 0 600 115"
+        role="img"
+        aria-label={`first 指向对象 ${first}；second 指向对象 ${second}`}
+      >
+        {[
+          { name: 'first', from: 150, target: first },
+          { name: 'second', from: 450, target: second },
+        ].map(({ name, from, target }) => {
+          const end = 100 + ['A', 'B', 'C'].indexOf(target) * 200;
+          return (
+            <g key={name}>
+              <text x={from} y="16" textAnchor="middle">
+                {name}
+              </text>
+              <path d={`M${from} 24 C${from} 62 ${end} 62 ${end} 97`} />
+              <circle cx={end} cy="99" r="4" />
+              <text x={end} y="113" textAnchor="middle">
+                {target}
+              </text>
+            </g>
+          );
+        })}
+      </svg>
       <div className="identity-object-map" role="group" aria-label="为当前变量选择对象">
         {stringObjects.map((object: { id: ObjectId; value: string }) => (
           <button

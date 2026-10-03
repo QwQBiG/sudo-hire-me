@@ -10,6 +10,7 @@ import {
   retryBounded,
 } from '../../domain/bounded-queue.mjs';
 import './resilience-labs.css';
+import './systems-quality.css';
 
 export default function BoundedQueue() {
   const [state, setState] = useState(() => createBoundedQueueState());
@@ -37,6 +38,13 @@ export default function BoundedQueue() {
           <small>已消费</small>
           <strong>{state.consumed.join(' → ') || '无'}</strong>
         </div>
+      </div>
+      <div className="system-capacity" data-full={state.queue.length === queueCapacity}>
+        <span>{state.pending ? '生产者等待空位' : '缓冲区占用'}</span>
+        <progress max={queueCapacity} value={state.queue.length} aria-label="队列占用容量" />
+        <strong>
+          {state.queue.length}/{queueCapacity}
+        </strong>
       </div>
       <div className="resilience-actions">
         <button

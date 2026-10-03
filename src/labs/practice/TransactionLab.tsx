@@ -4,6 +4,7 @@ import { ArrowDown, ArrowRight, ArrowUp, Check, Play, Undo2 } from 'lucide-react
 import { Experiment } from '../../components/Experiment';
 import { newTransaction, transact } from '../../domain/practice.mjs';
 import './practice.css';
+import './practice-quality.css';
 
 export default function TransactionLab() {
   const [state, setState] = useState(newTransaction);
@@ -38,7 +39,7 @@ export default function TransactionLab() {
           BEGIN
         </button>
       </div>
-      <div className="practice-transfer experiment-scene">
+      <div className="practice-transfer experiment-scene" data-stage={state.stage}>
         {[0, 1].map((account) => (
           <div className="practice-account" key={account}>
             <small>账户 {account + 1}</small>

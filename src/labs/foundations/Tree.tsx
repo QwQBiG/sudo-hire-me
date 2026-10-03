@@ -5,6 +5,7 @@ import { Experiment } from '../../components/Experiment';
 import { demoTree, treeTraversal } from '../../domain/foundations.mjs';
 import type { LabProps } from '../../types';
 import './foundations.css';
+import './foundations-quality.css';
 
 const modes = { pre: '前序：根 → 左 → 右', in: '中序：左 → 根 → 右', post: '后序：左 → 右 → 根' };
 
@@ -12,8 +13,9 @@ export default function Tree({ reducedMotion }: LabProps) {
   const [order, setOrder] = useState<keyof typeof modes>('pre');
   const [step, setStep] = useState(0);
   const [playing, setPlaying] = useState(false);
-  const [guess, setGuess] = useState(false);
+  const [guess, setGuess] = useState(true);
   const [feedback, setFeedback] = useState('');
+  const [rejected, setRejected] = useState('');
   const sequence = treeTraversal(order);
   const nodes = Object.entries(demoTree);
   const done = step === sequence.length;
@@ -26,13 +28,18 @@ export default function Tree({ reducedMotion }: LabProps) {
     setStep(0);
     setPlaying(false);
     setFeedback('');
+    setRejected('');
   };
   const choose = (id: string) => {
     if (!guess || done) return;
     if (sequence[step] === id) {
       setFeedback(`正确，下一个被访问的是 ${id}。`);
       setStep(step + 1);
-    } else setFeedback(`${id} 还不是当前答案。按“${modes[order]}”递归处理当前子树。`);
+      setRejected('');
+    } else {
+      setRejected(id);
+      setFeedback(`${id} 还不是当前答案。按“${modes[order]}”递归处理当前子树。`);
+    }
   };
   return (
     <Experiment
@@ -69,6 +76,21 @@ export default function Tree({ reducedMotion }: LabProps) {
           预测下一个节点
         </label>
       </div>
+      <div className="foundation-reading-path" aria-label="本次遍历的局部访问规则">
+        {(order === 'pre'
+          ? ['根', '左子树', '右子树']
+          : order === 'in'
+            ? ['左子树', '根', '右子树']
+            : ['左子树', '右子树', '根']
+        ).map((part) => (
+          <span key={part} data-active={part === '根'}>
+            {part}
+          </span>
+        ))}
+        <span>
+          已访问 {step} / {sequence.length}
+        </span>
+      </div>
       <div className="f-tree-scene">
         <svg
           viewBox="0 0 600 280"
@@ -86,6 +108,7 @@ export default function Tree({ reducedMotion }: LabProps) {
                   x2={target.x}
                   y2={target.y}
                   className="f-tree-edge"
+                  data-active={sequence[step - 1] === child}
                 />
               );
             }),
@@ -100,6 +123,7 @@ export default function Tree({ reducedMotion }: LabProps) {
               className={`f-tree-node ${visited ? 'visited' : ''} ${active ? 'active' : ''}`}
               style={{ left: `${node.x / 6}%`, top: `${node.y / 2.8}%` }}
               aria-label={`节点 ${id}${visited ? '，已访问' : ''}`}
+              data-rejected={rejected === id}
               disabled={!guess || done || visited}
               onClick={() => choose(id)}
             >

@@ -5,6 +5,16 @@ import { Experiment } from '../../components/Experiment';
 import { heapDatasets, removeMinFrames } from '../../domain/heap.mjs';
 import './heap.css';
 
+const positions = [
+  [300, 45],
+  [155, 130],
+  [445, 130],
+  [80, 220],
+  [225, 220],
+  [375, 220],
+  [525, 220],
+];
+
 export default function Heap() {
   const [dataset, setDataset] = useState<keyof typeof heapDatasets>('first');
   const [step, setStep] = useState(0);
@@ -35,22 +45,54 @@ export default function Heap() {
           {step + 1} / {frames.length}
         </span>
       </div>
-      <div className="heap-scene" aria-label="最小堆的树形结构">
-        {[0, 1, 2].map((level) => (
-          <div className="heap-level" key={level}>
-            {frame.values
-              .slice(2 ** level - 1, 2 ** (level + 1) - 1)
-              .map((value: number, offset: number) => {
-                const index = 2 ** level - 1 + offset;
-                return (
-                  <div className="heap-node" data-active={frame.active === index} key={index}>
-                    <small>下标 {index}</small>
-                    <strong>{value}</strong>
-                  </div>
-                );
-              })}
+      <div className="foundation-heap-map" aria-label="最小堆的树形结构">
+        <svg viewBox="0 0 600 270" preserveAspectRatio="none" aria-hidden="true">
+          {frame.values.slice(1).map((_: number, offset: number) => {
+            const index = offset + 1;
+            const parent = Math.floor((index - 1) / 2);
+            return (
+              <line
+                key={index}
+                x1={positions[parent][0]}
+                y1={positions[parent][1]}
+                x2={positions[index][0]}
+                y2={positions[index][1]}
+                data-active={frame.active === index || frame.active === parent}
+              />
+            );
+          })}
+        </svg>
+        {frame.values.map((value: number, index: number) => (
+          <div
+            className="heap-node"
+            data-active={frame.active === index}
+            key={index}
+            style={{ left: `${positions[index][0] / 6}%`, top: `${positions[index][1] / 2.7}%` }}
+          >
+            <small>下标 {index}</small>
+            <strong>{value}</strong>
           </div>
         ))}
+      </div>
+      <div className="foundation-state-strip" aria-live="polite">
+        <span>
+          当前处理下标 <strong>{frame.active ?? '—'}</strong>
+        </span>
+        {frame.active !== null && frame.active !== undefined && (
+          <span>
+            子节点：
+            {[2 * frame.active + 1, 2 * frame.active + 2]
+              .filter((index) => index < frame.values.length)
+              .join('、') || '无'}
+          </span>
+        )}
+        <span>
+          {step === 0
+            ? '初始最小堆，准备删除根节点'
+            : step === frames.length - 1
+              ? '下沉完成，最小堆性质恢复'
+              : '删除后需沿子节点修复'}
+        </span>
       </div>
       <div className="heap-array" aria-label="数组存储顺序">
         {frame.values.map((value: number, index: number) => (

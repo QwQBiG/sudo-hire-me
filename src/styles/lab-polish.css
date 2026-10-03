@@ -69,7 +69,7 @@
   border-color: #ab668a;
   box-shadow: 0 0 0 3px #a33e6c10;
 }
-.lab-surface :is(.bench, .experiment) input[type='range'] {
+.lab-surface :is(.bench, .experiment, .lab) input[type='range'] {
   appearance: none;
   height: 22px;
   background: transparent;
@@ -106,7 +106,7 @@
 .lab-surface input[type='range']:hover::-webkit-slider-thumb {
   box-shadow: 0 0 0 5px #a33e6c12;
 }
-.lab-surface :is(.bench, .experiment) input[type='checkbox'] {
+.lab-surface :is(.bench, .experiment, .lab) input[type='checkbox'] {
   appearance: none;
   position: relative;
   flex: 0 0 32px;
@@ -130,7 +130,7 @@
   box-shadow: 0 1px 3px #25253520;
   transition: translate 0.25s var(--motion-ease);
 }
-.lab-surface :is(.bench, .experiment) input[type='checkbox']:checked {
+.lab-surface :is(.bench, .experiment, .lab) input[type='checkbox']:checked {
   background: var(--accent);
 }
 .lab-surface input[type='checkbox']:checked::before {

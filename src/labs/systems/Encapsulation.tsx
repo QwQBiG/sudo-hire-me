@@ -4,6 +4,7 @@ import { ArrowRight } from 'lucide-react';
 import { Experiment } from '../../components/Experiment';
 import { forwardingFrame } from '../../domain/systems.mjs';
 import './systems.css';
+import './systems-quality.css';
 
 const notes = [
   '应用解释 ADD 2 3 的求和含义；TCP 不执行加法。',

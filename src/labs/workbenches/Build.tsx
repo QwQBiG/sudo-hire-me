@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { ArrowDown, ArrowUp, Check, CircleAlert, FileCode, Package, Play } from 'lucide-react';
 import type { LabProps } from '../../types';
 import { Bench, Feedback } from './Bench';
+import './workbench-quality.css';
 
 const sequences: Record<string, string[]> = {
   'program-compile-run': ['预处理', '编译', '汇编', '链接', '装载运行'],
@@ -32,6 +33,7 @@ export default function Build({ lesson }: LabProps) {
     setFailed(-1);
     setNote('构建现场已重置。');
     setPublished(false);
+    setLocked(true);
     setInstalled(null);
     setSource(1);
     setArtifact(null);
@@ -64,6 +66,14 @@ export default function Build({ lesson }: LabProps) {
             <small>本次安装</small>
             <strong>{installed ?? '待安装'}</strong>
           </div>
+        </div>
+        <div className="quality-path">
+          <code>^1.2.0 允许兼容版本</code>
+          <span>→</span>
+          <code>
+            {locked ? '锁定解析结果 = 1.2.3' : `重新解析 = ${published ? '1.3.0' : '1.2.3'}`}
+          </code>
+          <output>已安装：{installed ?? '尚未安装'}</output>
         </div>
         <div className="bench-actions">
           <button
@@ -146,6 +156,22 @@ export default function Build({ lesson }: LabProps) {
           >
             部署这份产物
           </button>
+        </div>
+        <div className="quality-observation">
+          <div>
+            <small>源码与构建是否一致</small>
+            <output>{artifact === source ? '当前源码已构建' : '源码尚有未构建变化'}</output>
+          </div>
+          <div>
+            <small>产物与部署是否一致</small>
+            <output>
+              {deployed === null
+                ? '未部署'
+                : deployed === artifact
+                  ? '最新产物已运行'
+                  : '运行的仍是旧产物'}
+            </output>
+          </div>
         </div>
         <Feedback>{note}</Feedback>
       </Bench>
@@ -283,6 +309,29 @@ export default function Build({ lesson }: LabProps) {
           </li>
         ))}
       </ol>
+      <div className="quality-build-artifacts" aria-label="阶段产物与门禁">
+        {steps.map((name, i) => (
+          <div key={name} className={failed === i ? 'failed' : results[i] ? 'ready' : ''}>
+            <small>{name}</small>
+            <code>
+              {modules
+                ? name.includes('main.c')
+                  ? 'main.o'
+                  : name.includes('math.c')
+                    ? 'math.o'
+                    : 'program'
+                : ci
+                  ? ['依赖目录', '检查结果', '测试报告', '构建目录', '可发布产物'][i]
+                  : ['source.i', 'source.s', 'source.o', 'program', '运行进程'][
+                      sequences[s].indexOf(name)
+                    ]}
+            </code>
+            <span>
+              {failed === i ? '失败，无有效输出' : results[i] ? '产物 / 门禁已就绪' : '尚未产生'}
+            </span>
+          </div>
+        ))}
+      </div>
       <button className="primary" onClick={run}>
         <Play size={16} />
         执行构建

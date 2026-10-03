@@ -1,27 +1,30 @@
 import { useState } from 'react';
 import { ArrowRight, Braces, Play, TriangleAlert } from 'lucide-react';
 import { Bench, Choice, Feedback } from './Bench';
+import './workbench-quality.css';
 
 export default function Errors() {
   const [input, setInput] = useState('abc');
   const [mode, setMode] = useState('result');
   const [output, setOutput] = useState<{ valid: boolean; value: number } | null>(null);
   const [handled, setHandled] = useState(false);
-  const valid = /^[+-]?\d+$/.test(input) && Math.abs(Number(input)) <= 999;
+  const formatValid = /^[+-]?\d+$/.test(input);
+  const valid = formatValid && Number(input) >= 0 && Number(input) <= 65535;
+  const error = formatValid ? 'RangeError' : 'ParseError';
   const value = output?.value;
   const channel = !output
     ? '等待调用'
     : mode === 'result'
       ? output.valid
         ? `Ok(${value})`
-        : 'Err(ParseError)'
+        : `Err(${error})`
       : mode === 'code'
         ? output.valid
           ? `status = 0; out = ${value}`
-          : 'status = 1; out 未写入'
+          : `status = ${formatValid ? 2 : 1}; out 未写入`
         : output.valid
           ? `return ${value}`
-          : 'throw ParseError';
+          : `throw ${error}`;
   function reset() {
     setInput('abc');
     setOutput(null);
@@ -30,7 +33,7 @@ export default function Errors() {
   return (
     <Bench
       title="让同一次失败经过不同的返回通道"
-      subtitle="固定解析器接受 -999..999 的十进制整数；三种错误表达方式是教学接口。"
+      subtitle="与正文相同的端口解析器：接受 0..65535 的十进制整数，区分格式错误与越界；三种表达方式是教学接口。"
       onReset={reset}
     >
       <Choice
@@ -47,6 +50,21 @@ export default function Errors() {
           setHandled(false);
         }}
       />
+      <div className="bench-actions">
+        {['abc', '8080', '70000', '0'].map((sample) => (
+          <button
+            key={sample}
+            className="secondary"
+            onClick={() => {
+              setInput(sample);
+              setOutput(null);
+              setHandled(false);
+            }}
+          >
+            {sample}
+          </button>
+        ))}
+      </div>
       <div className="contract-flow">
         <div>
           <label>
@@ -105,15 +123,43 @@ export default function Errors() {
           onClick={() => setHandled(true)}
         >
           {mode === 'exception'
-            ? 'catch ParseError'
+            ? `catch ${error}`
             : mode === 'result'
               ? '匹配 Err 分支'
               : '检查 status != 0'}
         </button>
       </div>
+      <div className="quality-lattice" aria-label="错误处理控制流">
+        <div className={output?.valid ? 'active' : ''}>
+          <small>成功分支</small>
+          <code>
+            {mode === 'result' ? 'Ok(value)' : mode === 'code' ? 'status == 0' : '正常 return'}
+          </code>
+          <output>{output?.valid ? `value = ${value}` : '没有有效成功值'}</output>
+        </div>
+        <div className={output && !output.valid ? 'failed' : ''}>
+          <small>失败分支</small>
+          <code>
+            {mode === 'result' ? 'Err(error)' : mode === 'code' ? 'status != 0' : 'throw → catch'}
+          </code>
+          <output>{output && !output.valid ? (handled ? '已处理' : '必须处理') : '未进入'}</output>
+        </div>
+        <div className={handled || output?.valid ? 'active' : ''}>
+          <small>调用方后续路径</small>
+          <output>
+            {!output
+              ? '等待调用'
+              : output.valid
+                ? '使用解析值'
+                : handled
+                  ? '报告 / 降级 / 传播错误'
+                  : '不能当作成功继续'}
+          </output>
+        </div>
+      </div>
       <Feedback good={!output || output.valid || handled}>
         {!output
-          ? '试试 abc、42、1000：改变输入会改变解析结果。'
+          ? 'abc 是格式错误，8080 成功，70000 越界，0 也在允许范围内，不能用它作为失败标记。'
           : output.valid
             ? '正常输入沿成功通道返回，调用方拿到有效整数。'
             : handled

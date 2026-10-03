@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Clock3, PlugZap } from 'lucide-react';
 import type { LabProps } from '../../types';
 import { Bench, Choice, Feedback, Meter } from './Bench';
+import './workbench-quality.css';
 
 export default function Resilience({ lesson }: LabProps) {
   const s = lesson.slug;
@@ -19,6 +20,7 @@ export default function Resilience({ lesson }: LabProps) {
     setTime(0);
     setState('closed');
     setHistory([]);
+    setHealthy(false);
     setNote('状态已重置。');
   }
   if (s === 'timeouts-deadlines') {
@@ -67,6 +69,14 @@ export default function Resilience({ lesson }: LabProps) {
               onChange={(e) => setB(Number(e.target.value))}
             />
           </label>
+        </div>
+        <div className="quality-path">
+          <code>A 结束于 {a} ms</code>
+          <span>→</span>
+          <code>B 等待 {Math.min(b, allowed)} ms</code>
+          <output className={b > allowed ? 'blocked' : ''}>
+            {b > allowed ? 'B 未完成，停止本地等待' : 'B 完成'}
+          </output>
         </div>
         <div className="deadline-timeline">
           <div style={{ width: `${a / 10}%` }}>A · {a}</div>
@@ -120,6 +130,13 @@ export default function Resilience({ lesson }: LabProps) {
           }}
         />
         <div className="retry-bars">
+          {!history.length && (
+            <div>
+              <span>#1</span>
+              <i style={{ width: '6.25%' }} />
+              <b>下一次上限 100 ms</b>
+            </div>
+          )}
           {history.map((delay, i) => (
             <div key={i}>
               <span>#{i + 1}</span>
@@ -127,6 +144,20 @@ export default function Resilience({ lesson }: LabProps) {
               <b>{delay} ms</b>
             </div>
           ))}
+        </div>
+        <div className="quality-observation">
+          <div>
+            <small>已安排重试</small>
+            <output>{attempt} / 6</output>
+          </div>
+          <div>
+            <small>下一次等待上限</small>
+            <output>
+              {attempt >= 6
+                ? '次数预算耗尽'
+                : `${mode === 'first' ? 100 : Math.min(1600, 100 * 2 ** attempt)} ms`}
+            </output>
+          </div>
         </div>
         <div className="bench-actions">
           <button
@@ -176,7 +207,7 @@ export default function Resilience({ lesson }: LabProps) {
   return (
     <Bench
       title="让熔断器决定是否继续调用"
-      subtitle="连续失败阈值 3；开启后冷却 30 秒，再允许单个探测请求。"
+      subtitle="连续失败阈值 3；开启后冷却 10 秒，再允许单个探测请求。"
       onReset={reset}
     >
       <label>
@@ -195,6 +226,26 @@ export default function Resilience({ lesson }: LabProps) {
           </div>
         ))}
       </div>
+      <div className="quality-observation">
+        <div>
+          <small>下一个请求</small>
+          <output>
+            {state === 'open'
+              ? '本地拒绝，不触达下游'
+              : state === 'half'
+                ? '只放行一个探测'
+                : '正常放行'}
+          </output>
+        </div>
+        <div>
+          <small>失败计数</small>
+          <output>{attempt} / 3</output>
+        </div>
+        <div>
+          <small>本轮冷却</small>
+          <output>{state === 'closed' ? '未开启' : `${Math.min(time, 10)} / 10 s`}</output>
+        </div>
+      </div>
       <div className="bench-actions">
         <button className="primary" onClick={request}>
           {state === 'half' ? '发送一个探测请求' : '发起请求'}
@@ -203,18 +254,18 @@ export default function Resilience({ lesson }: LabProps) {
           className="secondary"
           disabled={state !== 'open'}
           onClick={() => {
-            const next = time + 10;
+            const next = time + 5;
             setTime(next);
-            if (next >= 30) setState('half');
+            if (next >= 10) setState('half');
             setNote(
-              next >= 30
+              next >= 10
                 ? '冷却结束，进入半开；只放行有限探测，不能马上放开全部流量。'
-                : `已冷却 ${next}/30 秒。`,
+                : `已冷却 ${next}/10 秒。`,
             );
           }}
         >
           <Clock3 size={16} />
-          冷却 +10 秒
+          冷却 +5 秒
         </button>
       </div>
       <Feedback>{note}</Feedback>

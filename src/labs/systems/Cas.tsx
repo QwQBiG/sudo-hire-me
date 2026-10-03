@@ -3,6 +3,7 @@ import { RefreshCw, Zap } from 'lucide-react';
 import { Experiment } from '../../components/Experiment';
 import { attemptCas, createCasState, refreshCas } from '../../domain/cas-workbench.mjs';
 import './resilience-labs.css';
+import './systems-quality.css';
 
 export default function Cas() {
   const [state, setState] = useState(() => createCasState());
@@ -19,11 +20,22 @@ export default function Cas() {
       </div>
       <div className="cas-actors">
         {(['A', 'B'] as const).map((actor) => (
-          <section key={actor}>
+          <section key={actor} data-match={state.drafts[actor].expected === state.value}>
             <header>参与者 {actor}</header>
             <code>
               CAS({state.drafts[actor].expected}, {state.drafts[actor].next})
             </code>
+            <div className="cas-compare">
+              <span>
+                期望 <strong>{state.drafts[actor].expected}</strong>
+              </span>
+              <span>
+                {state.drafts[actor].expected === state.value ? '= 可以尝试' : '≠ 当前不匹配'}
+              </span>
+              <span>
+                实际 <strong>{state.value}</strong>
+              </span>
+            </div>
             <div className="resilience-actions">
               <button onClick={() => setState((s) => attemptCas(s, actor))}>
                 <Zap size={15} /> 尝试交换

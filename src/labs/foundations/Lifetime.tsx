@@ -3,6 +3,7 @@ import { Eye, Link2, Plus, Trash2, Unlink2 } from 'lucide-react';
 import { Experiment } from '../../components/Experiment';
 import { createLifetimeState, stepLifetime } from '../../domain/lifetime.mjs';
 import './lifetime.css';
+import { MechanismLinks } from './MechanismLinks';
 
 const actionNames: Record<string, string> = {
   allocate: '分配一块内存',
@@ -40,6 +41,18 @@ export default function Lifetime() {
       subtitle="固定单线程 C 教学模型。p 和 q 是指针变量，方框是同一块 malloc 对象；无效操作只显示风险。"
       onReset={() => setState(createLifetimeState())}
     >
+      {state.phase !== 'empty' && (
+        <MechanismLinks
+          nodes={['p', 'q', '#1']}
+          links={{
+            p: state.p === 'null' ? null : '#1',
+            q: state.q === 'null' ? null : '#1',
+          }}
+          active={(['p', 'q'] as const).filter((name) => state[name] === 'live')}
+          invalid={(['p', 'q'] as const).filter((name) => state[name] === 'dangling')}
+          label={`指针指向教学分配 #1；目标${state.phase === 'freed' ? '已释放，旧指向不可访问' : '仍存活'}。p ${state.p}，q ${state.q}`}
+        />
+      )}
       <div className="lifetime-scene">
         <div className="lifetime-handles">
           {(['p', 'q'] as const).map((name) => (

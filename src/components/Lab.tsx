@@ -3,6 +3,7 @@ import type { LabProps, Lesson } from '../types';
 import { useLabMotion } from './useLabMotion';
 import { workbenchFor } from '../domain/workbench-catalog.mjs';
 import '../styles/lab-polish.css';
+import '../labs/foundations/foundations-quality.css';
 
 const Bits = lazy(() => import('../labs/Bits'));
 const BinarySearch = lazy(() => import('../labs/BinarySearch'));

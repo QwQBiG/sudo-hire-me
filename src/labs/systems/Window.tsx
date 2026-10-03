@@ -12,6 +12,7 @@ import {
   windowSequence,
 } from '../../domain/tcp-window.mjs';
 import './window.css';
+import './systems-quality.css';
 
 export default function Window() {
   const [state, setState] = useState(() => createWindowState());

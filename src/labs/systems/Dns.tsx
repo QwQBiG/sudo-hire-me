@@ -1,18 +1,21 @@
 import { SelectField } from '../../components/SelectField';
-import { useState } from 'react';
+import { useState, type CSSProperties } from 'react';
 import { Search, Clock3 } from 'lucide-react';
 import { Experiment } from '../../components/Experiment';
 import { dnsQuery } from '../../domain/systems.mjs';
 import './systems.css';
+import './systems-quality.css';
 
 export default function Dns() {
   const [cache, setCache] = useState('none');
   const [age, setAge] = useState(0);
   const [result, setResult] = useState<ReturnType<typeof dnsQuery> | null>(null);
+  const [queries, setQueries] = useState(0);
   const reset = () => {
     setCache('none');
     setAge(0);
     setResult(null);
+    setQueries(0);
   };
   return (
     <Experiment
@@ -52,7 +55,12 @@ export default function Dns() {
             }}
           />
         </label>
-        <button onClick={() => setResult(dnsQuery(cache, age))}>
+        <button
+          onClick={() => {
+            setResult(dnsQuery(cache, age));
+            setQueries((count) => count + 1);
+          }}
+        >
           <Search size={16} />
           查询 A 记录
         </button>
@@ -79,6 +87,16 @@ export default function Dns() {
             <strong>{result ? `${result.ttl} s` : '未查询'}</strong>
           </div>
         </div>
+        {result && (
+          <div className="dns-path" key={queries} aria-label="本次实际询问与返回的顺序">
+            {result.path.map((name, index) => (
+              <span key={`${name}-${index}`} style={{ '--hop': index } as CSSProperties}>
+                {index + 1}. {name}
+                {index === result.path.length - 1 ? ' · 返回 A 记录' : ' →'}
+              </span>
+            ))}
+          </div>
+        )}
         {result && (
           <div className="sys-output" role="log">
             {result.path.join(' → ')}

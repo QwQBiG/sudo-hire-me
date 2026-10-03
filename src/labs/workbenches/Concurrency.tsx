@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import type { LabProps } from '../../types';
 import { Bench, Choice, Feedback } from './Bench';
+import './workbench-quality.css';
 
 export default function Concurrency({ lesson }: LabProps) {
   const ordering = lesson.slug === 'memory-ordering-visibility';
@@ -29,7 +30,7 @@ export default function Concurrency({ lesson }: LabProps) {
     return (
       <Bench
         title="发布标记与发布数据之间的关系"
-        subtitle="data 和 ready 都采用原子变量；展示 relaxed 允许的一种观察，不把非原子数据竞争当作确定结果。"
+        subtitle="C++ 对照模型：data 和 ready 都是原子变量，relaxed 允许不同原子的旧值组合；正文 Go 原子操作为顺序一致语义，不能套用这里的 relaxed 结果。"
         onReset={reset}
       >
         <Choice
@@ -107,6 +108,17 @@ export default function Concurrency({ lesson }: LabProps) {
             )}
           </section>
         </div>
+        <div className={`quality-path ${mode === 'synchronized' && ready ? 'synchronized' : ''}`}>
+          <code className={written ? '' : 'inactive'}>data.store(42)</code>
+          <span>→</span>
+          <code className={ready ? '' : 'inactive'}>
+            ready.store(true, {mode === 'first' ? 'relaxed' : 'release'})
+          </code>
+          <span>→</span>
+          <output className={mode === 'first' ? 'blocked' : ''}>
+            {mode === 'first' ? '无跨原子同步边' : 'acquire 读到此 true → data 写入 happens-before'}
+          </output>
+        </div>
         <Feedback>{note}</Feedback>
       </Bench>
     );
@@ -167,6 +179,20 @@ export default function Concurrency({ lesson }: LabProps) {
             </button>
           </div>
         ))}
+      </div>
+      <div className="quality-observation">
+        <div>
+          <small>已检查的线程</small>
+          <output>{checked.filter(Boolean).length} / 2</output>
+        </div>
+        <div>
+          <small>已尝试的扣减</small>
+          <output>{used.filter(Boolean).length} / 2</output>
+        </div>
+        <div>
+          <small>业务不变量 stock ≥ 0</small>
+          <output className={stock < 0 ? 'warning' : ''}>{stock >= 0 ? '保持' : '被破坏'}</output>
+        </div>
       </div>
       <Feedback good={stock >= 0}>{note}</Feedback>
     </Bench>

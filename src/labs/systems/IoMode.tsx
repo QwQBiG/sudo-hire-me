@@ -3,6 +3,7 @@ import { ArrowDownToLine, ArrowLeft, CircleX, Send } from 'lucide-react';
 import { Experiment } from '../../components/Experiment';
 import { advanceIoMode, createIoModeState } from '../../domain/io-mode.mjs';
 import './io-mode.css';
+import './systems-quality.css';
 
 const modes = [
   { id: 'blocking', title: '阻塞读', hint: '调用等待结果' },

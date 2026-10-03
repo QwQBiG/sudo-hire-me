@@ -3,6 +3,7 @@ import { ChevronsRight, StepForward } from 'lucide-react';
 import { Experiment } from '../../components/Experiment';
 import { createKmpState, stepKmp } from '../../domain/kmp-prefix.mjs';
 import './advanced-algorithms.css';
+import './foundations-quality.css';
 
 const presets = [
   { key: 'match', label: '失配后命中' },
@@ -47,6 +48,13 @@ export default function KmpPrefix() {
                 ? index === state.buildIndex
                 : state.phase === 'scan' && index === state.patternIndex
             }
+            data-border={
+              state.phase === 'prefix' &&
+              (index < state.border ||
+                (state.border > 0 &&
+                  index >= state.buildIndex - state.border &&
+                  index < state.buildIndex))
+            }
           >
             <small>{index}</small>
             <strong>{char}</strong>
@@ -61,12 +69,31 @@ export default function KmpPrefix() {
             className="kmp-cell"
             key={index}
             data-active={state.phase === 'scan' && index === state.textIndex}
+            data-matched={state.matches.some(
+              (start: number) => index >= start && index < start + state.pattern.length,
+            )}
           >
             <small>{index}</small>
             <strong>{char}</strong>
             <span>{state.phase === 'scan' && index === state.textIndex ? 'i' : '\u00a0'}</span>
           </div>
         ))}
+      </div>
+      <div className="foundation-state-strip" aria-live="polite">
+        <span>
+          阶段{' '}
+          <strong>
+            {state.phase === 'prefix'
+              ? '构造前缀表'
+              : state.phase === 'scan'
+                ? '扫描文本'
+                : '匹配完成'}
+          </strong>
+        </span>
+        <span>
+          已找到 <strong>{state.matches.length}</strong> 个起点
+        </span>
+        <span>前缀表回退：π[j − 1]</span>
       </div>
       <div className="advanced-readout" aria-live="polite">
         <span>

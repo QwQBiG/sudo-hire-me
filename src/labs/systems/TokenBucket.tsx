@@ -8,15 +8,30 @@ import {
   tokenCapacity,
 } from '../../domain/token-bucket.mjs';
 import './resilience-labs.css';
+import './systems-quality.css';
 
 export default function TokenBucket() {
   const [state, setState] = useState(() => createTokenBucketState());
+  const [lastRequest, setLastRequest] = useState<{ allowed: number; rejected: number } | null>(
+    null,
+  );
+  function request(count: number) {
+    const next = requestTokens(state, count);
+    setLastRequest({
+      allowed: next.allowed - state.allowed,
+      rejected: next.rejected - state.rejected,
+    });
+    setState(next);
+  }
   return (
     <Experiment
       title="令牌桶准入台"
       subtitle="容量 4 · 每秒补 1 · 每次请求消耗 1"
       className="token-bucket-lab"
-      onReset={() => setState(createTokenBucketState())}
+      onReset={() => {
+        setState(createTokenBucketState());
+        setLastRequest(null);
+      }}
     >
       <div className="bucket-meter">
         <div className="bucket-vessel" aria-label={`当前 ${state.tokens} 枚令牌`}>
@@ -33,10 +48,10 @@ export default function TokenBucket() {
         </div>
       </div>
       <div className="resilience-actions">
-        <button onClick={() => setState((s) => requestTokens(s, 1))}>
+        <button onClick={() => request(1)}>
           <Send size={15} /> 发 1 次请求
         </button>
-        <button onClick={() => setState((s) => requestTokens(s, 4))}>
+        <button onClick={() => request(4)}>
           <Send size={15} /> 突发 4 次
         </button>
         <button onClick={() => setState((s) => advanceTokenTime(s, 1))}>
@@ -46,6 +61,16 @@ export default function TokenBucket() {
           <FastForward size={15} /> 过 10 秒
         </button>
       </div>
+      {lastRequest && (
+        <div className="bucket-request-outcome" aria-label="最近一批请求结果">
+          <span>
+            本批放行<strong data-readout>{lastRequest.allowed}</strong>
+          </span>
+          <span>
+            本批拒绝<strong data-readout>{lastRequest.rejected}</strong>
+          </span>
+        </div>
+      )}
       <div className="bucket-counts">
         <span>
           累计放行 <strong>{state.allowed}</strong>

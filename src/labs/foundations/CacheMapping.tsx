@@ -63,6 +63,18 @@ export default function CacheMapping() {
           </button>
         ))}
       </div>
+      <div className="foundation-state-strip" aria-live="polite">
+        <span>
+          组数 <strong>{state.sets.length}</strong>
+        </span>
+        <span>组号 = 行号 mod {state.sets.length}</span>
+        <span>标记 = floor(行号 / {state.sets.length})</span>
+        {last && (
+          <span>
+            <strong>行 {last.line}</strong> → 组 {last.setIndex} / 标记 {last.tag}
+          </span>
+        )}
+      </div>
       <div
         className={`cache-mapping-sets ${state.ways === 2 ? 'two-way' : ''}`}
         aria-label="当前缓存组"

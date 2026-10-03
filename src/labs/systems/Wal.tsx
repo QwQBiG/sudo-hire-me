@@ -10,6 +10,7 @@ import {
   createWalState,
 } from '../../domain/wal-workbench.mjs';
 import './mechanism-labs.css';
+import './systems-quality.css';
 
 export default function Wal() {
   const [state, setState] = useState(() => createWalState());

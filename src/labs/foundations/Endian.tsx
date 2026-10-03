@@ -118,6 +118,19 @@ export default function Endian() {
                 </div>
               ))}
             </div>
+            <div className="foundation-endian-weights" aria-label="读回时四个字节的位移权重">
+              {result.bytes.map((byte, index) => {
+                const shift = (readOrder === 'big' ? 3 - index : index) * 8;
+                return (
+                  <span key={index}>
+                    <code>{byte.toString(16).toUpperCase().padStart(2, '0')}</code>
+                    <small>
+                      × 2<sup>{shift}</sup>
+                    </small>
+                  </span>
+                );
+              })}
+            </div>
             <div className="endian-readout" data-match={result.sameValue}>
               <div>
                 <small>按{orderName[readOrder]}读回</small>

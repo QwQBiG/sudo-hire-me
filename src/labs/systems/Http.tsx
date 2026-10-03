@@ -4,6 +4,7 @@ import { ShieldCheck, Eye } from 'lucide-react';
 import { Experiment } from '../../components/Experiment';
 import { httpMessage } from '../../domain/systems.mjs';
 import './systems.css';
+import './systems-quality.css';
 
 export default function Http() {
   const [method, setMethod] = useState('GET');
@@ -63,7 +64,7 @@ export default function Http() {
       </div>
       <div className="experiment-scene">
         <div className="sys-http-columns">
-          <div>
+          <div data-protected={hidden}>
             <h3>请求</h3>
             <pre>
               {hidden
@@ -71,7 +72,7 @@ export default function Http() {
                 : `${method} /items/${exists ? 7 : 99} HTTP/1.1\nHost: www.example.com\nAccept: application/json\n`}
             </pre>
           </div>
-          <div>
+          <div data-protected={hidden}>
             <h3>响应</h3>
             <pre>
               {hidden

@@ -37,7 +37,10 @@ export default function SlidingWindow() {
     <Experiment
       title="让窗口按条件伸缩"
       subtitle="右端取新元素；达标后左端继续试探。所有元素均为正整数。"
-      onReset={() => setState(createWindowState(state.target))}
+      onReset={() => {
+        setTargetText(String(state.target));
+        setState(createWindowState(state.target));
+      }}
     >
       <div className="experiment-controls algo-controls">
         <label>

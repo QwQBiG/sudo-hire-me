@@ -3,6 +3,7 @@ import { Copy, FilePlus2, FolderOpen, ScanText, X } from 'lucide-react';
 import { Experiment } from '../../components/Experiment';
 import { advanceDescriptor, createDescriptorState } from '../../domain/file-descriptor.mjs';
 import './file-descriptor.css';
+import './systems-quality.css';
 
 const commands = [
   { action: 'open-note', label: 'open(note.txt)', icon: FolderOpen },
@@ -61,6 +62,23 @@ export default function FileDescriptor() {
                     <small>偏移</small>
                     <strong>{description.offset}</strong>
                     <code>{description.content}</code>
+                    <div
+                      className="system-tokens"
+                      aria-label={`文件内容，当前偏移 ${description.offset}`}
+                    >
+                      {[...description.content].map((byte, index) => (
+                        <span
+                          key={index}
+                          data-consumed={index < description.offset}
+                          data-current={index === description.offset}
+                        >
+                          {byte}
+                        </span>
+                      ))}
+                      <span data-current={description.offset === description.content.length}>
+                        EOF
+                      </span>
+                    </div>
                   </div>
                 </div>
               );

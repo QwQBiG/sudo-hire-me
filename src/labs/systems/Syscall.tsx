@@ -1,8 +1,9 @@
 import { useState } from 'react';
-import { ArrowLeft, ArrowRight, LockKeyhole, Terminal } from 'lucide-react';
+import { Play, LockKeyhole, Terminal } from 'lucide-react';
 import { Experiment } from '../../components/Experiment';
 import { syscallFrames } from '../../domain/syscall.mjs';
 import './syscall.css';
+import './systems-quality.css';
 
 export default function Syscall() {
   const [kind, setKind] = useState<'function' | 'read'>('read');
@@ -10,6 +11,17 @@ export default function Syscall() {
   const [index, setIndex] = useState(0);
   const frames = syscallFrames(kind, waits);
   const frame = frames[index];
+  const next = frames[index + 1];
+  const actions: Record<string, string> = {
+    body: '执行函数体',
+    entry: '调用 read',
+    check: '检查读取条件',
+    blocked: '阻塞 A',
+    switch: '调度线程 B',
+    wakeup: '送入两字节，唤醒 A',
+    resume: '重新调度 A',
+    return: '返回调用结果',
+  };
 
   return (
     <Experiment
@@ -84,17 +96,19 @@ export default function Syscall() {
         <p>{frame.detail}</p>
       </div>
 
-      <div className="syscall-progress" aria-hidden="true">
-        {frames.map((item, position) => (
-          <span key={item.phase} data-current={position === index} data-done={position < index} />
+      <div className="syscall-events" aria-label="已发生的调用过程">
+        {frames.slice(0, index + 1).map((item, position) => (
+          <div key={item.phase} data-current={position === index}>
+            <small>
+              {item.mode === 'user' ? '用户态' : '内核态'} · {item.thread}
+            </small>
+            <span>{item.summary}</span>
+          </div>
         ))}
       </div>
       <div className="syscall-actions">
-        <button disabled={index === 0} onClick={() => setIndex(index - 1)}>
-          <ArrowLeft size={16} /> 上一步
-        </button>
-        <button disabled={index === frames.length - 1} onClick={() => setIndex(index + 1)}>
-          下一步 <ArrowRight size={16} />
+        <button disabled={!next} onClick={() => setIndex(index + 1)}>
+          <Play size={16} /> {next ? actions[next.phase] : '调用已返回'}
         </button>
       </div>
     </Experiment>

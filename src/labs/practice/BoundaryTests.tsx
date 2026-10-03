@@ -8,6 +8,7 @@ import {
 } from '../../domain/boundary-tests.mjs';
 import type { LabProps } from '../../types';
 import './boundary-tests.css';
+import './practice-quality.css';
 
 export default function BoundaryTests(_props: LabProps) {
   const [selected, setSelected] = useState<number[]>([]);
@@ -74,6 +75,20 @@ export default function BoundaryTests(_props: LabProps) {
         </button>
       </div>
       <div className="boundary-results" aria-live="polite">
+        <div className="boundary-coverage" aria-label="测试输入的类别覆盖">
+          {[
+            ['下界之外', selected.some((value) => value < 0)],
+            ['下界 0', selected.includes(0)],
+            ['区间内部', selected.some((value) => value > 0 && value < 10)],
+            ['上界 10', selected.includes(10)],
+            ['上界之外', selected.some((value) => value > 10)],
+          ].map(([label, covered]) => (
+            <span key={String(label)} data-covered={covered}>
+              {covered ? '✓ ' : ''}
+              {label}
+            </span>
+          ))}
+        </div>
         {ran ? (
           <>
             <div className="boundary-result-heading">

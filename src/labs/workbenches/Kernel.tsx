@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Cpu, File, Folder, Lock, Play, Plus, Unlink } from 'lucide-react';
 import type { LabProps } from '../../types';
 import { Bench, Choice, Feedback } from './Bench';
+import './workbench-quality.css';
 
 const titles: Record<string, string> = {
   'context-switch': '把 CPU 现场存回正确的进程',
@@ -40,6 +41,60 @@ export default function Kernel({ lesson }: LabProps) {
     setNote('状态已重置。');
   }
   const title = titles[s];
+  const summary =
+    s === 'context-switch'
+      ? [
+          ['CPU 当前进程', `P${active + 1}`],
+          ['当前 PC', String(registers[active])],
+          ['已保存的另一现场', String(registers[1 - active])],
+        ]
+      : s === 'process-vs-thread-resources'
+        ? [
+            ['当前线程局部值', String(registers[active])],
+            ['另一线程局部值', String(registers[1 - active])],
+            ['共享堆值', String(global)],
+          ]
+        : s === 'scheduler-starvation-priority'
+          ? [
+              ['L 等待时钟', String(queue.filter((n) => n === 0).length)],
+              ['L 是否已运行', queue.includes(1) ? '已得到 CPU' : '仍在等待'],
+              ['调度规则', flag ? '优先级老化' : '固定优先级'],
+            ]
+          : s === 'interrupt-exception-trap'
+            ? [
+                ['触发来源', flag ? ['外部设备', '当前指令', '用户主动请求'][active] : '尚无事件'],
+                ['发生关系', flag ? (active === 0 ? '异步' : '同步') : '—'],
+                ['服务入口', flag ? '受控进入内核处理' : '等待事件'],
+              ]
+            : s === 'mutex-vs-semaphore'
+              ? [
+                  ['已占用', String(owners.length)],
+                  ['可用许可', String((mode === 'first' ? 1 : 2) - owners.length)],
+                  ['拥有关系', mode === 'first' ? '只有拥有者解锁' : '计数许可，不强制同线程归还'],
+                ]
+              : s === 'condition-variable'
+                ? [
+                    ['唤醒状态', flag ? '已唤醒，尚需获得锁' : '等待中'],
+                    ['谓词 !queue.empty()', String(queue.length > 0)],
+                    ['能否消费', flag && queue.length > 0 ? '重获锁后可以' : '不能仅凭通知消费'],
+                  ]
+                : s === 'copy-on-write'
+                  ? [
+                      ['共享页的当前映射数', String(2 - owners.length)],
+                      ['私有页数', String(owners.length)],
+                      ['复制发生时机', owners.length ? '进程首次写入时' : '尚未发生写入'],
+                    ]
+                  : s === 'file-system-inode'
+                    ? [
+                        ['目录硬链接', String(names.length)],
+                        ['打开引用', flag ? '1' : '0'],
+                        ['存储可回收', !names.length && !flag ? '是，已无引用' : '否，仍有引用'],
+                      ]
+                    : [
+                        ['缓冲占用', `${queue.length} / 8 字节`],
+                        ['写端状态', flag ? '全部关闭' : '仍打开'],
+                        ['此刻空缓冲 read', flag ? '返回 0（EOF）' : '等待字节到达'],
+                      ];
   function record(text: string) {
     setNote(text);
     setLog((xs) => [text, ...xs].slice(0, 5));
@@ -286,6 +341,7 @@ export default function Kernel({ lesson }: LabProps) {
           </button>
           <button
             className="secondary"
+            disabled={queue.length >= 8}
             onClick={() => {
               setQueue([...queue, count + 1]);
               setCount(count + 1);
@@ -294,7 +350,7 @@ export default function Kernel({ lesson }: LabProps) {
             }}
           >
             <Plus size={16} />
-            生产并通知
+            生产并通知（本例最多 8 项）
           </button>
           <button
             className="primary"
@@ -418,7 +474,7 @@ export default function Kernel({ lesson }: LabProps) {
             onClick={() => {
               if (queue.length > 5)
                 return record('剩余空间不足，本模型将 3 字节写请求阻塞，暂不写入。');
-              setQueue([...queue, count, count + 1, count + 2]);
+              setQueue([...queue, count % 256, (count + 1) % 256, (count + 2) % 256]);
               setCount(count + 3);
               record('写入三个字节；管道是字节流，不保留应用消息边界。');
             }}
@@ -460,6 +516,14 @@ export default function Kernel({ lesson }: LabProps) {
       onReset={reset}
     >
       {body}
+      <div className="quality-observation" aria-label="系统状态观测">
+        {summary.map(([label, value]) => (
+          <div key={label}>
+            <small>{label}</small>
+            <output>{value}</output>
+          </div>
+        ))}
+      </div>
       <Feedback>{note}</Feedback>
       <ol className="bench-log">
         {log.map((line, i) => (

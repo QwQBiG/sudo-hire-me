@@ -35,6 +35,32 @@ export default function CString() {
         setStep(0);
       }}
     >
+      <div className="foundation-search-cases" role="group" aria-label="字符串边界示例">
+        <button
+          onClick={() => {
+            setBytes(initialBytes);
+            setStep(0);
+          }}
+        >
+          正常终止
+        </button>
+        <button
+          onClick={() => {
+            setBytes([0, 97, 116, 0, 88]);
+            setStep(0);
+          }}
+        >
+          首字节 NUL
+        </button>
+        <button
+          onClick={() => {
+            setBytes([67, 97, 116, 33, 88]);
+            setStep(0);
+          }}
+        >
+          没有 NUL
+        </button>
+      </div>
       <div className="cstring-register" aria-label="五字节缓冲区">
         {bytes.map((byte, index) => (
           <button
@@ -63,6 +89,20 @@ export default function CString() {
         </button>
         <span>
           已检查 {step} / {scan.visited.length} 格
+        </span>
+      </div>
+      <div
+        className="foundation-buffer-guard"
+        data-blocked={complete && !scan.terminated}
+        role="status"
+      >
+        <code>有效缓冲区 [0, {bytes.length})</code>
+        <span>
+          {complete
+            ? scan.terminated
+              ? `在 ${scan.terminatorIndex} 停止；终止符不计入长度`
+              : `到达边界 ${bytes.length}；不继续读取`
+            : `下一偏移 ${step}`}
         </span>
       </div>
       <div className="cstring-readout">

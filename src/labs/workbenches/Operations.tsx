@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Activity, AlertTriangle, Check, Server, Shield, TestTube2 } from 'lucide-react';
 import type { LabProps } from '../../types';
 import { Bench, Choice, Feedback, Meter } from './Bench';
+import './workbench-quality.css';
 
 export default function Operations({ lesson }: LabProps) {
   const s = lesson.slug;
@@ -58,6 +59,27 @@ export default function Operations({ lesson }: LabProps) {
             </button>
           ))}
         </div>
+        <div className="quality-lattice" aria-label="本次测试实际经过的边界">
+          {['计算函数', '数据库交互', '浏览器提交'].map((layer, i) => (
+            <div
+              key={layer}
+              className={
+                (mode === 'first' ? 0 : mode === 'integration' ? 1 : 2) >= i
+                  ? selected === i
+                    ? 'failed'
+                    : 'active'
+                  : ''
+              }
+            >
+              <small>{layer}</small>
+              <output>
+                {(mode === 'first' ? 0 : mode === 'integration' ? 1 : 2) >= i
+                  ? '本例测试包含'
+                  : '本例未覆盖'}
+              </output>
+            </div>
+          ))}
+        </div>
         <button
           className="primary"
           onClick={() => {
@@ -112,6 +134,14 @@ export default function Operations({ lesson }: LabProps) {
           <small>根 span：请求总耗时</small>
           <strong>220 ms</strong>
         </div>
+        <div className="quality-path">
+          <code>入口 20</code>
+          <span>→</span>
+          <code>并行等待 max(180, 35)</code>
+          <span>→</span>
+          <code>响应 20</code>
+          <output>20 + 180 + 20 = 220 ms</output>
+        </div>
         <Feedback>
           并行 span 耗时不能简单相加。指标用于观察分布与趋势，trace 用于关联一次请求的路径。
         </Feedback>
@@ -162,6 +192,26 @@ export default function Operations({ lesson }: LabProps) {
           <small>整体加速比，固定工作量</small>
           <strong>{(1 / total).toFixed(2)}×</strong>
         </div>
+        <div className="quality-observation">
+          <div>
+            <small>若原总耗时为 1000 ms</small>
+            <output>{(total * 1000).toFixed(0)} ms</output>
+          </div>
+          <div>
+            <small>不可优化部分</small>
+            <output>{(1 - fraction) * 1000} ms</output>
+          </div>
+          <div>
+            <small>可优化部分的新耗时</small>
+            <output>{((fraction / speed) * 1000).toFixed(0)} ms</output>
+          </div>
+          <div>
+            <small>局部无限加速的整体上限</small>
+            <output>
+              {fraction === 1 ? '无此固定部分限制' : `${(1 / (1 - fraction)).toFixed(2)}×`}
+            </output>
+          </div>
+        </div>
         <Feedback>
           模型按 Amdahl 定律计算：(1 − p) + p /
           s。优化一个只占很小比例的函数，无法把整个程序加速到同样倍数。实际收益仍需同条件复测。
@@ -186,10 +236,29 @@ export default function Operations({ lesson }: LabProps) {
                   ['public', '浏览器产物'],
                   ['runtime', '服务端运行时'],
                 ]}
-                onChange={(v) => setPlacements((xs) => xs.map((x, j) => (j === i ? v : x)))}
+                onChange={(v) => {
+                  setPlacements((xs) => xs.map((x, j) => (j === i ? v : x)));
+                  setResult(null);
+                }}
               />
             </div>
           ))}
+        </div>
+        <div className="quality-observation">
+          <div>
+            <small>浏览器用户能直接取得的值</small>
+            <output>{placements.filter((place) => place === 'public').length} 项</output>
+          </div>
+          <div>
+            <small>密码可见范围</small>
+            <output className={placements[0] !== 'runtime' ? 'warning' : ''}>
+              {placements[0] === 'runtime'
+                ? '仅服务端运行时'
+                : placements[0] === 'repo'
+                  ? '提交历史 / 仓库读者'
+                  : '所有产物用户'}
+            </output>
+          </div>
         </div>
         <button
           className="primary"
@@ -225,16 +294,20 @@ export default function Operations({ lesson }: LabProps) {
           />
         </label>
         <div className="rollout-split">
-          <div style={{ flex: 100 - value || 0.01 }}>
+          <div>
             <Server size={24} />
             <b>旧版本</b>
             <span>{100 - value}%</span>
           </div>
-          <div style={{ flex: value || 0.01 }}>
+          <div>
             <Server size={24} />
             <b>新版本</b>
             <span>{value}%</span>
           </div>
+        </div>
+        <div className="rollout-traffic" aria-label={`旧版本 ${100 - value}%，新版本 ${value}%`}>
+          <i style={{ width: `${100 - value}%` }} />
+          <i style={{ width: `${value}%` }} />
         </div>
         <div className="bench-stat">
           <small>固定样本率：旧版错误率 1%，新版 12%；加权错误率</small>
@@ -320,6 +393,22 @@ export default function Operations({ lesson }: LabProps) {
               }
             </span>
           ))}
+        </div>
+        <div className="quality-lattice" aria-label="已取得的证据与仍未证实的结论">
+          <div className={actions.includes('logs') ? 'active' : ''}>
+            <small>错误样本</small>
+            <output>{actions.includes('logs') ? 'acquire timeout' : '尚未检查'}</output>
+          </div>
+          <div className={actions.includes('pool') ? 'active' : ''}>
+            <small>资源证据</small>
+            <output>{actions.includes('pool') ? '借出与归还不配对' : '尚未检查'}</output>
+          </div>
+          <div>
+            <small>恢复结论</small>
+            <output>
+              {actions.includes('rollback') ? '已止损，仍需同条件复测' : '尚未验证恢复'}
+            </output>
+          </div>
         </div>
       </>
     );

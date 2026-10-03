@@ -153,6 +153,9 @@
     gap: 12px;
   }
   .bfs-map {
+    width: 100%;
+    aspect-ratio: auto;
+    height: 230px;
     min-height: 230px;
   }
   .bfs-trace {

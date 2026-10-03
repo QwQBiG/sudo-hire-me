@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { ArrowDown, ArrowUp, Check, Clipboard, MessageCircle, Plus, X } from 'lucide-react';
 import type { LabProps } from '../../types';
 import { Bench, Feedback, Meter } from './Bench';
+import './workbench-quality.css';
 
 type Segment = { label: string; text: string; reason: string };
 const scripts: Record<
@@ -152,6 +153,8 @@ export default function Interview({ lesson }: LabProps) {
   const [note, setNote] = useState('从素材中选择要保留的部分，再调整顺序和内容。');
   const [followup, setFollowup] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [rehearsal, setRehearsal] = useState(false);
+  const [evidence, setEvidence] = useState<boolean[]>(script.segments.map(() => false));
   const answer = chosen.map((i) => texts[i]).join('\n\n');
   const estimated = Math.ceil(Array.from(answer.replace(/\s/g, '')).length / 4);
   return (
@@ -163,6 +166,8 @@ export default function Interview({ lesson }: LabProps) {
         setTexts(script.segments.map((s) => s.text));
         setFollowup(false);
         setCopied(false);
+        setRehearsal(false);
+        setEvidence(script.segments.map(() => false));
         setNote('答稿已清空。');
       }}
     >
@@ -260,9 +265,49 @@ export default function Interview({ lesson }: LabProps) {
             </div>
           )}
           <Meter label="已选表达维度，不代表内容真实性评分" value={chosen.length} max={4} />
+          {chosen.length > 0 && (
+            <div className="draft-evidence">
+              {chosen.map((i) => (
+                <label key={i}>
+                  <input
+                    type="checkbox"
+                    checked={evidence[i]}
+                    onChange={(event) =>
+                      setEvidence((rows) =>
+                        rows.map((checked, index) =>
+                          index === i ? event.target.checked : checked,
+                        ),
+                      )
+                    }
+                  />
+                  <span>{script.segments[i].label}：我能提供真实细节或说明边界</span>
+                </label>
+              ))}
+            </div>
+          )}
         </div>
       </div>
+      {rehearsal && (
+        <section className="interview-rehearsal" aria-label="完整口述答稿">
+          <div className="bench-label">当前口述答稿 · 约 {estimated} 秒</div>
+          {chosen.map((i) => (
+            <p key={i}>{texts[i] || '此部分尚未写入内容'}</p>
+          ))}
+          <small>
+            自查真实证据：{chosen.filter((i) => evidence[i]).length} / {chosen.length}{' '}
+            个表达维度；勾选只记录自查，不验证真实性。
+          </small>
+        </section>
+      )}
       <div className="bench-actions">
+        <button
+          className="secondary"
+          disabled={!chosen.length}
+          onClick={() => setRehearsal(!rehearsal)}
+        >
+          <MessageCircle size={16} />
+          {rehearsal ? '收起口述稿' : '预演完整回答'}
+        </button>
         <button
           className="primary"
           disabled={!chosen.length}

@@ -4,6 +4,7 @@ import { ArrowRight, StepForward } from 'lucide-react';
 import { Experiment } from '../../components/Experiment';
 import { arrayInsertion } from '../../domain/foundations.mjs';
 import './foundations.css';
+import './foundations-quality.css';
 
 export default function Sequence() {
   const [index, setIndex] = useState(1);
@@ -50,7 +51,11 @@ export default function Sequence() {
           </h3>
           <div className="f-array-slots">
             {state.slots.map((value, i) => (
-              <div key={i} className={state.done && i === index ? 'inserted' : ''}>
+              <div
+                key={i}
+                className={state.done && i === index ? 'inserted' : ''}
+                data-moved={arrayStep > 0 && !state.done && i === 4 - arrayStep}
+              >
                 <small>[{i}]</small>
                 <strong>{value ?? '空'}</strong>
               </div>
@@ -127,6 +132,20 @@ export default function Sequence() {
             已修改 <strong>{linkStep}</strong> 条链接
           </p>
         </section>
+      </div>
+      <div className="foundation-state-strip" aria-live="polite">
+        <span>
+          数组搬移{' '}
+          <strong>
+            {state.moves} / {3 - index}
+          </strong>
+        </span>
+        <span>
+          链表改链接 <strong>{linkStep} / 2</strong>
+        </span>
+        <span>
+          {state.done && linkStep === 2 ? '两种结构的插入均完成' : '移动数据与修改链接是不同操作'}
+        </span>
       </div>
       <p className="experiment-status" aria-live="polite">
         下标 {index} 处插入：数组需要搬移 {3 - index} 个元素，链表修改 2 条链接。这里已知前驱；只有

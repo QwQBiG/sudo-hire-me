@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Box, DoorOpen, KeyRound, Lock, Plus, Trash2 } from 'lucide-react';
 import type { LabProps } from '../../types';
 import { Bench, Choice, Feedback } from './Bench';
+import './workbench-quality.css';
 
 const cases: Record<string, [string, string, string]> = {
   'stack-vs-heap': [
@@ -67,6 +68,8 @@ export default function Lifetime({ lesson }: LabProps) {
   const storageLesson = ['stack-vs-heap', 'variable-scope-lifetime'].includes(slug);
   const automatic = storageLesson && mode === 'automatic';
   const managed = ['cpp-raii', 'zig-error-union-defer'].includes(slug);
+  const dangling = scope && pointer && !alive;
+  const leaked = !scope && alive;
   function reset() {
     setAlive(false);
     setScope(true);
@@ -192,6 +195,40 @@ export default function Lifetime({ lesson }: LabProps) {
         </div>
       </div>
       {constructor ? (
+        <div className="quality-lattice" aria-label="对象已构造的部分">
+          {['Base', 'first', 'second', 'Derived body'].map((part, i) => (
+            <div key={part} className={events.length > i ? 'active' : ''}>
+              <small>构造依赖 {i + 1}</small>
+              <strong>{part}</strong>
+              <output>{events.length > i ? '已完成' : '等待前置部分'}</output>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <div className="quality-observation">
+          <div>
+            <small>名字可见性</small>
+            <output>{scope ? '作用域内' : '作用域外'}</output>
+          </div>
+          <div>
+            <small>资源生命周期</small>
+            <output>{alive ? '仍存活' : '不存在 / 已结束'}</output>
+          </div>
+          <div>
+            <small>持有状态</small>
+            <output className={dangling || leaked ? 'warning' : ''}>
+              {leaked
+                ? '无拥有者：泄漏'
+                : dangling
+                  ? '悬空地址'
+                  : pointer
+                    ? '有效拥有关系'
+                    : '无地址'}
+            </output>
+          </div>
+        </div>
+      )}
+      {constructor ? (
         <div className="bench-actions">
           {['Base 构造', '成员 first', '成员 second', 'Derived 函数体'].map((label, i) => (
             <button
@@ -312,7 +349,7 @@ export default function Lifetime({ lesson }: LabProps) {
       <ol className="bench-log">
         {events.map((event, i) => (
           <li key={`${event}-${i}`}>
-            <code>{String(events.length - i).padStart(2, '0')}</code>
+            <code>{String(constructor ? i + 1 : events.length - i).padStart(2, '0')}</code>
             {event}
           </li>
         ))}

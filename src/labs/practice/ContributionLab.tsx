@@ -4,6 +4,7 @@ import { Experiment } from '../../components/Experiment';
 import { assessContribution, contributionCases } from '../../domain/contribution.mjs';
 import type { LabProps } from '../../types';
 import './contribution.css';
+import './practice-quality.css';
 
 export default function ContributionLab({ lesson }: LabProps) {
   const initial = lesson.slug === 'open-source-contribution-story' ? 2 : 0;
@@ -30,13 +31,22 @@ export default function ContributionLab({ lesson }: LabProps) {
       subtitle="阅读这组虚构记录，再挑出有证据支持、范围也准确的一句话。"
       onReset={reset}
     >
-      <div className="contribution-tabs" role="tablist" aria-label="练习情境">
+      <div className="contribution-progress">
+        <span>
+          证据判断 {solved.length}/{contributionCases.length}
+        </span>
+        <progress
+          max={contributionCases.length}
+          value={solved.length}
+          aria-label="已完成的情境数量"
+        />
+      </div>
+      <div className="contribution-tabs" role="group" aria-label="选择练习情境">
         {contributionCases.map((item, position) => (
           <button
             key={item.id}
             type="button"
-            role="tab"
-            aria-selected={position === index}
+            aria-pressed={position === index}
             className={position === index ? 'is-current' : ''}
             onClick={() => {
               setIndex(position);

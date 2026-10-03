@@ -4,6 +4,7 @@ import { Search } from 'lucide-react';
 import { Experiment } from '../../components/Experiment';
 import { indexLeaves, queryIndex } from '../../domain/practice.mjs';
 import './practice.css';
+import './practice-quality.css';
 
 export default function IndexLab() {
   const [target, setTarget] = useState(62);
@@ -32,12 +33,14 @@ export default function IndexLab() {
               setSearched(false);
             }}
           >
-            {[4, 25, 42, 62, 98].map((value) => (
-              <option key={value} value={value}>
-                {value}
-                {value === 42 ? '（不存在）' : ''}
-              </option>
-            ))}
+            {[...indexLeaves.flat(), 42]
+              .sort((a, b) => a - b)
+              .map((value) => (
+                <option key={value} value={value}>
+                  {value}
+                  {value === 42 ? '（不存在）' : ''}
+                </option>
+              ))}
           </SelectField>
         </label>
         <label>
@@ -72,9 +75,18 @@ export default function IndexLab() {
               <small>叶节点 {leaf + 1}</small>
               <div>
                 {keys.map((key) => (
-                  <span key={key} className={searched && key === target ? 'is-match' : ''}>
+                  <button
+                    key={key}
+                    className={searched && key === target ? 'is-match' : ''}
+                    aria-label={`查询索引键 ${key}`}
+                    aria-pressed={searched && key === target}
+                    onClick={() => {
+                      setTarget(key);
+                      setSearched(true);
+                    }}
+                  >
                     {key}
-                  </span>
+                  </button>
                 ))}
               </div>
             </div>

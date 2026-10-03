@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useId, useState } from 'react';
 import { ChevronsRight, StepForward } from 'lucide-react';
 import { Experiment } from '../../components/Experiment';
 import {
@@ -10,6 +10,16 @@ import {
   settleDijkstra,
 } from '../../domain/dijkstra-path.mjs';
 import './advanced-algorithms.css';
+import './foundations-quality.css';
+
+const coordinates: Record<string, [number, number]> = {
+  A: [70, 165],
+  B: [210, 55],
+  C: [210, 265],
+  D: [370, 165],
+  E: [525, 165],
+  X: [525, 55],
+};
 
 const edges = Object.entries(dijkstraGraph).flatMap(([from, neighbors]) =>
   neighbors.map(({ to, weight }: { to: string; weight: number }) => ({ from, to, weight })),
@@ -27,6 +37,7 @@ interface DijkstraState {
 }
 
 export default function DijkstraPath() {
+  const marker = useId().replace(/:/g, '');
   const [state, setState] = useState<DijkstraState>(() => createDijkstraState());
   const expected = expectedDijkstraVertex(state);
   const path = dijkstraPath(state);
@@ -62,7 +73,50 @@ export default function DijkstraPath() {
         ))}
       </div>
       <div className="dijkstra-board">
-        <div className="dijkstra-vertices" role="group" aria-label="选择下一个定型的节点">
+        <div className="foundation-dijkstra-map" role="group" aria-label="选择下一个定型的节点">
+          <svg viewBox="0 0 600 330" preserveAspectRatio="none" aria-hidden="true">
+            <defs>
+              <marker
+                id={marker}
+                viewBox="0 0 8 8"
+                refX="7"
+                refY="4"
+                markerWidth="3"
+                markerHeight="3"
+                orient="auto"
+              >
+                <path d="M0 0 L8 4 L0 8 Z" fill="#8692a4" />
+              </marker>
+            </defs>
+            {edges.map(({ from, to, weight }) => {
+              const [x1, y1] = coordinates[from];
+              const [x2, y2] = coordinates[to];
+              const length = Math.hypot(x2 - x1, y2 - y1);
+              const inset = 40;
+              const updated =
+                state.last?.vertex === from &&
+                state.last.relaxations.some((entry) => entry.to === to && entry.updated);
+              const onPath =
+                targetSettled &&
+                path?.some(
+                  (node: string, index: number) => node === from && path[index + 1] === to,
+                );
+              return (
+                <g key={`${from}-${to}`} data-updated={updated} data-path={Boolean(onPath)}>
+                  <line
+                    x1={x1 + ((x2 - x1) * inset) / length}
+                    y1={y1 + ((y2 - y1) * inset) / length}
+                    x2={x2 - ((x2 - x1) * inset) / length}
+                    y2={y2 - ((y2 - y1) * inset) / length}
+                    markerEnd={`url(#${marker})`}
+                  />
+                  <text x={(x1 + x2) / 2} y={(y1 + y2) / 2 - 8} textAnchor="middle">
+                    {weight}
+                  </text>
+                </g>
+              );
+            })}
+          </svg>
           {dijkstraVertices.map((vertex: string) => {
             const fixed = state.settled.includes(vertex);
             const distance = state.distances[vertex];
@@ -72,6 +126,10 @@ export default function DijkstraPath() {
                 key={vertex}
                 disabled={state.done || fixed}
                 className="dijkstra-vertex"
+                style={{
+                  left: `${coordinates[vertex][0] / 6}%`,
+                  top: `${coordinates[vertex][1] / 3.3}%`,
+                }}
                 data-fixed={fixed}
                 data-target={state.target === vertex}
                 data-expected={expected === vertex}

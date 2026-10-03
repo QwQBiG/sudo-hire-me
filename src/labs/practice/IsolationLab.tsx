@@ -4,6 +4,7 @@ import { Check, Eye, Pencil } from 'lucide-react';
 import { Experiment } from '../../components/Experiment';
 import { isolationAction, newIsolation } from '../../domain/practice.mjs';
 import './practice.css';
+import './practice-quality.css';
 
 export default function IsolationLab() {
   const [state, setState] = useState(newIsolation);
@@ -34,6 +35,28 @@ export default function IsolationLab() {
         <span>{state.pending === null ? '没有未提交写入' : 'B 的 120 尚未提交'}</span>
       </div>
       <div className="practice-isolation-lanes experiment-scene">
+        <div className="practice-version-chain" aria-label="提交版本与事务 A 的读取快照">
+          <section data-visible="true" data-reader={state.reads.at(-1) === 100}>
+            <small>初始已提交版本</small>
+            <strong>100</strong>
+            <span>
+              {state.snapshot === 100 && state.mode === 'repeatable-read'
+                ? 'A 的事务快照固定在这里'
+                : '初始版本'}
+            </span>
+          </section>
+          <section data-visible={state.bDone} data-reader={state.reads.at(-1) === 120}>
+            <small>
+              {state.bDone
+                ? 'B 提交的新版本'
+                : state.pending !== null
+                  ? 'B 尚未提交的修改'
+                  : 'B 尚未写入'}
+            </small>
+            <strong>{state.pending !== null || state.bDone ? '120' : '—'}</strong>
+            <span>{state.bDone ? '已提交，可供新的快照读取' : 'A 不能读取未提交修改'}</span>
+          </section>
+        </div>
         <section>
           <h4>事务 A · 读取者</h4>
           <p>

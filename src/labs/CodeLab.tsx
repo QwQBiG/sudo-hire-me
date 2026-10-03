@@ -33,6 +33,9 @@ export default function CodeLab({ lesson }: LabProps) {
   const [output, setOutput] = useState<Output[]>([]);
   const [tables, setTables] = useState<Table[]>([]);
   const [state, setState] = useState<'idle' | 'loading' | 'running' | 'done' | 'error'>('idle');
+  const [executedCode, setExecutedCode] = useState<string | null>(null);
+  const [elapsed, setElapsed] = useState<number | null>(null);
+  const started = useRef(0);
   const stopRef = useRef<(() => void) | null>(null);
   const runId = useRef(0);
   const active = state === 'loading' || state === 'running';
@@ -50,10 +53,14 @@ export default function CodeLab({ lesson }: LabProps) {
     setState('idle');
     setOutput([{ kind: 'info', text: message }]);
     setTables([]);
+    setElapsed(null);
   }
   function run() {
     stopRef.current?.();
     const id = ++runId.current;
+    started.current = performance.now();
+    setExecutedCode(code);
+    setElapsed(null);
     setState(sql ? 'loading' : 'running');
     setOutput([]);
     setTables([]);
@@ -61,8 +68,10 @@ export default function CodeLab({ lesson }: LabProps) {
       let failed = false;
       stopRef.current = runJavaScript(code, (event) => {
         if (id !== runId.current) return;
-        if (event.kind === 'done') setState(failed ? 'error' : 'done');
-        else {
+        if (event.kind === 'done') {
+          setElapsed(Math.round(performance.now() - started.current));
+          setState(failed ? 'error' : 'done');
+        } else {
           if (event.kind === 'error') failed = true;
           setOutput((old) => [...old, { kind: event.kind, text: event.text ?? '' }]);
         }
@@ -80,6 +89,7 @@ export default function CodeLab({ lesson }: LabProps) {
       if (id !== runId.current) return;
       dispose();
       setState('error');
+      setElapsed(Math.round(performance.now() - started.current));
       setOutput([{ kind: 'error', text }]);
     };
     let timer = setTimeout(() => fail('SQLite 加载超过 60 秒，请检查网络后重试。'), 60000);
@@ -93,6 +103,7 @@ export default function CodeLab({ lesson }: LabProps) {
         return;
       }
       dispose();
+      setElapsed(Math.round(performance.now() - started.current));
       if (event.data.kind === 'error') {
         setState('error');
         setOutput([{ kind: 'error', text: event.data.text }]);
@@ -112,7 +123,11 @@ export default function CodeLab({ lesson }: LabProps) {
     worker.postMessage(code);
   }
   return (
-    <section className="lab code-lab" aria-label={sql ? 'SQL 实验' : 'JavaScript 实验'}>
+    <section
+      className="lab code-lab"
+      data-state={state}
+      aria-label={sql ? 'SQL 实验' : 'JavaScript 实验'}
+    >
       <header className="lab-heading">
         <span>
           {sql ? <Database size={18} /> : <Braces size={18} />}
@@ -156,6 +171,7 @@ export default function CodeLab({ lesson }: LabProps) {
               setState('idle');
               setOutput([]);
               setTables([]);
+              setElapsed(null);
             }}
           >
             <TriangleAlert size={15} />
@@ -191,6 +207,7 @@ export default function CodeLab({ lesson }: LabProps) {
           spellCheck={false}
           autoCapitalize="off"
           autoCorrect="off"
+          wrap="off"
           maxLength={20000}
         />
       </div>
@@ -211,20 +228,34 @@ export default function CodeLab({ lesson }: LabProps) {
         )}
       </div>
       <div className="output">
-        <div className="output-heading">
+        <div className="output-heading" aria-live="polite">
           <span>{sql ? 'RESULT' : 'CONSOLE'}</span>
           <span className={state === 'error' ? 'error-text' : ''}>
-            {
-              {
-                idle: '等待运行',
-                loading: '加载 SQLite…',
-                running: '运行中…',
-                done: '运行结束',
-                error: '运行出错',
-              }[state]
-            }
+            {executedCode !== code && (state === 'done' || state === 'error')
+              ? '代码已修改 · 上次运行结果'
+              : {
+                  idle: '等待运行',
+                  loading: '加载 SQLite…',
+                  running: '运行中…',
+                  done: '运行结束',
+                  error: '运行出错',
+                }[state]}
           </span>
         </div>
+        {(state === 'done' || state === 'error') && (
+          <div className="run-summary">
+            <span>
+              总用时 <b>{elapsed ?? 0} ms</b>
+            </span>
+            <span>
+              {sql ? '显示行数' : '输出条数'}{' '}
+              <b>
+                {sql ? tables.reduce((sum, table) => sum + table.rows.length, 0) : output.length}
+              </b>
+            </span>
+            <span>{state === 'error' ? '失败' : '完成'}</span>
+          </div>
+        )}
         <div className="output-body" role="log" aria-live="polite">
           {state === 'idle' && !output.length && (
             <p className="output-placeholder">
@@ -238,7 +269,12 @@ export default function CodeLab({ lesson }: LabProps) {
             </pre>
           ))}
           {tables.map((table, index) => (
-            <div className="result-table" key={index}>
+            <div
+              className="result-table"
+              key={index}
+              tabIndex={0}
+              aria-label={`查询结果 ${index + 1}`}
+            >
               <table>
                 <thead>
                   <tr>

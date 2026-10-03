@@ -8,6 +8,7 @@ import {
   waitReadiness,
 } from '../../domain/io-readiness.mjs';
 import './mechanism-labs.css';
+import './systems-quality.css';
 
 export default function IoReadiness() {
   const [state, setState] = useState(() => createReadinessState());
@@ -38,6 +39,12 @@ export default function IoReadiness() {
               <small>{state.buffers[fd].length} 字节待读</small>
             </header>
             <code>{state.buffers[fd] || '∅'}</code>
+            <div className="system-tokens" aria-label={`fd ${fd} 缓冲内容`}>
+              {[...state.buffers[fd]].slice(0, 16).map((byte, index) => (
+                <span key={index}>{byte}</span>
+              ))}
+              {state.buffers[fd].length > 16 && <span>+{state.buffers[fd].length - 16}</span>}
+            </div>
             <div className="mechanism-actions">
               <button
                 onClick={() => setState((s) => sendReadinessData(s, fd, fd === 3 ? 'ABCD' : 'XY'))}

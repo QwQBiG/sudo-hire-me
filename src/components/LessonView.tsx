@@ -13,7 +13,7 @@ import {
 } from 'lucide-react';
 import { Markdown } from './Markdown';
 import { Lab } from './Lab';
-import { LanguageExamples } from './LanguageExamples';
+import { LessonReading } from './LessonReading';
 import { Quiz } from './Quiz';
 import type { Lesson, LessonProgress, LessonSummary } from '../types';
 
@@ -43,9 +43,6 @@ export function LessonView({
         !['面试回答', '选择题', '开放题', '实验代码', '多语言示例', '逐步推演'].includes(s.title),
     ) ??
     lesson.sections[0];
-  const readingSections = lesson.sections.filter(
-    (s) => !['面试回答', '选择题', '开放题'].includes(s.title),
-  );
   return (
     <div className="lesson-page page-enter">
       <header className="lesson-title">
@@ -172,49 +169,20 @@ export function LessonView({
               </>
             )}
             {tab === 'read' && (
-              <div className="reading">
-                <nav className="reading-index" aria-label="本课目录">
-                  {readingSections.map((section, index) => (
-                    <button
-                      key={section.title}
-                      onClick={() => {
-                        const target = document.getElementById(`reading-${index}`);
-                        target?.focus({ preventScroll: true });
-                        target?.scrollIntoView({ block: 'start' });
-                      }}
-                    >
-                      <span>{String(index + 1).padStart(2, '0')}</span>
-                      {section.title}
-                    </button>
-                  ))}
-                </nav>
-                {readingSections.map((section, index) => (
-                  <section key={section.title}>
-                    <h2 id={`reading-${index}`} tabIndex={-1}>
-                      {section.title}
-                    </h2>
-                    {section.title === '多语言示例' && lesson.languageExamples ? (
-                      <LanguageExamples examples={lesson.languageExamples} />
-                    ) : (
-                      <Markdown>{section.markdown}</Markdown>
-                    )}
-                  </section>
-                ))}
-                <button
-                  className="primary"
-                  onClick={() => {
-                    update({ read: true });
-                    setTab('quiz');
-                  }}
-                >
-                  <Check size={17} />
-                  已读，进入挑战
-                </button>
-              </div>
+              <LessonReading
+                lesson={lesson}
+                onComplete={() => {
+                  update({ read: true });
+                  setTab('quiz');
+                }}
+              />
             )}
             {tab === 'quiz' && (
               <Quiz
                 lesson={lesson}
+                note={progress.note}
+                passed={progress.passed}
+                onNoteChange={(note) => update({ note })}
                 onAnswer={(correct) =>
                   update({ attempts: progress.attempts + 1, passed: progress.passed || correct })
                 }

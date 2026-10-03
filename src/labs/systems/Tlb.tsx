@@ -9,6 +9,7 @@ import {
   tlbPageTable,
 } from '../../domain/tlb.mjs';
 import './tlb.css';
+import './systems-quality.css';
 
 const examples = [12, 268, 15, 524, 12, 780, 1030];
 
@@ -40,8 +41,9 @@ export default function Tlb() {
             type="number"
             min={0}
             max={1279}
-            value={address}
-            onChange={(event) => setAddress(Number(event.target.value))}
+            value={Number.isFinite(address) ? address : ''}
+            aria-invalid={!validAddress}
+            onChange={(event) => setAddress(event.target.valueAsNumber)}
           />
         </label>
         <button disabled={!validAddress} onClick={() => access(address)}>
@@ -56,6 +58,11 @@ export default function Tlb() {
           装入页 3
         </button>
       </div>
+      {!validAddress && (
+        <p role="alert" className="experiment-status">
+          请输入 0 至 1279 之间的整数虚拟地址；当前没有执行访问。
+        </p>
+      )}
       <div className="tlb-presets" role="group" aria-label="示例虚拟地址">
         {examples.map((value, index) => (
           <button key={`${index}-${value}`} onClick={() => access(value)}>

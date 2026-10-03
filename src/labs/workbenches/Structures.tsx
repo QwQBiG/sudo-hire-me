@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Plus, Search } from 'lucide-react';
 import type { LabProps } from '../../types';
 import { Bench, Feedback, Meter } from './Bench';
+import './workbench-quality.css';
 
 export default function Structures({ lesson }: LabProps) {
   const slug = lesson.slug;
@@ -28,6 +29,7 @@ export default function Structures({ lesson }: LabProps) {
     setCapacity(4);
     setMoves(0);
     setVisited([]);
+    setInput(2);
     setNote('状态已重置。');
   }
   const titles: Record<string, string> = {
@@ -90,13 +92,14 @@ export default function Structures({ lesson }: LabProps) {
         current = next;
       }
     }
-    function layout(n: number, x: number, y: number, spread: number, parent: number | null) {
-      treeNodes.push({ value: n, x, y, parent });
+    function layout(n: number, y: number, parent: number | null) {
+      const rank = [...values].sort((a, b) => a - b).indexOf(n);
+      treeNodes.push({ value: n, x: 40 + ((rank + 1) * 560) / (values.length + 1), y, parent });
       const kids = children.get(n)!;
-      if (kids.left !== undefined) layout(kids.left, x - spread, y + 65, spread / 2, n);
-      if (kids.right !== undefined) layout(kids.right, x + spread, y + 65, spread / 2, n);
+      if (kids.left !== undefined) layout(kids.left, y + 65, n);
+      if (kids.right !== undefined) layout(kids.right, y + 65, n);
     }
-    if (values.length) layout(values[0], 320, 32, 145, null);
+    if (values.length) layout(values[0], 32, null);
   }
   return (
     <Bench
@@ -147,7 +150,7 @@ export default function Structures({ lesson }: LabProps) {
                 {values
                   .filter((v) => v % capacity === i)
                   .map((v, j) => (
-                    <span key={j} className="bench-token">
+                    <span key={`${v}-${j}`} className="bench-token" data-readout>
                       {v}
                     </span>
                   ))}
@@ -239,6 +242,67 @@ export default function Structures({ lesson }: LabProps) {
           )}
         </div>
       )}
+      <div className="quality-observation">
+        <div>
+          <small>{slug === 'heap-top-k' ? '已送入的元素' : '当前元素数量'}</small>
+          <output>{slug === 'heap-top-k' ? moves : values.length}</output>
+        </div>
+        <div>
+          <small>
+            {slug === 'hash-collisions-resizing'
+              ? '最长桶链'
+              : slug === 'linear-search-first'
+                ? '已比较元素'
+                : slug === 'binary-search-tree-operations'
+                  ? '查找路径长度'
+                  : slug === 'heap-top-k'
+                    ? '淘汰门槛（最小候选）'
+                    : '未使用容量'}
+          </small>
+          <output>
+            {slug === 'hash-collisions-resizing'
+              ? Math.max(
+                  0,
+                  ...Array.from(
+                    { length: capacity },
+                    (_, i) => values.filter((v) => v % capacity === i).length,
+                  ),
+                )
+              : slug === 'linear-search-first' || slug === 'binary-search-tree-operations'
+                ? visited.length
+                : slug === 'heap-top-k'
+                  ? values.length === 3
+                    ? values[0]
+                    : '候选未满'
+                  : capacity - values.length}
+          </output>
+        </div>
+        {slug === 'linear-search-first' && (
+          <div>
+            <small>首次匹配下标</small>
+            <output>
+              {visited.find((i) => values[i] === input) ??
+                (visited.length === values.length ? '不存在' : '尚未确定')}
+            </output>
+          </div>
+        )}
+      </div>
+      {slug === 'heap-top-k' && (
+        <div className="quality-heap" aria-label="三元素最小堆">
+          <div className="heap-root">
+            <small>堆顶 · 最小候选</small>
+            <output>{values[0] ?? '空'}</output>
+          </div>
+          <div className="heap-children">
+            {[1, 2].map((i) => (
+              <div key={i}>
+                <small>子节点 {i}</small>
+                <output>{values[i] ?? '空'}</output>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
       <div className="bench-actions">
         {slug !== 'linear-search-first' && (
           <button className="primary" onClick={add}>
@@ -302,7 +366,13 @@ export default function Structures({ lesson }: LabProps) {
           max={3}
         />
       )}
-      <Feedback>{note}</Feedback>
+      <Feedback>
+        {slug === 'linear-search-first' &&
+        visited.length === values.length &&
+        !values.includes(input)
+          ? `已比较全部 ${values.length} 个元素，没有匹配，返回不存在。`
+          : note}
+      </Feedback>
     </Bench>
   );
 }

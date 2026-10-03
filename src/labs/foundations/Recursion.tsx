@@ -3,6 +3,7 @@ import { ArrowDown, ArrowUp, StepForward } from 'lucide-react';
 import { Experiment } from '../../components/Experiment';
 import { factorialTrace } from '../../domain/foundations.mjs';
 import './foundations.css';
+import './foundations-quality.css';
 
 export default function Recursion() {
   const [n, setN] = useState(4);
@@ -42,6 +43,14 @@ export default function Recursion() {
           )}
           {done ? '全部返回' : nextAction === 'call' ? '进入下一层' : '返回上一层'}
         </button>
+      </div>
+      <div
+        className="foundation-capacity recursion"
+        aria-label={`活跃调用深度 ${current.frames.length}`}
+      >
+        {Array.from({ length: n + 1 }, (_, i) => (
+          <i key={i} data-used={i < current.frames.length} />
+        ))}
       </div>
       <div className="f-recursion-scene">
         <div className="f-call-stack" aria-label="活跃调用栈">

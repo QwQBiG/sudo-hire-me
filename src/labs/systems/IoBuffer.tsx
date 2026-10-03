@@ -3,6 +3,7 @@ import { ArrowDownToLine, ArrowRight, HardDriveDownload, Power, SquarePen } from
 import { Experiment } from '../../components/Experiment';
 import { advanceIoBuffer, createIoBufferState } from '../../domain/io-buffer.mjs';
 import './io-buffer.css';
+import './systems-quality.css';
 
 export default function IoBuffer() {
   const [state, setState] = useState(() => createIoBufferState());

@@ -43,6 +43,23 @@ export default function DmaTransfer() {
         <ArrowRight aria-hidden="true" size={20} />
         <MemoryStick aria-hidden="true" size={23} />
       </div>
+      <div className="foundation-dma-activity" aria-live="polite">
+        <span>设备进度</span>
+        <div className="foundation-capacity queue">
+          {Array.from({ length: state.size }, (_, i) => (
+            <i key={i} data-used={i < state.moved} />
+          ))}
+        </div>
+        <span>CPU 独立任务</span>
+        <output>{state.cpuWork} 次</output>
+        <small>
+          {state.phase === 'transferring'
+            ? '两种进度分别推进，不代表真实时间或总线吞吐量'
+            : state.phase === 'notified'
+              ? '完成已确认'
+              : '设备搬运与 CPU 计算分别记录'}
+        </small>
+      </div>
       <div className="dma-transfer-actions">
         <button
           type="button"

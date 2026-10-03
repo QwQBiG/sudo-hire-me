@@ -7,6 +7,7 @@ import {
   transferUniqueOwner,
 } from '../../domain/move-ownership.mjs';
 import './move-ownership.css';
+import { MechanismLinks } from './MechanismLinks';
 
 export default function MoveOwnership() {
   const [state, setState] = useState(ownershipState());
@@ -24,6 +25,15 @@ export default function MoveOwnership() {
         setMessage('p 独占整数对象 7，q 为空。');
       }}
     >
+      <MechanismLinks
+        nodes={['p', '#1', 'q']}
+        links={{
+          p: state.owner === 'p' ? '#1' : null,
+          q: state.owner === 'q' ? '#1' : null,
+        }}
+        active={[state.owner]}
+        label={`教学对象 #1 当前仅由 ${state.owner} 拥有`}
+      />
       <div className="move-ownership-track" aria-label={`当前 ${source} 独占对象 7`}>
         {(['p', 'q'] as const).map((name) => (
           <div key={name} className={state.owner === name ? 'owner' : 'empty'}>

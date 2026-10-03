@@ -4,6 +4,7 @@ import { StepForward } from 'lucide-react';
 import { Experiment } from '../../components/Experiment';
 import { cacheTrace } from '../../domain/foundations.mjs';
 import './foundations.css';
+import './foundations-quality.css';
 
 const patterns: Record<string, number[]> = {
   顺序访问: [0, 1, 2, 3, 4, 5, 6, 7],
@@ -46,6 +47,18 @@ export default function Cache() {
           {next === undefined ? '序列结束' : `读 a[${next}]`}
         </button>
       </div>
+      <div className="foundation-state-strip" aria-live="polite">
+        <span>
+          主存行 <strong>{current?.block ?? '—'}</strong>
+        </span>
+        <span>
+          本次{' '}
+          <strong>{current ? (current.hit ? 'HIT：无需装入' : 'MISS：整行装入') : '未访问'}</strong>
+        </span>
+        <span>
+          淘汰 <strong>{current?.evicted ?? '无'}</strong>
+        </span>
+      </div>
       <div className="f-cache-memory" aria-label="主存中的数组元素">
         {[0, 1, 2, 3].map((block) => (
           <div
@@ -77,8 +90,18 @@ export default function Cache() {
       <div className="f-cache-resident">
         <span>缓存 · 旧 → 新</span>
         {[0, 1].map((slot) => (
-          <div key={slot} className={resident[slot] === undefined ? 'empty' : 'loaded'}>
+          <div
+            key={resident[slot] ?? `empty-${slot}`}
+            className={resident[slot] === undefined ? 'empty' : 'loaded'}
+          >
             {resident[slot] === undefined ? '空行' : `第 ${resident[slot]} 行`}
+            <small>
+              {slot === resident.length - 1
+                ? '最近使用'
+                : resident.length === 2
+                  ? '下次优先淘汰'
+                  : ''}
+            </small>
           </div>
         ))}
       </div>

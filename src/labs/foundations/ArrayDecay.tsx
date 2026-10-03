@@ -59,6 +59,18 @@ export default function ArrayDecay() {
           </div>
         ))}
       </div>
+      {(context === 'element-step' || context === 'array-step') && (
+        <div
+          className="foundation-pointer-stride"
+          aria-label={`指针加一的跨度为 ${result.result} 字节`}
+        >
+          <span>{context === 'element-step' ? 'a' : '&a'}</span>
+          <div style={{ width: `${(Number(result.result) / byteCount) * 100}%` }}>
+            <i />
+            <strong>+1 = 跨 {result.result} B</strong>
+          </div>
+        </div>
+      )}
       <div className="array-decay-expressions" role="group" aria-label="选择要观察的 C 表达式">
         {arrayContexts.map((item) => (
           <button

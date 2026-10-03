@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { ArrowRight, Braces, Check, Plug, X } from 'lucide-react';
 import type { LabProps } from '../../types';
 import { Bench, Choice, Feedback } from './Bench';
+import './workbench-quality.css';
 
 type ContractCase = {
   title: string;
@@ -205,14 +206,23 @@ const cases: Record<string, ContractCase> = {
         mode === 'compose'
           ? 'Notifier(sender).notify(message)'
           : 'BaseNotifier ref = implementation\nref.notify(message)',
-      value: mode === 'invalid' ? '调用约定被破坏' : `${Number(text) || 0} 条消息交给发送能力`,
+      value:
+        !text.trim() || !Number.isSafeInteger(Number(text)) || Number(text) < 0
+          ? '消息数量需要非负整数'
+          : mode === 'invalid'
+            ? '调用约定被破坏'
+            : `${Number(text)} 条消息交给发送能力`,
       note:
         mode === 'invalid'
           ? '子类拒绝基类承诺支持的操作，会破坏可替代性。仅仅复用代码不足以证明应该继承。'
           : mode === 'compose'
             ? 'Notifier 持有发送部件，可以替换部件而不改变自己的类型关系。'
             : '满足父契约的实现可以被调用方替换使用。',
-      ok: mode !== 'invalid',
+      ok:
+        mode !== 'invalid' &&
+        !!text.trim() &&
+        Number.isSafeInteger(Number(text)) &&
+        Number(text) >= 0,
     }),
   },
   'oop-interface-abstract-class': {
@@ -230,18 +240,24 @@ const cases: Record<string, ContractCase> = {
           ? 'class Store implements Savable'
           : 'class Store extends CountingStore',
       value:
-        mode === 'missing'
-          ? '具体类无法满足契约'
-          : mode === 'abstract'
-            ? `共享实现将 calls += ${Number(text) || 0}`
-            : '调用具体实现的 save()',
+        !text.trim() || !Number.isSafeInteger(Number(text)) || Number(text) < 0
+          ? '调用次数需要非负整数'
+          : mode === 'missing'
+            ? '具体类无法满足契约'
+            : mode === 'abstract'
+              ? `共享实现将 calls += ${Number(text)}`
+              : '调用具体实现的 save()',
       note:
         mode === 'abstract'
           ? '抽象类可以集中维护实例状态和公共实现；是否适合继承仍要检查类型关系。'
           : mode === 'missing'
             ? '非抽象的具体类必须提供所需行为。'
             : '接口表达角色与能力；现代 Java 接口也可有默认方法，但没有普通实例字段。',
-      ok: mode !== 'missing',
+      ok:
+        mode !== 'missing' &&
+        !!text.trim() &&
+        Number.isSafeInteger(Number(text)) &&
+        Number(text) >= 0,
     }),
   },
 };
@@ -280,6 +296,86 @@ export default function Contracts({ lesson }: LabProps) {
           <pre className="bench-code">{result.code}</pre>
         </div>
       </div>
+      {lesson.slug === 'struct-enum-modeling' && (
+        <div className="quality-lattice" aria-label="互斥状态分支">
+          {[
+            ['pending', 'Pending', '不携带结果'],
+            ['success', 'Success(value)', '携带结果 42'],
+            ['failed', 'Failed(error)', '携带错误 timeout'],
+          ].map(([id, label, payload]) => (
+            <button
+              key={id}
+              className={input === id ? 'active' : ''}
+              aria-pressed={input === id}
+              onClick={() => setInput(id)}
+            >
+              <code>{label}</code>
+              <small>{payload}</small>
+            </button>
+          ))}
+        </div>
+      )}
+      {lesson.slug === 'generic-programming-basics' && (
+        <div className="quality-path">
+          <code>T = {mode === 'number' ? 'Integer' : mode === 'text' ? 'String' : 'Opaque'}</code>
+          <span>→</span>
+          <code className={mode === 'opaque' ? 'blocked' : ''}>
+            Comparable {mode === 'opaque' ? '✕' : '✓'}
+          </code>
+          <span>→</span>
+          <output>{result.ok ? `max = ${result.value}` : '不能应用比较算法'}</output>
+        </div>
+      )}
+      {lesson.slug === 'oop-abstraction' && (
+        <div className="quality-lattice" aria-label="存储角色与实现">
+          <div className="active">
+            <small>调用方依赖</small>
+            <code>Storage.save(text)</code>
+            <span>不依赖具体存储位置</span>
+          </div>
+          <div className={mode === 'broken' ? 'failed' : 'active'}>
+            <small>当前实现</small>
+            <code>
+              {mode === 'memory' ? 'MemoryStore' : mode === 'file' ? 'FileStore' : 'LoadOnlyStore'}
+            </code>
+            <span>{mode === 'broken' ? 'save 缺失，拒绝替代' : 'save 能力满足'}</span>
+          </div>
+          <div>
+            <small>可观察输出</small>
+            <output>{result.value}</output>
+          </div>
+        </div>
+      )}
+      {lesson.slug === 'oop-inheritance-composition' && (
+        <div className="quality-path">
+          <code>Caller → Notifier</code>
+          <span>{mode === 'compose' ? 'has-a →' : 'is-a ←'}</span>
+          <code className={mode === 'invalid' ? 'blocked' : ''}>
+            {mode === 'compose'
+              ? 'Sender 部件'
+              : mode === 'valid'
+                ? '契约兼容实现'
+                : '拒绝 notify 的子类'}
+          </code>
+          <output>{result.ok ? '调用约定保持' : '输入 / 替代条件未满足'}</output>
+        </div>
+      )}
+      {lesson.slug === 'oop-interface-abstract-class' && (
+        <div className="quality-lattice">
+          <div className={mode === 'missing' ? 'failed' : 'active'}>
+            <small>角色能力</small>
+            <code>save()</code>
+            <output>{mode === 'missing' ? '具体类漏实现' : '由具体类提供'}</output>
+          </div>
+          <div className={mode === 'abstract' ? 'active' : ''}>
+            <small>普通实例状态</small>
+            <code>{mode === 'abstract' ? 'CountingStore.calls' : '接口无普通实例字段'}</code>
+            <output>
+              {mode === 'abstract' && result.ok ? `calls += ${Number(input)}` : '不由接口保存计数'}
+            </output>
+          </div>
+        </div>
+      )}
       {lesson.slug === 'callbacks-function-pointers' && result.ok && (
         <div className="callback-conveyor" aria-label="逐项回调结果">
           {input

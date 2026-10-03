@@ -3,6 +3,7 @@ import { StepBack, StepForward } from 'lucide-react';
 import { Experiment } from '../../components/Experiment';
 import { referenceTrace, replacementFrames } from '../../domain/replacement.mjs';
 import './replacement.css';
+import './systems-quality.css';
 
 export default function Replacement() {
   const [step, setStep] = useState(0);

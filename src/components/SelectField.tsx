@@ -52,6 +52,7 @@ export function SelectField({ value, onChange, children, disabled, className, ..
   const id = useId();
   const trigger = useRef<HTMLButtonElement>(null);
   const popup = useRef<HTMLDivElement>(null);
+  const typed = useRef({ text: '', at: 0 });
   const [open, setOpen] = useState(false);
   const [active, setActive] = useState(0);
   const [position, setPosition] = useState({ top: 0, left: 0, width: 0, maxHeight: 260 });
@@ -161,11 +162,40 @@ export function SelectField({ value, onChange, children, disabled, className, ..
           if (event.key === 'Home' || event.key === 'End') {
             event.preventDefault();
             if (!open) show();
-            setActive(event.key === 'Home' ? 0 : options.length - 1);
+            const edge =
+              event.key === 'Home'
+                ? options.findIndex((option) => !option.disabled)
+                : options.reduce((last, option, index) => (option.disabled ? last : index), -1);
+            if (edge >= 0) setActive(edge);
           }
           if ((event.key === 'Enter' || event.key === ' ') && open) {
             event.preventDefault();
             choose(active);
+          }
+          if (
+            event.key.length === 1 &&
+            event.key !== ' ' &&
+            !event.ctrlKey &&
+            !event.metaKey &&
+            !event.altKey
+          ) {
+            event.preventDefault();
+            const key = event.key.toLocaleLowerCase();
+            const previous = performance.now() - typed.current.at < 600 ? typed.current.text : '';
+            const text = previous === key ? key : previous + key;
+            typed.current = { text, at: performance.now() };
+            const start = open ? active + 1 : selected;
+            for (let offset = 0; offset < options.length; offset++) {
+              const index = (start + offset) % options.length;
+              if (
+                !options[index].disabled &&
+                options[index].label.toLocaleLowerCase().startsWith(text)
+              ) {
+                if (!open) show();
+                setActive(index);
+                break;
+              }
+            }
           }
         }}
       >

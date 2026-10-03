@@ -4,6 +4,8 @@ import { Send, Timer } from 'lucide-react';
 import { Experiment } from '../../components/Experiment';
 import { tcpPackets } from '../../domain/systems.mjs';
 import './systems.css';
+import './systems-quality.css';
+import { WireTransfer } from './WireTransfer';
 
 type Entry = { text: string; direction: string; lost: boolean };
 export default function Tcp() {
@@ -14,6 +16,7 @@ export default function Tcp() {
   const [pendingLoss, setPendingLoss] = useState(false);
   const [finished, setFinished] = useState(false);
   const [entries, setEntries] = useState<Entry[]>([]);
+  const [transmissions, setTransmissions] = useState(0);
   const packets = tcpPackets(client, server);
   const current = packets[stage];
   const last = pendingLoss ? current : packets[stage - 1];
@@ -29,6 +32,7 @@ export default function Tcp() {
     setPendingLoss(false);
     setEntries([]);
     setFinished(false);
+    setTransmissions(0);
   };
   const send = () => {
     if (!current) return;
@@ -42,6 +46,7 @@ export default function Tcp() {
     }
     next.push({ text: current.text, direction: current.direction, lost: loss });
     setEntries([...entries, ...next].slice(-12));
+    setTransmissions((count) => count + 1);
     if (!loss) setStage(stage + 1);
     setPendingLoss(loss);
     setLoss(false);
@@ -96,6 +101,12 @@ export default function Tcp() {
             <small>{serverState}</small>
           </div>
         </div>
+        <WireTransfer
+          sequence={transmissions}
+          label={entries.at(-1)?.text ?? ''}
+          direction={entries.at(-1)?.direction === 'left' ? 'left' : 'right'}
+          lost={entries.at(-1)?.lost}
+        />
         <div className="sys-timeline" role="log" aria-label="TCP 报文记录">
           {entries.length ? (
             entries.map((entry, index) => (

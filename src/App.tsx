@@ -40,6 +40,7 @@ export default function App() {
   const [query, setQuery] = useState('');
   const [subject, setSubject] = useState('');
   const [mapSubject, setMapSubject] = useState(starterSubject);
+  const [mapStatus, setMapStatus] = useState('all');
   const [notice, setNotice] = useState('');
   const { progress, update, importProgress, setProgress, warning } = useProgress(slugs);
   const completed = lessons.filter((l) => progress.lessons[l.slug]?.passed).length;
@@ -47,6 +48,16 @@ export default function App() {
   const visibleLessons = lessons.filter(
     (item) =>
       (!subject || item.subject === subject) &&
+      (route !== 'review' ||
+        (!!progress.lessons[item.slug] &&
+          (progress.lessons[item.slug].bookmark ||
+            progress.lessons[item.slug].note ||
+            progress.lessons[item.slug].attempts ||
+            progress.lessons[item.slug].read ||
+            progress.lessons[item.slug].passed))) &&
+      (route !== 'map' ||
+        mapStatus === 'all' ||
+        (mapStatus === 'passed') === !!progress.lessons[item.slug]?.passed) &&
       (route !== 'map' ||
         query.trim() ||
         subject ||
@@ -227,6 +238,23 @@ export default function App() {
                   <span>{visibleLessons.length} 关</span>
                 </label>
               )}
+              {route === 'map' && (
+                <div className="map-status-filter" role="group" aria-label="挑战状态">
+                  {[
+                    ['all', '全部'],
+                    ['pending', '未通过'],
+                    ['passed', '已通过'],
+                  ].map(([value, label]) => (
+                    <button
+                      key={value}
+                      aria-pressed={mapStatus === value}
+                      onClick={() => setMapStatus(value)}
+                    >
+                      {label}
+                    </button>
+                  ))}
+                </div>
+              )}
               <div className="course-grid">
                 {visibleLessons.map((item) => {
                   const record = progress.lessons[item.slug];
@@ -265,7 +293,11 @@ export default function App() {
                   );
                 })}
               </div>
-              {!visibleLessons.length && <p className="empty-courses">没有匹配的课程。</p>}
+              {!visibleLessons.length && (
+                <p className="empty-courses">
+                  {route === 'review' ? '没有匹配的复习记录。' : '没有匹配的课程。'}
+                </p>
+              )}
               <section className="backup-section">
                 <div>
                   <h2>

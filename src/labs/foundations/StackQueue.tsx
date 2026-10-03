@@ -3,6 +3,7 @@ import { ArrowDownToLine, ArrowUpFromLine, Plus } from 'lucide-react';
 import { Experiment } from '../../components/Experiment';
 import { containerAction } from '../../domain/foundations.mjs';
 import './foundations.css';
+import './foundations-quality.css';
 
 export default function StackQueue() {
   const [stack, setStack] = useState<string[]>(['A', 'B', 'C']);
@@ -58,6 +59,11 @@ export default function StackQueue() {
           <h3>
             栈 <small>后进先出 LIFO</small>
           </h3>
+          <div className="foundation-capacity" aria-label={`栈使用 ${stack.length} / 6`}>
+            {Array.from({ length: 6 }, (_, i) => (
+              <i key={i} data-used={i < stack.length} />
+            ))}
+          </div>
           <div className="f-stack-vessel" aria-label="栈，底部到顶部">
             {stack.map((item, i) => (
               <div key={i} className={i === stack.length - 1 ? 'top' : ''}>
@@ -77,6 +83,11 @@ export default function StackQueue() {
           <h3>
             队列 <small>先进先出 FIFO</small>
           </h3>
+          <div className="foundation-capacity queue" aria-label={`队列使用 ${queue.length} / 6`}>
+            {Array.from({ length: 6 }, (_, i) => (
+              <i key={i} data-used={i < queue.length} />
+            ))}
+          </div>
           <div className="f-queue-vessel" aria-label="队列，从队头到队尾">
             {queue.map((item, i) => (
               <div key={i} className={i === 0 ? 'front' : ''}>

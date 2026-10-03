@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { Experiment } from '../../components/Experiment';
 import { calculateSubnet } from '../../domain/subnet.mjs';
 import './subnet.css';
+import './systems-quality.css';
 
 export default function Subnet() {
   const [address, setAddress] = useState('192.168.10.37');
@@ -65,11 +66,27 @@ export default function Subnet() {
                 <div className="subnet-bit-row" key={label}>
                   <span>{label}</span>
                   <div>
-                    {[...bits].map((bit, index) => (
-                      <strong key={index} data-role={index >= 8 - hostBits ? 'host' : 'network'}>
-                        {bit}
-                      </strong>
-                    ))}
+                    {[...bits].map((bit, index) =>
+                      label === '地址末字节' ? (
+                        <button
+                          key={index}
+                          aria-label={`翻转地址末字节的第 ${index + 1} 位，当前为 ${bit}`}
+                          onClick={() => {
+                            const octets = address.trim().split('.');
+                            octets[3] = String(Number(octets[3]) ^ (1 << (7 - index)));
+                            setAddress(octets.join('.'));
+                          }}
+                        >
+                          <strong data-role={index >= 8 - hostBits ? 'host' : 'network'}>
+                            {bit}
+                          </strong>
+                        </button>
+                      ) : (
+                        <strong key={index} data-role={index >= 8 - hostBits ? 'host' : 'network'}>
+                          {bit}
+                        </strong>
+                      ),
+                    )}
                   </div>
                 </div>
               ))}

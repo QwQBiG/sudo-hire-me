@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { RotateCcw, Cpu } from 'lucide-react';
 import { decodeByte } from '../domain/search.mjs';
+import './foundations/foundations-quality.css';
 
 export default function Bits() {
   const [bits, setBits] = useState('00001101');
@@ -66,6 +67,17 @@ export default function Bits() {
           {terms.length ? terms.map((n) => (n < 0 ? `(${n})` : n)).join(' + ') : '0'} ={' '}
           {signed ? decoded.signed : decoded.unsigned}
         </code>
+      </div>
+      <div className="foundation-bit-interpretations" aria-live="polite">
+        <span>
+          相同位模式 <code>0x{decoded.unsigned.toString(16).toUpperCase().padStart(2, '0')}</code>
+        </span>
+        <span data-active={!signed}>
+          无符号 <strong>{decoded.unsigned}</strong>
+        </span>
+        <span data-active={signed}>
+          补码 <strong>{decoded.signed}</strong>
+        </span>
       </div>
       <footer className="lab-footer">
         <span>位模式不变，解释方式不同。</span>

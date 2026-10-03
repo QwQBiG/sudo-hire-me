@@ -4,6 +4,7 @@ import { Send, RefreshCw } from 'lucide-react';
 import { Experiment } from '../../components/Experiment';
 import { transportDelivery } from '../../domain/systems.mjs';
 import './systems.css';
+import './systems-quality.css';
 
 export default function Transport() {
   const [tcp, setTcp] = useState(true);

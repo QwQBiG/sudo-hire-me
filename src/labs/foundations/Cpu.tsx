@@ -1,8 +1,9 @@
-import { useState } from 'react';
+import { useState, type CSSProperties } from 'react';
 import { ArrowLeft, ArrowRight, Cpu as CpuIcon, Database, StepForward } from 'lucide-react';
 import { Experiment } from '../../components/Experiment';
 import { cpuState } from '../../domain/foundations.mjs';
 import './foundations.css';
+import './foundations-quality.css';
 
 export default function Cpu() {
   const [step, setStep] = useState(0);
@@ -72,6 +73,15 @@ export default function Cpu() {
           <div className={`f-data-bus ${step === 1 || step === 3 ? 'active' : ''}`}>
             <span>{step === 3 ? 'STORE' : 'LOAD'}</span>
             {step === 3 ? <ArrowLeft size={30} /> : <ArrowRight size={30} />}
+            {(step === 1 || step === 3) && (
+              <strong
+                key={step}
+                className="f-bus-packet"
+                style={step === 3 ? ({ '--bus-start': '24px' } as CSSProperties) : undefined}
+              >
+                {state.r1}
+              </strong>
+            )}
           </div>
           <div className={`f-register ${step === 1 || step === 2 ? 'active' : ''}`}>
             <CpuIcon size={23} />
@@ -83,6 +93,22 @@ export default function Cpu() {
             <strong>+ {addend}</strong>
           </div>
         </div>
+      </div>
+      <div className="foundation-state-strip" aria-live="polite">
+        <span>
+          完成 <strong>{step} / 3</strong> 条指令
+        </span>
+        <span>
+          R1 <strong>{state.r1}</strong>
+        </span>
+        <span>
+          [104] <strong>{state.destination}</strong>
+        </span>
+        <span>
+          {step === 3
+            ? 'PC 12：程序片段结束'
+            : `PC ${state.pc}：下一条 ${instructions[step].split(' ')[0]}`}
+        </span>
       </div>
       <div className="experiment-controls">
         <button className="primary" disabled={step === 3} onClick={() => setStep(step + 1)}>

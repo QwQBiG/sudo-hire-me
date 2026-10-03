@@ -8,6 +8,7 @@ import './styles/lesson.css';
 import './styles/labs.css';
 import './styles/presentation.css';
 import './styles/experiments.css';
+import './styles/learning-quality.css';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>

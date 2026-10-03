@@ -4,6 +4,7 @@ import { Play, ListChecks } from 'lucide-react';
 import { Experiment } from '../../components/Experiment';
 import { debugCases, runMaxCase } from '../../domain/practice.mjs';
 import './practice.css';
+import './practice-quality.css';
 
 type Run = ReturnType<typeof runMaxCase>;
 export default function DebugLab() {
@@ -11,6 +12,8 @@ export default function DebugLab() {
   const [selected, setSelected] = useState(1);
   const [result, setResult] = useState<Run | null>(null);
   const [suite, setSuite] = useState<Run[]>([]);
+  const [focused, setFocused] = useState(0);
+  const comparison = result?.trace[focused];
   const clear = () => {
     setResult(null);
     setSuite([]);
@@ -79,6 +82,7 @@ export default function DebugLab() {
           onClick={() => {
             setResult(runMaxCase(selected, fixed));
             setSuite([]);
+            setFocused(0);
           }}
         >
           <Play size={16} />
@@ -88,20 +92,53 @@ export default function DebugLab() {
           onClick={() => {
             setSuite(debugCases.map((_, i) => runMaxCase(i, fixed)));
             setResult(runMaxCase(selected, fixed));
+            setFocused(0);
           }}
         >
           <ListChecks size={16} />
           运行全部测试
         </button>
       </div>
+      {comparison && (
+        <div className="practice-variable-board" aria-live="polite">
+          <div>
+            <small>value</small>
+            <strong>{comparison.value === null ? '—' : comparison.value}</strong>
+            <span>{focused === 0 ? '初始化' : '本轮候选值'}</span>
+          </div>
+          <div>
+            <small>best</small>
+            <strong data-readout>{String(comparison.best)}</strong>
+            <span>本轮结束后的值</span>
+          </div>
+          <div>
+            <small>判断</small>
+            <strong>{focused === 0 ? '初值' : comparison.updated ? '更新' : '保留'}</strong>
+            <span>
+              {focused === 0
+                ? fixed
+                  ? '取首元素'
+                  : '错误地取 0'
+                : comparison.updated
+                  ? '候选值更大'
+                  : '候选值不更大'}
+            </span>
+          </div>
+        </div>
+      )}
       {result && result.trace.length > 0 && (
         <div className="practice-trace experiment-scene" aria-label="最大值变量变化">
           {result.trace.map((entry, i) => (
-            <div key={i} className={entry.updated ? 'is-updated' : ''}>
+            <button
+              key={i}
+              aria-pressed={focused === i}
+              onClick={() => setFocused(i)}
+              className={entry.updated ? 'is-updated' : ''}
+            >
               <small>{i === 0 ? '初始化' : `比较 ${entry.value}`}</small>
               <strong>{String(entry.best)}</strong>
               <span>best</span>
-            </div>
+            </button>
           ))}
         </div>
       )}

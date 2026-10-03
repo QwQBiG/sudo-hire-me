@@ -1,19 +1,35 @@
 import { useState } from 'react';
 import type { LabProps } from '../../types';
 import { Bench, Feedback } from './Bench';
+import './workbench-quality.css';
 
 const activities = [
-  { name: 'A', start: 0, end: 6 },
-  { name: 'B', start: 1, end: 3 },
-  { name: 'C', start: 3, end: 5 },
-  { name: 'D', start: 5, end: 7 },
-  { name: 'E', start: 6, end: 10 },
-  { name: 'F', start: 7, end: 9 },
+  { name: 'A', start: 0, end: 5 },
+  { name: 'B', start: 1, end: 2 },
+  { name: 'C', start: 2, end: 3 },
+  { name: 'D', start: 3, end: 4 },
+  { name: 'E', start: 4, end: 5 },
 ];
 export default function Greedy(_props: LabProps) {
   const [chosen, setChosen] = useState<string[]>([]);
   const [note, setNote] = useState('每次选择不与已选活动重叠的一项，试着安排尽可能多的活动。');
   const selected = activities.filter((x) => chosen.includes(x.name));
+  function applyRule(rule: 'start' | 'finish') {
+    const ordered = [...activities].sort((a, b) =>
+      rule === 'start' ? a.start - b.start : a.end - b.end || a.start - b.start,
+    );
+    let end = -Infinity;
+    const result: string[] = [];
+    for (const activity of ordered) {
+      if (activity.start < end) continue;
+      result.push(activity.name);
+      end = activity.end;
+    }
+    setChosen(result);
+    setNote(
+      `${rule === 'start' ? '最早开始' : '最早结束'}规则得到 ${result.join(' → ')}，共 ${result.length} 项。`,
+    );
+  }
   const overlap = (a: (typeof activities)[number]) =>
     selected.some((b) => a.start < b.end && b.start < a.end);
   function choose(a: (typeof activities)[number]) {
@@ -37,7 +53,7 @@ export default function Greedy(_props: LabProps) {
       }}
     >
       <div className="schedule-axis">
-        {Array.from({ length: 11 }, (_, i) => (
+        {Array.from({ length: 6 }, (_, i) => (
           <span key={i}>{i}</span>
         ))}
       </div>
@@ -46,8 +62,10 @@ export default function Greedy(_props: LabProps) {
           <div className="schedule-lane" key={a.name}>
             <button
               className={chosen.includes(a.name) ? 'chosen' : overlap(a) ? 'conflict' : ''}
-              style={{ left: `${a.start * 10}%`, width: `${(a.end - a.start) * 10}%` }}
+              style={{ left: `${a.start * 20}%`, width: `${(a.end - a.start) * 20}%` }}
               onClick={() => choose(a)}
+              aria-pressed={chosen.includes(a.name)}
+              aria-label={`活动 ${a.name}，区间 ${a.start} 到 ${a.end}${overlap(a) && !chosen.includes(a.name) ? '，与当前安排冲突' : ''}`}
             >
               <strong>{a.name}</strong>
               <span>
@@ -56,6 +74,14 @@ export default function Greedy(_props: LabProps) {
             </button>
           </div>
         ))}
+      </div>
+      <div className="bench-actions">
+        <button className="secondary" onClick={() => applyRule('start')}>
+          比较：最早开始
+        </button>
+        <button className="primary" onClick={() => applyRule('finish')}>
+          比较：最早结束
+        </button>
       </div>
       <div className="bench-grid">
         <div className="bench-stat">
@@ -74,7 +100,7 @@ export default function Greedy(_props: LabProps) {
       </div>
       <Feedback>
         {chosen.length === 4
-          ? '达到最优数量 4：B、C、D、F。按结束时间从早到晚选择兼容活动，可以用交换论证证明这一问题的最优性。'
+          ? '达到最优数量 4：B、C、D、E。按结束时间从早到晚选择兼容活动，可以用交换论证证明这一问题的最优性。'
           : note + ' 先选耗时很长的 A，再比较先选 B 的结果。'}
       </Feedback>
     </Bench>

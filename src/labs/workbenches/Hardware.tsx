@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { ArrowDown, Cpu, Database, HardDrive, Play, RefreshCw } from 'lucide-react';
 import type { LabProps } from '../../types';
 import { Bench, Choice, Feedback } from './Bench';
+import './workbench-quality.css';
 
 export default function Hardware({ lesson }: LabProps) {
   const slug = lesson.slug;
@@ -11,6 +12,8 @@ export default function Hardware({ lesson }: LabProps) {
   const [copies, setCopies] = useState<(number | null)[]>([10, 10]);
   const [ticks, setTicks] = useState(0);
   const [resident, setResident] = useState(false);
+  const [hits, setHits] = useState(0);
+  const [lastAccess, setLastAccess] = useState<'none' | 'hit' | 'miss'>('none');
   const [note, setNote] = useState('改变条件，然后发起一次访问。');
   function reset() {
     setValue(10);
@@ -18,6 +21,8 @@ export default function Hardware({ lesson }: LabProps) {
     setCopies([10, 10]);
     setTicks(0);
     setResident(false);
+    setHits(0);
+    setLastAccess('none');
     setNote('实验状态已重置。');
   }
   const pipeline = slug === 'cpu-pipeline-hazards';
@@ -27,6 +32,7 @@ export default function Hardware({ lesson }: LabProps) {
   if (pipeline) {
     const stalls = mode === 'first' ? 2 : 0;
     const rows = ['ADD r1, r2, r3', 'SUB r4, r1, r5', 'AND r6, r4, r7'];
+    const cycles = mode === 'first' ? 11 : 7;
     return (
       <Bench
         title="给相关指令安排时钟槽位"
@@ -66,10 +72,28 @@ export default function Hardware({ lesson }: LabProps) {
           </div>
         </div>
         <div className="bench-actions">
-          <button className="primary" onClick={() => setTicks((t) => (t + 1) % 11)}>
+          <button
+            className="primary"
+            disabled={ticks >= cycles - 1}
+            onClick={() => setTicks((t) => t + 1)}
+          >
             <Play size={16} /> 时钟 +1
           </button>
           <span className="bench-token">第 {ticks + 1} 拍</span>
+        </div>
+        <div className="quality-observation">
+          <div>
+            <small>本例完工时间</small>
+            <output>{cycles} 拍</output>
+          </div>
+          <div>
+            <small>相邻 RAW 等待</small>
+            <output>{stalls} 拍 / 对</output>
+          </div>
+          <div>
+            <small>与无转发相比节省</small>
+            <output>{11 - cycles} 拍</output>
+          </div>
         </div>
         <Feedback>
           {mode === 'first'
@@ -117,6 +141,18 @@ export default function Hardware({ lesson }: LabProps) {
             </div>
           ))}
         </div>
+        <div className="quality-observation">
+          <div>
+            <small>设备进度</small>
+            <output>{Math.min(ticks, 5)} / 5 拍</output>
+          </div>
+          <div>
+            <small>可做其他工作的时钟槽</small>
+            <output>
+              {mode === 'first' ? Math.max(0, ticks - 5) : ticks - (ticks >= 5 ? 1 : 0)}
+            </output>
+          </div>
+        </div>
         <div className="bench-actions">
           <button className="primary" disabled={ticks === 8} onClick={() => setTicks((t) => t + 1)}>
             <Play size={16} /> 时钟 +1
@@ -148,7 +184,11 @@ export default function Hardware({ lesson }: LabProps) {
               <div
                 key={String(label)}
                 style={{ width: `${55 + i * 15}%` }}
-                className={resident && i === 1 ? 'active' : ''}
+                className={
+                  (lastAccess === 'hit' && i === 1) || (lastAccess === 'miss' && i === 2)
+                    ? 'active'
+                    : ''
+                }
               >
                 <Symbol size={20} />
                 <strong>{String(label)}</strong>
@@ -163,6 +203,8 @@ export default function Hardware({ lesson }: LabProps) {
             onClick={() => {
               setResident(true);
               setTicks(ticks + 1);
+              setLastAccess(resident ? 'hit' : 'miss');
+              if (resident) setHits(hits + 1);
               setNote(
                 resident
                   ? '缓存命中，不需要再次访问主存。'
@@ -181,6 +223,28 @@ export default function Hardware({ lesson }: LabProps) {
           >
             逐出缓存行
           </button>
+        </div>
+        <div className="quality-observation">
+          <div>
+            <small>访问 / 命中 / 缺失</small>
+            <output>
+              {ticks} / {hits} / {ticks - hits}
+            </output>
+          </div>
+          <div>
+            <small>最近路径</small>
+            <output>
+              {lastAccess === 'none'
+                ? '等待访问'
+                : lastAccess === 'hit'
+                  ? 'Cache → CPU'
+                  : '主存 → Cache → CPU'}
+            </output>
+          </div>
+          <div>
+            <small>缓存驻留</small>
+            <output>{resident ? '有效行' : '无目标行'}</output>
+          </div>
         </div>
         <Feedback>{note}</Feedback>
       </Bench>
@@ -271,6 +335,21 @@ export default function Hardware({ lesson }: LabProps) {
             <RefreshCw size={16} /> 逐出并检查写回
           </button>
         )}
+      </div>
+      <div className="quality-path">
+        <code>
+          {coherence
+            ? `Core 1：${copies[1] === null ? '失效，必须重新取值' : '有效副本'}`
+            : `Dirty = ${value !== memory ? 1 : 0}`}
+        </code>
+        <span>→</span>
+        <output>
+          {coherence
+            ? '一致性先维护副本有效性'
+            : value !== memory
+              ? '逐出前必须写回'
+              : '下层已与缓存一致'}
+        </output>
       </div>
       <Feedback>{note}</Feedback>
     </Bench>

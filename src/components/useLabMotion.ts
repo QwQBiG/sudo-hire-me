@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 
 const readouts =
-  'output, .metric > strong, .bench-stat strong, .object-cell strong, .worker-slots strong, .server-fleet strong, .version-chain strong, .http-response strong, .bench-feedback > div, .experiment-status, [data-readout]';
+  'output, .metric > strong, .bench-stat strong, .object-cell strong, .worker-slots strong, .server-fleet strong, .version-chain strong, .http-response strong, .bench-feedback > div, .experiment-status, .fd-offset > strong, .cas-value > strong, .io-buffer > strong, .iob-stage > code, .window-byte > strong, .tlb-slot > strong, .replacement-frames strong, .practice-account > strong, [data-readout]';
 
 export function useLabMotion(identity: string) {
   const root = useRef<HTMLDivElement>(null);

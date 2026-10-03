@@ -4,6 +4,8 @@ import { ArrowLeftRight, Send, Clock3, FilePenLine } from 'lucide-react';
 import { Experiment } from '../../components/Experiment';
 import { cacheRequest } from '../../domain/systems.mjs';
 import './systems.css';
+import './systems-quality.css';
+import { WireTransfer } from './WireTransfer';
 
 export default function HttpCache() {
   const [cached, setCached] = useState<number | null>(null);
@@ -13,6 +15,8 @@ export default function HttpCache() {
   const [message, setMessage] = useState('缓存为空；第一次请求需要取得完整正文。');
   const [status, setStatus] = useState('未请求');
   const [network, setNetwork] = useState<boolean | null>(null);
+  const [requests, setRequests] = useState(0);
+  const [transferLabel, setTransferLabel] = useState('');
   const reset = () => {
     setCached(null);
     setServer(1);
@@ -20,6 +24,7 @@ export default function HttpCache() {
     setPolicy('max-age');
     setStatus('未请求');
     setNetwork(null);
+    setRequests(0);
     setMessage('缓存为空；第一次请求需要取得完整正文。');
   };
   const request = () => {
@@ -29,6 +34,14 @@ export default function HttpCache() {
     setStatus(result.status);
     setNetwork(result.network);
     setMessage(result.message);
+    setRequests((count) => count + 1);
+    setTransferLabel(
+      !result.network
+        ? `本地复用 v${result.cachedVersion}，没有网络请求`
+        : result.status === '304'
+          ? '条件请求 → 304；无正文，复用本地内容'
+          : `GET → 200；取得源站 v${server} 正文`,
+    );
   };
   return (
     <Experiment
@@ -47,6 +60,7 @@ export default function HttpCache() {
               setAge(0);
               setStatus('未请求');
               setNetwork(null);
+              setRequests(0);
               setMessage('以空缓存开始新的策略实验；不是源站远程删除浏览器缓存。');
             }}
           >
@@ -74,6 +88,14 @@ export default function HttpCache() {
             <code>ETag: "v{server}"</code>
           </div>
         </div>
+        <WireTransfer
+          sequence={requests}
+          direction="left"
+          local={network === false}
+          from="浏览器"
+          to="源站"
+          label={transferLabel}
+        />
         <label>
           本地保存后的年龄：{age} 秒
           <progress className="sys-cache-age" max={60} value={Math.min(age, 60)} />

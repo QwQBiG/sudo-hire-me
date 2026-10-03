@@ -72,6 +72,18 @@ export default function BranchPredict() {
           </span>
         ))}
       </div>
+      {two.history.at(-1) && (
+        <div className="foundation-state-strip" aria-live="polite">
+          <span>
+            2 位状态：<strong>{two.history.at(-1)!.before}</strong> →{' '}
+            <strong>{two.history.at(-1)!.after}</strong>
+          </span>
+          <span>预测发生在更新前</span>
+          <span>
+            下次预测 <strong>{two.state >= 2 ? 'T' : 'N'}</strong>
+          </span>
+        </div>
+      )}
       <div className="branch-predict-history" aria-label="分支结果与预测历史">
         {one.history.map((event, index) => (
           <div

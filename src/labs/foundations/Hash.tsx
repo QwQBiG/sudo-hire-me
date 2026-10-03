@@ -4,6 +4,7 @@ import { ArrowRight, Plus, Search } from 'lucide-react';
 import { Experiment } from '../../components/Experiment';
 import { hashBuckets } from '../../domain/foundations.mjs';
 import './foundations.css';
+import './foundations-quality.css';
 
 const initial = [
   { key: 12, value: 'Lin' },
@@ -89,6 +90,20 @@ export default function Hash() {
           <Search size={16} />
           查找
         </button>
+      </div>
+      {!valid && (
+        <p className="experiment-status" role="alert">
+          键须为 0–999 的非负整数；当前输入不会执行查找或写入。
+        </p>
+      )}
+      <div className="foundation-state-strip" aria-live="polite">
+        <span>h(k) = k mod {capacity}</span>
+        <span>
+          已选桶 <strong>{query === null ? '—' : query % capacity}</strong>
+        </span>
+        <span>
+          此桶链长 <strong>{query === null ? '—' : buckets[query % capacity].length}</strong>
+        </span>
       </div>
       <div className="f-hash-buckets">
         {buckets.map((bucket, i) => (

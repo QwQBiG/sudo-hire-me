@@ -4,6 +4,7 @@ import { ArrowRight, Radio, Router, Send } from 'lucide-react';
 import { Experiment } from '../../components/Experiment';
 import { advanceArp, arpDestinations, createArpState } from '../../domain/arp.mjs';
 import './arp.css';
+import './systems-quality.css';
 
 export default function Arp() {
   const [destination, setDestination] = useState('192.168.10.50');

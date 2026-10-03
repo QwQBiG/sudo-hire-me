@@ -88,6 +88,7 @@ export default function Sorting({ reducedMotion }: LabProps) {
                   className="sort-bar"
                   data-focus={frame.focus === index}
                   key={`${item.key}${item.tag}`}
+                  data-token-id={`sort-${kind}-${item.key}${item.tag}`}
                 >
                   <div style={{ height: `${35 + item.key * 22}px` }} />
                   <strong>

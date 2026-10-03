@@ -3,6 +3,7 @@ import { LockKeyhole, Unlock } from 'lucide-react';
 import { Experiment } from '../../components/Experiment';
 import { isDeadlocked, requestLock } from '../../domain/systems.mjs';
 import './systems.css';
+import './systems-quality.css';
 
 export default function Locks() {
   const [owners, setOwners] = useState([-1, -1]);

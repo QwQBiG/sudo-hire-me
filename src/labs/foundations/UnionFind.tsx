@@ -9,6 +9,7 @@ import {
   unionSets,
 } from '../../domain/union-find.mjs';
 import './algorithm-labs.css';
+import { MechanismLinks } from './MechanismLinks';
 
 const vertices = [0, 1, 2, 3, 4, 5];
 
@@ -77,6 +78,14 @@ export default function UnionFind() {
           <Search size={16} /> find(A)
         </button>
       </div>
+      <MechanismLinks
+        nodes={vertices}
+        links={Object.fromEntries(
+          state.parent.map((parent: number, vertex: number) => [vertex, parent]),
+        )}
+        active={state.path}
+        label={`父节点关系：${state.parent.map((parent: number, vertex: number) => `${vertex} 指向 ${parent}`).join('；')}`}
+      />
       <div className="uf-workbench">
         <div>
           <h4>
