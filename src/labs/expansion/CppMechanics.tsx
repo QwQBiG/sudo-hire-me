@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { ArrowRight, Plus, Trash2, Link, Unlink } from 'lucide-react';
 import type { LabProps } from '../../types';
-import { referenceState, vectorMutation } from '../../domain/expansion.mjs';
+import { referenceState } from '../../domain/expansion.mjs';
 import { Bench, Choice, Feedback } from '../workbenches/Bench';
 import './expansion.css';
 
@@ -12,15 +12,10 @@ export default function CppMechanics({ lesson }: LabProps) {
   const [expression, setExpression] = useState('x');
   const [reference, setReference] = useState('mutable');
   const [attempted, setAttempted] = useState(false);
-  const [spare, setSpare] = useState(false),
-    [index, setIndex] = useState(1);
-  const [operation, setOperation] = useState('push'),
-    [changed, setChanged] = useState(false);
   const reset = () => {
     setStrong(1);
     setWeak(0);
     setAttempted(false);
-    setChanged(false);
   };
   const state = referenceState(strong, weak);
   const category =
@@ -32,7 +27,6 @@ export default function CppMechanics({ lesson }: LabProps) {
   const bind =
     reference === 'const' ||
     (reference === 'mutable' ? category === 'lvalue' : category !== 'lvalue');
-  const mutation = vectorMutation(3, spare ? 5 : 3, operation, index);
   return (
     <Bench
       className="expansion"
@@ -105,7 +99,7 @@ export default function CppMechanics({ lesson }: LabProps) {
             不能复制，可移动；本图不把线程安全扩展到对象内部。
           </Feedback>
         </>
-      ) : lesson.slug === 'cpp-value-categories' ? (
+      ) : (
         <>
           <Choice
             label="表达式"
@@ -154,68 +148,6 @@ export default function CppMechanics({ lesson }: LabProps) {
           <Feedback good={!attempted || bind}>
             这里的 x/r 均为非 const int。std::move
             只转换值类别，不搬移资源；具名右值引用变量在表达式中是左值。
-          </Feedback>
-        </>
-      ) : (
-        <>
-          <label className="exp-check">
-            <input
-              type="checkbox"
-              checked={spare}
-              onChange={(e) => {
-                setSpare(e.target.checked);
-                setChanged(false);
-              }}
-            />
-            事先 reserve(5)，保留空余容量
-          </label>
-          <Choice
-            label="保存的位置"
-            value={String(index)}
-            options={[
-              ['0', 'begin()'],
-              ['1', 'begin()+1'],
-              ['3', '旧 end()'],
-            ]}
-            onChange={(v) => {
-              setIndex(Number(v));
-              setChanged(false);
-            }}
-          />
-          <Choice
-            label="修改操作"
-            value={operation}
-            options={[
-              ['push', 'push_back(40)'],
-              ['erase', 'erase(begin()+1)'],
-            ]}
-            onChange={(v) => {
-              setOperation(v);
-              setChanged(false);
-            }}
-          />
-          <div className="exp-tape">
-            {Array.from({ length: spare ? 5 : 3 }, (_, i) => (
-              <div key={i} className={i === index ? 'active' : ''}>
-                <small>位置 {i}</small>
-                <strong>
-                  {changed && operation === 'erase'
-                    ? ([10, 30][i] ?? '空位')
-                    : ([10, 20, 30, changed ? 40 : '空位'][i] ?? '空位')}
-                </strong>
-              </div>
-            ))}
-          </div>
-          <div className="exp-actions">
-            <button disabled={changed} onClick={() => setChanged(true)}>
-              <ArrowRight size={16} />
-              执行修改
-            </button>
-          </div>
-          <Feedback good={!changed || mutation.valid}>
-            {changed
-              ? `${mutation.reallocated ? '容量不足，重新分配：全部旧迭代器失效。' : '未重新分配。'} 保存的位置${mutation.valid ? '仍有效' : '已失效，禁止解引用'}。`
-              : '旧 end() 不是元素；追加即使不扩容也会使旧 end() 失效。erase 使删除位置及其后迭代器失效。'}
           </Feedback>
         </>
       )}

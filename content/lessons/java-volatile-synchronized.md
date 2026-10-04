@@ -20,6 +20,22 @@ Java 内存模型（Java Memory Model，JMM）中，volatile 写与同一变量�
 
 初始 count=0，A/B 各加一次：A 读 0，B 读 0，A 写 1，B 写 1，最终 1 而不是 2。每次读写都可以满足可见性约束，但两个线程都基于旧值计算。同一把锁包住完整 count++ 时，B 只能在 A 完成后再读，得到 1 并写 2。
 
+### local 与 count 不是同一个位置
+
+把一次 `count++` 拆成三件事：读取共享 `count` 到线程局部值 `local`；计算 `local + 1`；把结果写回 `count`。这里的 local 是帮助理解的临时值，不是要求编译器一定生成某个局部变量或三条硬件指令。读到 0、计算出 1，都还没有改变共享 count。
+
+| 调度 | A 的局部值 | B 的局部值 | 共享 count |
+| --- | --- | --- | --- |
+| A 读 | 0 | 尚未读取 | 0 |
+| B 读 | 0 | 0 | 0 |
+| A 算、B 算 | 1 | 1 | 0 |
+| A 写 | 1 | 1 | 1 |
+| B 写 | 1 | 1 | 1 |
+
+第二次写入是覆盖 `count = 1`，不是“再把 1 加到 count”。这正是更新丢失（Lost Update）的原因。换成 A 完成读、算、写后才调度 B，最终会是 2；volatile 版本偶尔得到正确答案并不构成线程安全证明。
+
+在网页模型中，两线程各有三个有序操作，保持各自线程顺序共有 `C(6,3) = 20` 种交错。最终值为 1 或 2；数量只是这个有限模型的穷举结果，不是 JVM 调度概率。同一把锁把每个递增包成临界区，只剩 A 先或 B 先，两者都得到 2。原子计数器也把一次递增视为不可交错的整体，但不保证多个计数器或多字段业务规则一起原子。
+
 | 工具 | 单变量可见性 | count++ 整体 | 多字段业务不变量 |
 | --- | --- | --- | --- |
 | volatile int | 有相应保证 | 不保证 | 不自动保证 |
@@ -64,3 +80,4 @@ D. 两次写入必定相加
 ## 参考
 
 - [Java 语言规范：线程与锁、happens-before](https://docs.oracle.com/javase/specs/jls/se25/html/jls-17.html)
+- [AtomicInteger：原子递增 API](https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/util/concurrent/atomic/AtomicInteger.html)
