@@ -47,6 +47,20 @@ fun main() {
 
 把实现改成 `text!!.length` 后传 `null`，`!!` 会在运行时抛空指针异常。它是程序员主动断言“这里必非空”，并没有让原值自动变非空。
 
+## 空字符串与 UTF-16 长度
+
+先区分三个容易混淆的输入。下表把默认值改成 9，便于看出右侧是否真的被使用：
+
+| `text` | `text?.length` | `text?.length ?: 9` | `text!!.length` |
+| --- | --- | --- | --- |
+| `null` | `null`，跳过长度访问 | 9，求值默认分支 | 空指针异常 |
+| `""` | 0 | 0，不求值默认分支 | 0 |
+| `"null"` | 4 | 4，不求值默认分支 | 4 |
+
+**Elvis 检查的是 null，不是零、空字符串或其他语言的“假值”。** 实验单独设置“输入为 null”，因此空文本不会自动变成缺失。`"null"` 只是包含四个字母的字符串。
+
+16 位 Unicode 转换格式（16-bit Unicode Transformation Format，UTF-16）按代码单元（Code Unit）编码。补充平面字符 U+1F600 使用代理对（Surrogate Pair）`D83D DE00`，在 Kotlin/JVM 中长度是 2；这不代表屏幕上显示两个字符。实验展示十六进制代码单元，避免把 `length` 当成用户感知字符数。[Java SE 21：String 的 UTF-16 表示](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html)
+
 ## 编译期保证的边界
 
 Kotlin 还支持在编译器能证明变量未变时，经过 `if (text != null)` 后智能转换（Smart Cast）为非空类型；对可变化且无法证明稳定的值，不能保证任意检查都能智能转换。与没有空值注解的 Java API 互操作时还可能出现平台类型（Platform Type），编译器缺少完整空值信息，运行时仍可能收到 `null`。因此“用了 Kotlin 就不可能出现空指针异常”是错误的。[Kotlin 官方文档：Java 互操作与平台类型](https://kotlinlang.org/docs/java-interop.html#null-safety-and-platform-types)

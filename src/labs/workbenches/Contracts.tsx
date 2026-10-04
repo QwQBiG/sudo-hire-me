@@ -73,72 +73,6 @@ const cases: Record<string, ContractCase> = {
       };
     },
   },
-  'null-option-absence': {
-    title: '让缺失走进类型的另一条分支',
-    input: 'Alice',
-    inputLabel: '查找到的用户名（留空表示缺失）',
-    choices: [
-      ['match', '匹配 Some / None'],
-      ['fallback', '提供默认值'],
-      ['unwrap', '直接取值'],
-    ],
-    run: (text, mode) => ({
-      code: text ? `Some("${text}")` : 'None',
-      value:
-        text || (mode === 'unwrap' ? '取值失败' : mode === 'fallback' ? 'guest' : '未找到用户'),
-      note:
-        !text && mode === 'unwrap'
-          ? '缺失分支没有消失，强行取值把它变成了运行时失败。'
-          : '明确处理缺失，并不等于把所有错误都转换为空字符串。',
-      ok: !!text || mode !== 'unwrap',
-    }),
-  },
-  'kotlin-null-safety': {
-    title: '空值经过三个运算符',
-    input: '',
-    inputLabel: 'String? 的值（留空模拟 null）',
-    choices: [
-      ['safe', '?.length'],
-      ['elvis', '?.length ?: 0'],
-      ['bang', '!!.length'],
-    ],
-    run: (text, mode) => ({
-      code: `val name: String? = ${text ? JSON.stringify(text) : 'null'}\nname${mode === 'safe' ? '?.length' : mode === 'elvis' ? '?.length ?: 0' : '!!.length'}`,
-      value: text
-        ? String(text.length)
-        : mode === 'safe'
-          ? 'null'
-          : mode === 'elvis'
-            ? '0'
-            : 'NullPointerException',
-      note:
-        mode === 'bang'
-          ? '!! 是非空断言，运行时为 null 会抛异常，并没有自动修好数据。'
-          : '安全调用在 null 时跳过属性访问；Elvis 只在左侧为 null 时提供备用值。',
-      ok: !!text || mode !== 'bang',
-    }),
-  },
-  'java-equals-hashcode': {
-    title: '把两个相等的键送入集合',
-    input: 'Ada',
-    inputLabel: '两个独立 Key 对象都包含的 name',
-    choices: [
-      ['consistent', 'equals + 一致 hashCode'],
-      ['broken', '只重写 equals'],
-      ['collision', '所有对象同一哈希值'],
-    ],
-    run: (text, mode) => ({
-      code: `a = new Key(${JSON.stringify(text)})\nb = new Key(${JSON.stringify(text)})\na.equals(b) == true`,
-      value: mode === 'broken' ? '模型集合中出现 2 个条目' : '集合中保留 1 个条目',
-      note:
-        mode === 'broken'
-          ? '此模型给对象身份哈希指定不同值，相等对象落入不同桶。违反契约后，集合不再能保证预期行为；真实身份哈希不保证每次不同。'
-          : mode === 'collision'
-            ? '哈希碰撞不等于相等。这个哈希满足相等对象同哈希的要求，但大量碰撞降低效率。'
-            : '先用哈希定位候选桶，再用 equals 判断相等；相等对象必须有相同哈希。',
-      ok: mode !== 'broken',
-    }),
-  },
   'struct-enum-modeling': {
     title: '让数据模型挡住不可能的状态',
     input: 'pending',
@@ -254,43 +188,6 @@ export default function Contracts({ lesson }: LabProps) {
                 </output>
               </div>
             ))}
-        </div>
-      )}
-      {lesson.slug === 'java-equals-hashcode' && (
-        <div className="contract-buckets">
-          <div className="contract-key-pair">
-            <span>A · Key({input})</span>
-            <span>B · Key({input})</span>
-            <code>equals(A, B) = true</code>
-          </div>
-          <div className="contract-bucket">
-            <small>模型哈希桶 3</small>
-            <span>A</span>
-            {mode !== 'broken' && <span>B → 相等，复用 A</span>}
-          </div>
-          <div className={`contract-bucket ${mode === 'broken' ? 'conflict' : 'empty'}`}>
-            <small>模型哈希桶 7</small>
-            <span>{mode === 'broken' ? 'B → 被当作另一个条目' : '空'}</span>
-          </div>
-        </div>
-      )}
-      {['null-option-absence', 'kotlin-null-safety'].includes(lesson.slug) && (
-        <div className="absence-branches">
-          <div className={input ? 'chosen' : ''}>
-            <span>存在值</span>
-            <code>{input ? JSON.stringify(input) : '—'}</code>
-          </div>
-          <div className={!input ? 'chosen' : ''}>
-            <span>缺失值</span>
-            <code>{lesson.slug === 'kotlin-null-safety' ? 'null' : 'None'}</code>
-          </div>
-          <ArrowRight size={20} />
-          <div className={`branch-result ${result.ok ? '' : 'failed'}`}>
-            <small>
-              {mode === 'unwrap' || mode === 'bang' ? '直接取值 / 断言' : '明确处理分支'}
-            </small>
-            <output>{result.value}</output>
-          </div>
         </div>
       )}
       <div className={`contract-result ${result.ok ? '' : 'rejected'}`}>

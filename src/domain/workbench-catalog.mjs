@@ -45,14 +45,10 @@ export const workbenchGroups = {
   'queue-contract': ['oop-abstraction'],
   'shape-contract': ['oop-inheritance-composition'],
   'java-roles': ['oop-interface-abstract-class'],
-  contracts: [
-    'struct-enum-modeling',
-    'generic-programming-basics',
-    'null-option-absence',
-    'callbacks-function-pointers',
-    'java-equals-hashcode',
-    'kotlin-null-safety',
-  ],
+  'optional-search': ['null-option-absence'],
+  'kotlin-null': ['kotlin-null-safety'],
+  'key-set': ['java-equals-hashcode'],
+  contracts: ['struct-enum-modeling', 'generic-programming-basics', 'callbacks-function-pointers'],
   representation: [
     'type-conversion-casting',
     'array-bounds-slices',
