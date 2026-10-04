@@ -48,7 +48,9 @@ export const workbenchGroups = {
   'optional-search': ['null-option-absence'],
   'kotlin-null': ['kotlin-null-safety'],
   'key-set': ['java-equals-hashcode'],
-  contracts: ['struct-enum-modeling', 'generic-programming-basics', 'callbacks-function-pointers'],
+  'point-direction': ['struct-enum-modeling'],
+  'generic-flow': ['generic-programming-basics'],
+  'callback-flow': ['callbacks-function-pointers'],
   representation: [
     'type-conversion-casting',
     'array-bounds-slices',
