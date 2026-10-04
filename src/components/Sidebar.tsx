@@ -6,6 +6,7 @@ import {
   ChevronRight,
   Code2,
   Github,
+  House,
   Map,
   PanelLeftClose,
   PanelLeftOpen,
@@ -46,6 +47,9 @@ export function Sidebar({
 }: Props) {
   const [mobile, setMobile] = useState(() => matchMedia('(max-width: 720px)').matches);
   const [expandedSubject, setExpandedSubject] = useState('');
+  const [directoryOpen, setDirectoryOpen] = useState(() =>
+    lessons.some((item) => item.slug === route),
+  );
   const panel = useRef<HTMLElement>(null);
   const onClose = useRef(close);
   onClose.current = close;
@@ -59,7 +63,11 @@ export function Sidebar({
     if (!open || !mobile) return;
     const previous = document.activeElement as HTMLElement | null;
     const controls = () =>
-      Array.from(panel.current?.querySelectorAll<HTMLElement>('a, button, input, select') ?? []);
+      Array.from(
+        panel.current?.querySelectorAll<HTMLElement>('a, button, input, select') ?? [],
+      ).filter((item) => item.getClientRects().length && !item.hasAttribute('disabled'));
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
     controls()[0]?.focus();
     const keydown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') onClose.current();
@@ -78,6 +86,7 @@ export function Sidebar({
     document.addEventListener('keydown', keydown);
     return () => {
       document.removeEventListener('keydown', keydown);
+      document.body.style.overflow = previousOverflow;
       previous?.focus();
     };
   }, [open, mobile]);
@@ -85,6 +94,7 @@ export function Sidebar({
   const activeSubject = lessons.find((item) => item.slug === route)?.subject;
   useEffect(() => {
     setExpandedSubject(activeSubject ?? '');
+    setDirectoryOpen(Boolean(activeSubject));
   }, [activeSubject]);
   const filtered = lessons.filter(
     (l) =>
@@ -116,7 +126,7 @@ export function Sidebar({
   );
   return (
     <>
-      {open && (
+      {open && mobile && (
         <button
           className="sidebar-backdrop"
           onClick={close}
@@ -129,14 +139,16 @@ export function Sidebar({
         inert={mobile && !open}
         className={`sidebar ${open ? 'is-open' : ''}`}
         aria-label="学习导航"
+        role={mobile && open ? 'dialog' : undefined}
+        aria-modal={mobile && open ? true : undefined}
       >
         <div className="sidebar-header">
           <a
             className="brand"
-            href="#/map"
+            href="#/home"
             onClick={close}
-            aria-label="sudo hire me，关卡地图"
-            title="关卡地图"
+            aria-label="sudo hire me，学习首页"
+            title="学习首页"
           >
             <Code2 size={25} />
             <span>
@@ -160,14 +172,26 @@ export function Sidebar({
         <div className="workspace-label">INTERVIEW / LEARNING SPACE</div>
         <nav className="primary-nav">
           <a
+            className={route === 'home' ? 'active' : ''}
+            href="#/home"
+            onClick={close}
+            title="学习首页"
+            aria-label="学习首页"
+            aria-current={route === 'home' ? 'page' : undefined}
+          >
+            <House size={18} />
+            <span className="nav-label">学习首页</span>
+          </a>
+          <a
             className={route === 'map' ? 'active' : ''}
             href="#/map"
             onClick={close}
-            title="关卡地图"
-            aria-label="关卡地图"
+            title="课程目录"
+            aria-label="课程目录"
+            aria-current={route === 'map' ? 'page' : undefined}
           >
             <Map size={18} />
-            <span className="nav-label">关卡地图</span>
+            <span className="nav-label">课程目录</span>
             <span>{String(lessons.length).padStart(2, '0')}</span>
           </a>
           <a
@@ -176,65 +200,88 @@ export function Sidebar({
             onClick={close}
             title="复习手册"
             aria-label="复习手册"
+            aria-current={route === 'review' ? 'page' : undefined}
           >
             <BookOpen size={18} />
             <span className="nav-label">复习手册</span>
           </a>
         </nav>
-        <label className="search-box">
-          <Search size={16} />
-          <input
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            placeholder="查找知识点"
-            aria-label="查找知识点"
-          />
-        </label>
-        <label className="subject-filter">
-          <span className="sr-only">筛选主题</span>
-          <SelectField
-            value={subject}
-            onChange={(event) => setSubject(event.target.value)}
-            aria-label="筛选主题"
-          >
-            <option value="">全部主题</option>
-            {subjects.map((item) => (
-              <option key={item} value={item}>
-                {item}
-              </option>
-            ))}
-          </SelectField>
-        </label>
-        <div className="nav-section-title">
-          {searching ? '筛选结果' : '按主题学习'} <span>{filtered.length} 关</span>
+        <button
+          className="directory-toggle"
+          onClick={() => setDirectoryOpen((value) => !value)}
+          aria-expanded={directoryOpen}
+          aria-controls="sidebar-directory"
+        >
+          <BookOpen size={16} />
+          <span>课程导航</span>
+          <ChevronDown size={15} />
+        </button>
+        <div className="sidebar-directory" id="sidebar-directory" hidden={!directoryOpen}>
+          <label className="search-box">
+            <Search size={16} />
+            <input
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="查找知识点"
+              aria-label="查找知识点"
+              onKeyDown={(event) => {
+                if (event.key === 'Enter') {
+                  location.hash = '#/map';
+                  close();
+                }
+              }}
+            />
+          </label>
+          <label className="subject-filter">
+            <span className="sr-only">筛选主题</span>
+            <SelectField
+              value={subject}
+              onChange={(event) => setSubject(event.target.value)}
+              aria-label="筛选主题"
+            >
+              <option value="">全部主题</option>
+              {subjects.map((item) => (
+                <option key={item} value={item}>
+                  {item}
+                </option>
+              ))}
+            </SelectField>
+          </label>
+          <div className="nav-section-title">
+            {searching ? '筛选结果' : '按主题学习'} <span>{filtered.length} 关</span>
+          </div>
+          <nav className="lesson-nav" aria-label="课程目录">
+            {searching
+              ? filtered.map(lessonLink)
+              : subjects.map((name) => {
+                  const entries = lessons.filter((item) => item.subject === name);
+                  const passed = entries.filter(
+                    (item) => progress.lessons[item.slug]?.passed,
+                  ).length;
+                  const expanded = expandedSubject === name;
+                  return (
+                    <div className="lesson-group" key={name}>
+                      <button
+                        type="button"
+                        className="lesson-group-toggle"
+                        aria-expanded={expanded}
+                        onClick={() => setExpandedSubject(expanded ? '' : name)}
+                      >
+                        <span>{name}</span>
+                        <span className="lesson-group-count">
+                          {passed}/{entries.length}
+                        </span>
+                        <ChevronDown size={15} />
+                      </button>
+                      {expanded && (
+                        <div className="lesson-group-list">{entries.map(lessonLink)}</div>
+                      )}
+                    </div>
+                  );
+                })}
+          </nav>
+          {!filtered.length && <p className="nav-empty">没有找到相关课程</p>}
         </div>
-        <nav className="lesson-nav" aria-label="课程目录">
-          {searching
-            ? filtered.map(lessonLink)
-            : subjects.map((name) => {
-                const entries = lessons.filter((item) => item.subject === name);
-                const passed = entries.filter((item) => progress.lessons[item.slug]?.passed).length;
-                const expanded = expandedSubject === name;
-                return (
-                  <div className="lesson-group" key={name}>
-                    <button
-                      type="button"
-                      className="lesson-group-toggle"
-                      aria-expanded={expanded}
-                      onClick={() => setExpandedSubject(expanded ? '' : name)}
-                    >
-                      <span>{name}</span>
-                      <span className="lesson-group-count">
-                        {passed}/{entries.length}
-                      </span>
-                      <ChevronDown size={15} />
-                    </button>
-                    {expanded && <div className="lesson-group-list">{entries.map(lessonLink)}</div>}
-                  </div>
-                );
-              })}
-        </nav>
-        {!filtered.length && <p className="nav-empty">没有找到相关课程</p>}
         <div className="sidebar-bottom">
           <div className="save-status">
             <span />

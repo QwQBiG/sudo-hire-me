@@ -3,9 +3,10 @@ import {
   ArrowRight,
   BookOpen,
   Check,
+  Code2,
   Download,
   Menu,
-  Terminal,
+  Search,
   Trophy,
   Upload,
   X,
@@ -14,18 +15,20 @@ import catalog from '../.generated/lessons.json';
 import { Sidebar } from './components/Sidebar';
 import { SelectField } from './components/SelectField';
 import { LessonLoader } from './components/LessonLoader';
+import { Home } from './components/Home';
 import { useProgress } from './hooks/useProgress';
 import { freshLesson, MAX_PROGRESS_FILE_BYTES } from './domain/progress.mjs';
+import {
+  STARTER_SUBJECT as starterSubject,
+  isStarterLesson,
+  routeFromHash,
+  hasStudyRecord,
+} from './domain/navigation.mjs';
 import type { LessonSummary } from './types';
 
 const lessons = catalog as LessonSummary[];
 const slugs = lessons.map((l) => l.slug);
-const starterSubject = '__starter__';
-const starterFoundations = new Set(['binary-representation', 'memory-units', 'cpu-execution']);
-const isStarterLesson = (lesson: LessonSummary) =>
-  starterFoundations.has(lesson.slug) || lesson.subject === '编程基础与面向对象';
-const getRoute = () =>
-  location.hash.replace(/^#\//, '').replace(/^lesson\//, '') || lessons[0].slug;
+const getRoute = () => routeFromHash(location.hash);
 
 export default function App() {
   const [route, setRoute] = useState(getRoute);
@@ -41,20 +44,38 @@ export default function App() {
   const [subject, setSubject] = useState('');
   const [mapSubject, setMapSubject] = useState(starterSubject);
   const [mapStatus, setMapStatus] = useState('all');
+  const [reviewStatus, setReviewStatus] = useState('all');
+  const [catalogLimit, setCatalogLimit] = useState(24);
+  const [lastVisited, setLastVisited] = useState(() => {
+    try {
+      const slug = localStorage.getItem('sudo-hire-me:last-lesson') ?? '';
+      return slugs.includes(slug) ? slug : '';
+    } catch {
+      return '';
+    }
+  });
   const [notice, setNotice] = useState('');
   const { progress, update, importProgress, setProgress, warning } = useProgress(slugs);
   const completed = lessons.filter((l) => progress.lessons[l.slug]?.passed).length;
   const lesson = lessons.find((l) => l.slug === route);
+  const pageTitle =
+    lesson?.title ??
+    (route === 'home'
+      ? '学习首页'
+      : route === 'review'
+        ? '复习手册'
+        : route === 'map'
+          ? '课程目录'
+          : '未找到课程');
   const visibleLessons = lessons.filter(
     (item) =>
       (!subject || item.subject === subject) &&
       (route !== 'review' ||
-        (!!progress.lessons[item.slug] &&
-          (progress.lessons[item.slug].bookmark ||
-            progress.lessons[item.slug].note ||
-            progress.lessons[item.slug].attempts ||
-            progress.lessons[item.slug].read ||
-            progress.lessons[item.slug].passed))) &&
+        (hasStudyRecord(progress.lessons[item.slug]) &&
+          (reviewStatus === 'all' ||
+            (reviewStatus === 'bookmarked' && progress.lessons[item.slug]?.bookmark) ||
+            (reviewStatus === 'notes' && progress.lessons[item.slug]?.note) ||
+            (reviewStatus === 'pending' && !progress.lessons[item.slug]?.passed)))) &&
       (route !== 'map' ||
         mapStatus === 'all' ||
         (mapStatus === 'passed') === !!progress.lessons[item.slug]?.passed) &&
@@ -86,8 +107,27 @@ export default function App() {
     }
   }, [sidebarCollapsed]);
   useEffect(() => {
-    document.title = `${lesson?.title ?? (route === 'review' ? '复习手册' : '关卡地图')} · sudo hire me`;
-  }, [lesson, route]);
+    document.title = `${pageTitle} · sudo hire me`;
+  }, [pageTitle]);
+  useEffect(() => {
+    setCatalogLimit(24);
+  }, [route, query, subject, mapSubject, mapStatus, reviewStatus]);
+  useEffect(() => {
+    if (!lesson) return;
+    setLastVisited(lesson.slug);
+    try {
+      localStorage.setItem('sudo-hire-me:last-lesson', lesson.slug);
+    } catch {
+      // Resume links remain usable during this session without storage.
+    }
+  }, [lesson]);
+  function browse(name = '') {
+    setSubject('');
+    setMapSubject(name || '');
+    setMapStatus('all');
+    if (name) setQuery('');
+    location.hash = '#/map';
+  }
   function exportProgress() {
     const url = URL.createObjectURL(
       new Blob([JSON.stringify(progress, null, 2)], { type: 'application/json' }),
@@ -112,7 +152,9 @@ export default function App() {
     }
   }
   return (
-    <div className={`app-shell ${sidebarCollapsed ? 'sidebar-collapsed' : ''}`}>
+    <div
+      className={`app-shell ${sidebarCollapsed ? 'sidebar-collapsed' : ''} route-${lesson ? 'lesson' : route}`}
+    >
       <a
         className="skip-link"
         href="#main-content"
@@ -147,10 +189,14 @@ export default function App() {
             >
               <Menu size={21} />
             </button>
-            <Terminal size={16} />
-            <span>基础训练</span>
+            <a className="topbar-home" href="#/home" aria-label="返回学习首页" title="学习首页">
+              <Code2 size={19} />
+            </a>
+            <a className="breadcrumb-home" href="#/home">
+              学习空间
+            </a>
             <span className="breadcrumb-separator">/</span>
-            <strong>{lesson?.title ?? (route === 'review' ? '复习手册' : '关卡地图')}</strong>
+            <strong>{pageTitle}</strong>
           </div>
           <div className="player-status">
             <span className="xp">
@@ -178,7 +224,16 @@ export default function App() {
           </div>
         )}
         <div id="main-content" className="main-content" tabIndex={-1}>
-          {lesson ? (
+          {route === 'home' ? (
+            <Home
+              lessons={lessons}
+              progress={progress}
+              lastVisited={lastVisited}
+              query={query}
+              setQuery={setQuery}
+              browse={browse}
+            />
+          ) : lesson ? (
             <LessonLoader
               key={lesson.slug}
               lesson={lesson}
@@ -193,10 +248,10 @@ export default function App() {
               <div className="eyebrow">
                 {route === 'map' ? 'THE LEARNING PATH' : 'YOUR FIELD NOTES'}
               </div>
-              <h1>{route === 'map' ? '从理解开始，一关一关来。' : '把知识，变成自己的表达。'}</h1>
+              <h1>{route === 'map' ? '课程目录' : '复习手册'}</h1>
               <p className="overview-intro">
                 {route === 'map'
-                  ? '计算机基础 · 数据结构与算法 · 操作系统 · 网络 · 数据库 · 编程语言 · 工程实践'
+                  ? '从基础概念，到能解释、能操作、能回答。'
                   : '收藏、笔记与练习记录，回到仍值得再想一次的问题。'}
               </p>
               <div className="journey-stats">
@@ -218,6 +273,33 @@ export default function App() {
                   <strong>{lessons.filter((l) => progress.lessons[l.slug]?.read).length}</strong>
                   <small>已读原理</small>
                 </div>
+              </div>
+              <div className="catalog-toolbar">
+                <label className="catalog-search">
+                  <Search size={18} />
+                  <input
+                    value={query}
+                    onChange={(event) => setQuery(event.target.value)}
+                    aria-label="搜索目录"
+                    placeholder="搜索知识点、课程或主题"
+                  />
+                </label>
+                <span>{visibleLessons.length} 课</span>
+                {(query ||
+                  subject ||
+                  (route === 'map' ? mapStatus !== 'all' : reviewStatus !== 'all')) && (
+                  <button
+                    className="text-button"
+                    onClick={() => {
+                      setQuery('');
+                      setSubject('');
+                      setMapStatus('all');
+                      setReviewStatus('all');
+                    }}
+                  >
+                    清除筛选
+                  </button>
+                )}
               </div>
               {route === 'map' && !query.trim() && !subject && (
                 <label className="map-subject-control">
@@ -255,8 +337,26 @@ export default function App() {
                   ))}
                 </div>
               )}
+              {route === 'review' && (
+                <div className="map-status-filter" role="group" aria-label="复习记录类型">
+                  {[
+                    ['all', '全部记录'],
+                    ['pending', '待巩固'],
+                    ['bookmarked', '收藏'],
+                    ['notes', '笔记'],
+                  ].map(([value, label]) => (
+                    <button
+                      key={value}
+                      aria-pressed={reviewStatus === value}
+                      onClick={() => setReviewStatus(value)}
+                    >
+                      {label}
+                    </button>
+                  ))}
+                </div>
+              )}
               <div className="course-grid">
-                {visibleLessons.map((item) => {
+                {visibleLessons.slice(0, catalogLimit).map((item) => {
                   const record = progress.lessons[item.slug];
                   return (
                     <a
@@ -293,44 +393,67 @@ export default function App() {
                   );
                 })}
               </div>
-              {!visibleLessons.length && (
-                <p className="empty-courses">
-                  {route === 'review' ? '没有匹配的复习记录。' : '没有匹配的课程。'}
-                </p>
+              {visibleLessons.length > 0 && (
+                <div className="catalog-more">
+                  <span aria-live="polite">
+                    已显示 {Math.min(catalogLimit, visibleLessons.length)} / {visibleLessons.length}{' '}
+                    课
+                  </span>
+                  {catalogLimit < visibleLessons.length && (
+                    <button
+                      className="secondary"
+                      onClick={() => setCatalogLimit((value) => value + 24)}
+                    >
+                      显示更多
+                      <ArrowRight size={16} />
+                    </button>
+                  )}
+                </div>
               )}
-              <section className="backup-section">
-                <div>
-                  <h2>
-                    <BookOpen size={19} />
-                    学习存档
-                  </h2>
-                  <p>备份包含本浏览器中的笔记、收藏和练习记录。</p>
+              {!visibleLessons.length && (
+                <div className="empty-courses">
+                  <p>{route === 'review' ? '没有匹配的复习记录。' : '没有匹配的课程。'}</p>
+                  <a className="secondary" href="#/home">
+                    回到学习首页
+                    <ArrowRight size={16} />
+                  </a>
                 </div>
-                <div className="backup-actions">
-                  <button className="secondary" onClick={exportProgress}>
-                    <Download size={17} />
-                    导出进度
-                  </button>
-                  <label className="secondary file-import">
-                    <Upload size={17} />
-                    导入进度
-                    <input
-                      type="file"
-                      accept="application/json,.json"
-                      onChange={(e) => {
-                        void importFile(e.target.files?.[0]);
-                        e.target.value = '';
-                      }}
-                    />
-                  </label>
-                </div>
-              </section>
+              )}
+              {route === 'review' && (
+                <section className="backup-section">
+                  <div>
+                    <h2>
+                      <BookOpen size={19} />
+                      学习存档
+                    </h2>
+                    <p>备份包含本浏览器中的笔记、收藏和练习记录。</p>
+                  </div>
+                  <div className="backup-actions">
+                    <button className="secondary" onClick={exportProgress}>
+                      <Download size={17} />
+                      导出进度
+                    </button>
+                    <label className="secondary file-import">
+                      <Upload size={17} />
+                      导入进度
+                      <input
+                        type="file"
+                        accept="application/json,.json"
+                        onChange={(e) => {
+                          void importFile(e.target.files?.[0]);
+                          e.target.value = '';
+                        }}
+                      />
+                    </label>
+                  </div>
+                </section>
+              )}
             </div>
           ) : (
             <section className="not-found">
               <h1>没有找到这一关</h1>
-              <a className="primary" href="#/map">
-                返回关卡地图 <ArrowRight size={18} />
+              <a className="primary" href="#/home">
+                返回学习首页 <ArrowRight size={18} />
               </a>
             </section>
           )}

@@ -1,6 +1,6 @@
 .reading-toolbar {
   position: sticky;
-  top: 12px;
+  top: calc(var(--topbar-height) + 48px);
   z-index: 5;
   display: flex;
   align-items: center;
@@ -10,6 +10,7 @@
   border: 1px solid #dde3eb;
   background: #fff;
   box-shadow: 0 4px 12px #2836460a;
+  border-radius: 7px;
 }
 .reading-directory {
   display: flex;
@@ -84,7 +85,7 @@
   font-weight: 650;
 }
 .reading h2[data-section] {
-  scroll-margin-top: 95px;
+  scroll-margin-top: calc(var(--topbar-height) + 140px);
   display: flex;
   align-items: baseline;
   gap: 12px;
@@ -419,7 +420,7 @@
 @media (max-width: 720px) {
   .reading-toolbar {
     gap: 10px;
-    top: 6px;
+    top: calc(var(--topbar-height) + 48px);
     padding: 8px;
   }
   .reading-location > span {

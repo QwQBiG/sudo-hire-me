@@ -9,6 +9,8 @@ import {
   FlaskConical,
   Flag,
   MessageSquare,
+  PanelRightClose,
+  PanelRightOpen,
   Trophy,
 } from 'lucide-react';
 import { Markdown } from './Markdown';
@@ -35,6 +37,7 @@ export function LessonView({
 }: Props) {
   const [tab, setTab] = useState<'lab' | 'read' | 'quiz'>('lab');
   const [copied, setCopied] = useState(false);
+  const [toolsOpen, setToolsOpen] = useState(true);
   const answer = lesson.sections.find((s) => s.title === '面试回答')?.markdown ?? '';
   const beginner =
     lesson.sections.find((s) => s.title.includes('从零')) ??
@@ -44,7 +47,12 @@ export function LessonView({
     ) ??
     lesson.sections[0];
   return (
-    <div className="lesson-page page-enter">
+    <div className={`lesson-page page-enter ${toolsOpen ? '' : 'tools-hidden'}`}>
+      <a className="lesson-directory-link text-button" href="#/map">
+        <BookOpen size={15} />
+        课程目录
+        <ArrowRight size={14} />
+      </a>
       <header className="lesson-title">
         <div className="eyebrow">
           <span className="level-tag">LEVEL {String(lesson.order + 1).padStart(2, '0')}</span>
@@ -60,6 +68,16 @@ export function LessonView({
         </h1>
         <p>{lesson.description}</p>
         <div className="title-actions">
+          <button
+            className="icon-button"
+            onClick={() => setToolsOpen((value) => !value)}
+            aria-expanded={toolsOpen}
+            aria-controls="lesson-tools"
+            aria-label={toolsOpen ? '收起学习工具' : '展开学习工具'}
+            title={toolsOpen ? '收起学习工具' : '展开学习工具'}
+          >
+            {toolsOpen ? <PanelRightClose size={19} /> : <PanelRightOpen size={19} />}
+          </button>
           <button
             className={`icon-button ${progress.bookmark ? 'bookmarked' : ''}`}
             aria-label={progress.bookmark ? '取消收藏' : '收藏本课'}
@@ -199,7 +217,7 @@ export function LessonView({
             )}
           </footer>
         </main>
-        <aside className="lesson-rail">
+        <aside className="lesson-rail" id="lesson-tools" hidden={!toolsOpen} aria-label="学习工具">
           {prerequisites.length > 0 && (
             <div className="rail-section prerequisite-links">
               <h2>

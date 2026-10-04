@@ -151,6 +151,7 @@ export function SelectField({ value, onChange, children, disabled, className, ..
         onClick={() => (open ? setOpen(false) : show())}
         onKeyDown={(event) => {
           if (event.key === 'Escape') {
+            if (open) event.stopPropagation();
             setOpen(false);
             return;
           }

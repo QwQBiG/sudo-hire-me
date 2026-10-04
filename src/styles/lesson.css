@@ -1,6 +1,6 @@
 .lesson-title {
   position: relative;
-  padding-right: 85px;
+  padding-right: 125px;
   margin-bottom: 31px;
 }
 .lesson-title > .eyebrow {
@@ -43,8 +43,21 @@
 }
 .lesson-columns {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 210px;
-  gap: 36px;
+  grid-template-columns: minmax(0, 1fr) 220px;
+  gap: 30px;
+}
+.lesson-page.tools-hidden .lesson-columns {
+  grid-template-columns: minmax(0, 1fr);
+}
+.lesson-rail[hidden] {
+  display: none;
+}
+.lesson-directory-link {
+  margin-bottom: 20px;
+  color: var(--muted);
+}
+.lesson-title h1 {
+  font-size: 32px;
 }
 .lesson-content {
   min-width: 0;
@@ -53,7 +66,7 @@
   background: #f8edf2;
   border: 1px solid #e5cad7;
   border-left: 3px solid #b49dac;
-  border-radius: 0 5px 5px 0;
+  border-radius: 7px;
   padding: 22px 26px;
   margin-bottom: 27px;
 }
@@ -80,11 +93,16 @@
   flex-shrink: 0;
 }
 .lesson-tabs {
+  position: sticky;
+  top: var(--topbar-height);
+  z-index: 10;
+  background: #f8f9fc;
+  padding-top: 12px;
   display: flex;
   border-bottom: 1px solid #e5cad7;
   margin-bottom: 21px;
   gap: 28px;
-  min-height: 45px;
+  min-height: 48px;
 }
 .lesson-tabs > button {
   display: flex;
@@ -201,7 +219,8 @@
 .reading > section {
   padding: 22px 0 25px;
 }
-.reading h2 {
+.lesson-page .reading h2 {
+  scroll-margin-top: calc(var(--topbar-height) + 140px);
   font-size: 19px;
   padding-bottom: 8px;
   border-bottom: 1px solid var(--line);
@@ -284,7 +303,7 @@
   border-bottom: 1px solid var(--line);
 }
 .rail-section h2 {
-  font-size: 11px;
+  font-size: 12px;
   display: flex;
   align-items: center;
   gap: 7px;
@@ -317,7 +336,7 @@
 .record-row {
   display: flex;
   justify-content: space-between;
-  font-size: 10px;
+  font-size: 12px;
   margin: 12px 0 0;
   color: var(--muted);
 }
@@ -338,7 +357,7 @@
   background: #fff;
   width: 100%;
   min-height: 132px;
-  font-size: 11px;
+  font-size: 12px;
   line-height: 1.9;
   padding: 12px;
   color: #71586c;
@@ -504,7 +523,7 @@
 @media (max-width: 720px) {
   .lesson-title {
     margin-bottom: 24px;
-    padding-right: 60px;
+    padding-right: 0;
   }
   .lesson-title h1 {
     font-size: 28px;
@@ -522,8 +541,9 @@
     font-size: 9px;
   }
   .title-actions {
-    gap: 0;
-    right: -6px;
+    position: static;
+    margin-top: 12px;
+    gap: 8px;
   }
   .title-actions .icon-button {
     width: 30px;
@@ -536,6 +556,7 @@
     font-size: 13px;
   }
   .lesson-tabs {
+    top: 60px;
     gap: 22px;
     margin-bottom: 17px;
   }

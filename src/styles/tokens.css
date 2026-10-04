@@ -1,7 +1,7 @@
 :root {
   font-family: Inter, 'Segoe UI', 'Microsoft YaHei', sans-serif;
   color: #36313e;
-  background: #faf8fb;
+  background: #f8f9fc;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -15,7 +15,8 @@
   --violet: #7b60a1;
   --cyan: #83c7eb;
   --mono: Consolas, Menlo, 'Liberation Mono', monospace;
-  --sidebar: 250px;
+  --sidebar: 256px;
+  --topbar-height: 64px;
 }
 * {
   box-sizing: border-box;

@@ -13,18 +13,26 @@ export function LessonReading({ lesson, onComplete }: { lesson: Lesson; onComple
   const [expanded, setExpanded] = useState(false);
   useEffect(() => {
     const headings = [...(root.current?.querySelectorAll<HTMLElement>('h2[data-section]') ?? [])];
-    const observer = new IntersectionObserver(
-      () => {
-        const passed = headings.reduce(
-          (last, heading, index) => (heading.getBoundingClientRect().top <= 160 ? index : last),
-          0,
-        );
-        setActive(Math.max(0, passed));
-      },
-      { rootMargin: '-150px 0px -50% 0px' },
-    );
-    headings.forEach((heading) => observer.observe(heading));
-    return () => observer.disconnect();
+    let frame = 0;
+    const update = () => {
+      frame = 0;
+      const passed = headings.reduce(
+        (last, heading, index) => (heading.getBoundingClientRect().top <= 210 ? index : last),
+        0,
+      );
+      setActive(passed);
+    };
+    const schedule = () => {
+      if (!frame) frame = requestAnimationFrame(update);
+    };
+    window.addEventListener('scroll', schedule, { passive: true });
+    window.addEventListener('resize', schedule);
+    update();
+    return () => {
+      window.removeEventListener('scroll', schedule);
+      window.removeEventListener('resize', schedule);
+      cancelAnimationFrame(frame);
+    };
   }, [lesson.slug]);
   const jump = (index: number) => {
     const target = root.current?.querySelector<HTMLElement>(`h2[data-section="${index}"]`);
