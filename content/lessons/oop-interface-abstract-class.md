@@ -1,7 +1,7 @@
 ---
 slug: "oop-interface-abstract-class"
 title: "接口与抽象类怎么选"
-description: "用可计价对象的共同能力与形状的共享状态，区分 Java interface 和 abstract class。"
+description: "用求面积的共同能力与形状的共享状态，区分 Java interface 和 abstract class。"
 subject: "编程基础与面向对象"
 order: 25
 minutes: 17
@@ -57,7 +57,19 @@ public class Main {
 
 `Area measurable` 可调用接口中的 `area()`，但不能仅凭这个声明类型调用 `color()`；`Shape shape` 可调用 `color()` 和 `kind()`，但 `Shape` 没有承诺 `area()`。实际对象都是同一个 `Square`，**静态类型决定可见契约**。这也是为什么“接口更灵活”不能替代写清调用方究竟需要什么能力。
 
-### 第三步：如果另有不同体系的可计价对象
+以下只比较本例的三个方法，且假定调用方与示例类位于同一包；`color()` 和 `kind()` 是包访问级别，不是 `public`：
+
+| 引用静态类型 | `area()` | `color()` | `kind()` |
+| --- | --- | --- | --- |
+| `Area` | 可调用 | 未声明 | 未声明 |
+| `Shape` | 未声明 | 可调用 | 可调用 |
+| `Square` | 可调用 | 可调用 | 可调用 |
+
+合法调用中，`kind()` 执行 `Square` 的覆盖实现；`color()` 执行继承自 `Shape` 的具体方法。不要把“静态类型检查能否调用”和“运行时选择覆盖实现”混为一件事。
+
+`new Area(...)` 和 `new Shape(...)` 都不合法，但 `new Square("red", 3)` 会先通过 `super(color)` 执行基类构造初始化，再初始化 `side`。抽象类不能直接实例化，不等于它没有构造器。实验修改颜色或边长是在重新设置构造参数并建模新对象；仅切换引用类型则保留同一个对象。
+
+### 第三步：如果另有不同体系的可求面积对象
 
 一个 `FloorPlan` 不一定应该继承 `Shape`，却可以实现 `Area`。Java 类只能直接继承一个父类，但可以实现多个接口；这使接口适合表达跨不同类体系的能力。若确有稳定的共同状态和基类构造过程，抽象类更容易放置这些共享实现；继承仍须遵守行为契约，不应只为复用代码硬建立 is-a 关系。
 

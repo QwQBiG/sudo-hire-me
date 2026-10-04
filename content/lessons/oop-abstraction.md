@@ -16,13 +16,15 @@ prerequisites: ["oop-encapsulation"]
 
 抽象（Abstraction）是从具体实现中提取使用者真正需要的性质。一个先进先出（First In, First Out，FIFO）队列可以承诺：`enqueue(x)` 把元素放到尾部；`dequeue()` 取出最早尚未取出的元素；空队列的 `dequeue()` 明确报告“无元素”。使用者只依赖这些行为，不必知道里面采用数组、链表还是其他结构。
 
-契约（Contract）还要说清边界：元素顺序、空队列结果、操作是否可失败。只写“提供 enqueue 和 dequeue 两个函数名”不够；若实现偷偷从尾部弹出，就变成栈，违背队列抽象。[Java `Queue` 官方 API：队列操作契约](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Queue.html)
+契约（Contract）还要说清边界：元素顺序、空队列结果、操作是否可失败。只写“提供 enqueue 和 dequeue 两个函数名”不够；若实现偷偷从尾部弹出，就变成栈，违背本课的 FIFO 抽象。**队列名称本身不保证 FIFO**：Java `Queue` 也允许按优先级等规则排序，需查看具体实现承诺。[Java `Queue` 官方 API：队列操作契约](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Queue.html)
 
 ## 逐步推演
 
 ### 第一步：只对外展示操作
 
-假设接口写成 `enqueue(String item)` 和 `dequeue() -> Optional<String>`。这里 `Optional` 用来区分“空队列”和真实字符串值；不讨论并发阻塞。调用者执行 `enqueue("A")`、`enqueue("B")`，抽象状态是从队首到队尾 `[A, B]`。
+假设自定义接口写成 `enqueue(String item)` 和 `dequeue() -> Optional<String>`。这里 `Optional` 用来区分“空队列”和真实字符串值；不讨论并发阻塞。调用者执行 `enqueue("A")`、`enqueue("B")`，抽象状态是从队首到队尾 `[A, B]`。这不是 Java `Queue` 的方法签名；该接口常用 `offer` 与 `poll` 等方法。
+
+本课实验把两种实现都限制为 **4 个元素**：成功入队返回 `OK`；满时返回 `Full`，状态不变；空队列出队显示 `None`。`Full` 和 `None` 是模型标记，不是 Java 编译器或标准 API 的输出。
 
 ### 第二步：按契约取值
 
@@ -37,7 +39,11 @@ prerequisites: ["oop-encapsulation"]
 
 ### 第三步：更换实现但保留行为
 
-把内部从链表改为可增长数组，只要给相同操作序列的可观察结果仍满足 FIFO 与空队列规则，使用者代码就不必因内部表示变化而重写。反例：新实现把 `B` 先返回，虽然方法签名没有变，却破坏了抽象契约。
+把内部从链表改为数组，只要相同操作序列的可观察结果仍满足 FIFO、容量与空队列规则，使用者代码就不必因内部表示变化而重写。反例：新实现把 `B` 先返回，虽然方法签名没有变，却破坏了抽象契约。若容量上限也是承诺的一部分，就不能悄悄换成任意增长的队列。
+
+实验中的循环数组（Circular Array）用 `head` 和 `size` 定位元素，下次入队位置为 `(head + size) % 4`；满和空都可能出现 `head == tail`，但 `size` 分别是 4 和 0。链式实现则让 `head` 指向首节点，出队后转向原节点的 `next`。这是内部表示的差别，不改变返回顺序。
+
+**检验方式：**连续入队 A、B，再出队一次。数组与链式实现都返回 A，错误的尾部出队实现返回 B。一个反例足以否定它满足 FIFO；几个正确样例却不能证明所有输入和边界都正确。
 
 ### 第四步：分清抽象与封装
 

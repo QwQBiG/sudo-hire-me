@@ -62,6 +62,16 @@ public class Main {
 
 `vehicle` 和 `car` 指向同一个汽车对象；`vehicle.move()` 可调用继承来的车辆行为。`car.start()` 则进入汽车方法，再委托给被持有的发动机。按代码逻辑，预期依次打印 `moving` 和 `engine on`。把 `engine` 字段设为 `private final`，调用方不能直接替换这份引用；真实产品仍需设计注入、错误与生命周期规则。
 
+还可以提供另一种发动机实现：
+
+```java
+class ElectricEngine extends Engine {
+  @Override String start() { return "electric engine on"; }
+}
+```
+
+`new Car(new ElectricEngine())` 不改变汽车的父类型，却改变被委托的启动实现。实验中切换发动机配置表示重新构造汽车，不是替换已有对象的 `final` 引用；`final` 限制引用重新赋值，并不自动使发动机对象不可变。
+
 ### 第三步：检验“是一个”背后的行为约定
 
 类型名称合适还不够。另设一个**可变** `Rectangle`，契约允许分别设置宽与高；调用方先 `setWidth(2)` 再 `setHeight(3)`，预期 `area()` 为 6。
@@ -81,6 +91,15 @@ class Square extends Rectangle {
 ```
 
 如果 `Rectangle shape = new Square(); shape.setWidth(2); shape.setHeight(3);`，最后宽高都是 3，`area()` 是 **9**。虽然数学上正方形是矩形，这个**可变 Rectangle API** 承诺独立设置两边，`Square` 却破坏了依赖该契约的程序。这是行为可替代性（Behavioral Subtyping）的问题，不是编译器的类型错误。[Liskov 与 Wing：行为子类型原始论文](https://www.cs.cmu.edu/~wing/publications/LiskovWing94.pdf)
+
+实验从宽高均为 1 开始，用同一调用对照父契约与对象状态：
+
+| 调用 | Rectangle 契约预期的宽高 | 可变 Square 的实际宽高 |
+| --- | --- | --- |
+| `setWidth(2)` | `(2, 1)` | `(2, 2)` |
+| 再 `setHeight(3)` | `(2, 3)`，面积 6 | `(3, 3)`，面积 9 |
+
+第一步就已违反“高度不变”的后置条件（Postcondition）。不能只盯最终面积：某次碰巧选到相等宽高，也不等于证明这个子类满足所有独立 setter 操作。
 
 ### 第四步：选择更准确的边界
 
