@@ -3,37 +3,18 @@ import {
   ArrowRight,
   BookOpen,
   Bookmark,
-  Braces,
   Check,
-  CircuitBoard,
-  Code2,
-  Cpu,
-  Database,
   Flag,
   FlaskConical,
-  Layers3,
-  Network,
   RotateCcw,
   Search,
-  Terminal,
   Trophy,
 } from 'lucide-react';
 import { continueLesson, hasStudyRecord } from '../domain/navigation.mjs';
 import { decodeByte } from '../domain/search.mjs';
-import { TopicPreview } from './TopicPreview';
+import { explorationTopics, TopicExplorer } from './TopicExplorer';
 import type { LessonSummary, Progress } from '../types';
 
-const topics = [
-  ['计算机基础', Cpu, '位、内存、CPU 与程序执行', 'rose', 'bits'],
-  ['编程基础与面向对象', Braces, '函数、对象、封装与多态', 'blue', 'objects'],
-  ['数据结构与算法', Layers3, '从数组到树，理解每一步', 'violet', 'sort'],
-  ['操作系统', Terminal, '进程、内存、调度与 I/O', 'blue', 'process'],
-  ['计算机网络', Network, '从一次请求理解协议', 'rose', 'network'],
-  ['数据库', Database, '查询、索引、事务与恢复', 'amber', 'query'],
-  ['并发与系统设计', CircuitBoard, '同步、竞争与系统取舍', 'violet', 'lock'],
-  ['工程实践', Code2, '调试、测试与协作', 'amber', 'git'],
-  ['项目与面试表达', Flag, '把经验讲成可信的答案', 'blue', 'evidence'],
-] as const;
 const firstSlugs = [
   'binary-representation',
   'memory-units',
@@ -62,6 +43,7 @@ interface Props {
 
 export function Home({ lessons, progress, lastVisited, query, setQuery, browse }: Props) {
   const [searchOpen, setSearchOpen] = useState(false);
+  const [warmupOpen, setWarmupOpen] = useState(false);
   const next = continueLesson(lessons, progress, lastVisited);
   const completed = lessons.filter((item) => progress.lessons[item.slug]?.passed).length;
   const read = lessons.filter((item) => progress.lessons[item.slug]?.read).length;
@@ -78,7 +60,8 @@ export function Home({ lessons, progress, lastVisited, query, setQuery, browse }
     : [];
   const languages = [...new Set(lessons.map((item) => item.subject))]
     .filter(
-      (subject) => !topics.some(([name]) => name === subject) && subject !== 'JavaScript 选修',
+      (subject) =>
+        !explorationTopics.some(({ name }) => name === subject) && subject !== 'JavaScript 选修',
     )
     .sort((a, b) => languageOrder.indexOf(a) - languageOrder.indexOf(b));
   const optionalCount = lessons.filter((item) => item.subject === 'JavaScript 选修').length;
@@ -192,11 +175,23 @@ export function Home({ lessons, progress, lastVisited, query, setQuery, browse }
                 浏览全部课程
                 <ArrowRight size={15} />
               </button>
+              <button
+                className="text-button"
+                aria-expanded={warmupOpen}
+                aria-controls="home-warmup"
+                onClick={() => setWarmupOpen((open) => !open)}
+              >
+                <FlaskConical size={16} />
+                二进制热身
+              </button>
             </div>
           </div>
         )}
-        <BinaryWarmup />
       </section>
+      <div className="home-warmup" id="home-warmup" hidden={!warmupOpen}>
+        {warmupOpen && <BinaryWarmup />}
+      </div>
+      <TopicExplorer lessons={lessons} progress={progress} browse={browse} />
       <section className="home-section">
         <div className="home-section-title">
           <h2>从零起步</h2>
@@ -225,38 +220,6 @@ export function Home({ lessons, progress, lastVisited, query, setQuery, browse }
                   <ArrowRight size={16} />
                 </a>
               )
-            );
-          })}
-        </div>
-      </section>
-      <section className="home-section home-topics">
-        <div className="home-section-title">
-          <h2>按主题探索</h2>
-          <span>基础 · 原理 · 实践</span>
-        </div>
-        <div className="topic-grid">
-          {topics.map(([name, Icon, description, tone, scene]) => {
-            const entries = lessons.filter((lesson) => lesson.subject === name);
-            const passed = entries.filter((lesson) => progress.lessons[lesson.slug]?.passed).length;
-            return (
-              <button
-                className={`topic-entry tone-${tone}`}
-                key={name}
-                onClick={() => browse(name)}
-              >
-                <div className="topic-entry-top">
-                  <Icon size={23} />
-                  <span>{entries.length} 课</span>
-                  <ArrowRight size={17} />
-                </div>
-                <h3>{name}</h3>
-                <p>{description}</p>
-                <TopicPreview scene={scene} />
-                <div className="topic-progress" aria-hidden="true">
-                  <span style={{ width: `${(passed / entries.length) * 100}%` }} />
-                </div>
-                <small>{passed ? `${passed} / ${entries.length} 已通过` : '尚未开始'}</small>
-              </button>
             );
           })}
         </div>

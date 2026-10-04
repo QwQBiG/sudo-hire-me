@@ -11,6 +11,7 @@ import './styles/experiments.css';
 import './styles/learning-quality.css';
 import './styles/home.css';
 import './styles/interactions.css';
+import './styles/workspace.css';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
