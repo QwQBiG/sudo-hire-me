@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, type CSSProperties } from 'react';
 import {
   ArrowRight,
   Bookmark,
@@ -122,7 +122,12 @@ export function LessonView({
             </div>
             <Markdown>{answer}</Markdown>
           </section>
-          <div className="lesson-tabs" role="tablist" aria-label="学习方式">
+          <div
+            className="lesson-tabs"
+            role="tablist"
+            aria-label="学习方式"
+            style={{ '--tab-index': ['lab', 'read', 'quiz'].indexOf(tab) } as CSSProperties}
+          >
             {(
               [
                 ['lab', FlaskConical, '动手理解'],

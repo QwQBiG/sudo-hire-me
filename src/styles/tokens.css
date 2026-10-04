@@ -17,6 +17,7 @@
   --mono: Consolas, Menlo, 'Liberation Mono', monospace;
   --sidebar: 256px;
   --topbar-height: 64px;
+  --lesson-tabs-height: 56px;
 }
 * {
   box-sizing: border-box;

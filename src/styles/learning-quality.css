@@ -1,6 +1,6 @@
 .reading-toolbar {
   position: sticky;
-  top: calc(var(--topbar-height) + 48px);
+  top: calc(var(--topbar-height) + var(--lesson-tabs-height));
   z-index: 5;
   display: flex;
   align-items: center;
@@ -420,7 +420,7 @@
 @media (max-width: 720px) {
   .reading-toolbar {
     gap: 10px;
-    top: calc(var(--topbar-height) + 48px);
+    top: calc(var(--topbar-height) + var(--lesson-tabs-height));
     padding: 8px;
   }
   .reading-location > span {

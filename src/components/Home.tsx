@@ -20,18 +20,19 @@ import {
 } from 'lucide-react';
 import { continueLesson, hasStudyRecord } from '../domain/navigation.mjs';
 import { decodeByte } from '../domain/search.mjs';
+import { TopicPreview } from './TopicPreview';
 import type { LessonSummary, Progress } from '../types';
 
 const topics = [
-  ['计算机基础', Cpu, '位、内存、CPU 与程序执行', 'rose'],
-  ['编程基础与面向对象', Braces, '函数、对象、封装与多态', 'blue'],
-  ['数据结构与算法', Layers3, '从数组到树，理解每一步', 'violet'],
-  ['操作系统', Terminal, '进程、内存、调度与 I/O', 'blue'],
-  ['计算机网络', Network, '从一次请求理解协议', 'rose'],
-  ['数据库', Database, '查询、索引、事务与恢复', 'amber'],
-  ['并发与系统设计', CircuitBoard, '同步、竞争与系统取舍', 'violet'],
-  ['工程实践', Code2, '调试、测试与协作', 'amber'],
-  ['项目与面试表达', Flag, '把经验讲成可信的答案', 'blue'],
+  ['计算机基础', Cpu, '位、内存、CPU 与程序执行', 'rose', 'bits'],
+  ['编程基础与面向对象', Braces, '函数、对象、封装与多态', 'blue', 'objects'],
+  ['数据结构与算法', Layers3, '从数组到树，理解每一步', 'violet', 'sort'],
+  ['操作系统', Terminal, '进程、内存、调度与 I/O', 'blue', 'process'],
+  ['计算机网络', Network, '从一次请求理解协议', 'rose', 'network'],
+  ['数据库', Database, '查询、索引、事务与恢复', 'amber', 'query'],
+  ['并发与系统设计', CircuitBoard, '同步、竞争与系统取舍', 'violet', 'lock'],
+  ['工程实践', Code2, '调试、测试与协作', 'amber', 'git'],
+  ['项目与面试表达', Flag, '把经验讲成可信的答案', 'blue', 'evidence'],
 ] as const;
 const firstSlugs = [
   'binary-representation',
@@ -234,7 +235,7 @@ export function Home({ lessons, progress, lastVisited, query, setQuery, browse }
           <span>基础 · 原理 · 实践</span>
         </div>
         <div className="topic-grid">
-          {topics.map(([name, Icon, description, tone]) => {
+          {topics.map(([name, Icon, description, tone, scene]) => {
             const entries = lessons.filter((lesson) => lesson.subject === name);
             const passed = entries.filter((lesson) => progress.lessons[lesson.slug]?.passed).length;
             return (
@@ -250,6 +251,7 @@ export function Home({ lessons, progress, lastVisited, query, setQuery, browse }
                 </div>
                 <h3>{name}</h3>
                 <p>{description}</p>
+                <TopicPreview scene={scene} />
                 <div className="topic-progress" aria-hidden="true">
                   <span style={{ width: `${(passed / entries.length) * 100}%` }} />
                 </div>
@@ -310,12 +312,16 @@ export function Home({ lessons, progress, lastVisited, query, setQuery, browse }
 
 function BinaryWarmup() {
   const [bits, setBits] = useState('00001010');
+  const [mission, setMission] = useState<number | null>(null);
+  const targets = [42, 138, 255];
   const { unsigned, signed } = decodeByte(bits);
+  const target = mission === null ? null : targets[mission];
+  const solved = target !== null && unsigned === target;
   const weights = [...bits]
     .map((bit, index) => (bit === '1' ? 2 ** (7 - index) : 0))
     .filter(Boolean);
   return (
-    <div className="binary-warmup">
+    <div className={`binary-warmup ${solved ? 'mission-solved' : ''}`}>
       <div className="warmup-heading">
         <h2>
           <FlaskConical size={17} />
@@ -330,6 +336,34 @@ function BinaryWarmup() {
           <RotateCcw size={16} />
         </button>
       </div>
+      <div className="warmup-mode" role="group" aria-label="热身模式">
+        <button aria-pressed={mission === null} onClick={() => setMission(null)}>
+          自由探索
+        </button>
+        <button aria-pressed={mission !== null} onClick={() => setMission(0)}>
+          小挑战
+        </button>
+        <span>8 BIT</span>
+      </div>
+      {target !== null && (
+        <div className="warmup-mission">
+          <span>
+            拼出无符号整数 <b>{target}</b>
+          </span>
+          <span className="mission-status" role="status">
+            {solved ? (
+              <>
+                <Check size={14} />
+                匹配成功
+              </>
+            ) : unsigned < target ? (
+              `还差 ${target - unsigned}`
+            ) : (
+              `超出 ${unsigned - target}`
+            )}
+          </span>
+        </div>
+      )}
       <div className="warmup-bits" role="group" aria-label="8 位二进制开关">
         {[...bits].map((bit, index) => (
           <button
@@ -362,6 +396,19 @@ function BinaryWarmup() {
       <p className="warmup-equation">
         {weights.length ? weights.join(' + ') : '0'} = {unsigned}
       </p>
+      {target !== null && (
+        <button
+          className="warmup-next text-button"
+          disabled={!solved}
+          onClick={() => {
+            setMission(((mission ?? 0) + 1) % targets.length);
+            setBits('00000000');
+          }}
+        >
+          下一题
+          <ArrowRight size={15} />
+        </button>
+      )}
       <a href="#/lesson/binary-representation" className="text-button">
         为什么最高位会影响符号？
         <ArrowRight size={15} />

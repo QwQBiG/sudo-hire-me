@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
   ArrowRight,
   BookOpen,
@@ -17,6 +17,7 @@ import { SelectField } from './components/SelectField';
 import { LessonLoader } from './components/LessonLoader';
 import { Home } from './components/Home';
 import { useProgress } from './hooks/useProgress';
+import { usePageEntrance } from './hooks/usePageEntrance';
 import { freshLesson, MAX_PROGRESS_FILE_BYTES } from './domain/progress.mjs';
 import {
   STARTER_SUBJECT as starterSubject,
@@ -56,6 +57,8 @@ export default function App() {
   });
   const [notice, setNotice] = useState('');
   const { progress, update, importProgress, setProgress, warning } = useProgress(slugs);
+  const surface = useRef<HTMLDivElement>(null);
+  usePageEntrance(surface, route, progress.reducedMotion);
   const completed = lessons.filter((l) => progress.lessons[l.slug]?.passed).length;
   const lesson = lessons.find((l) => l.slug === route);
   const pageTitle =
@@ -223,7 +226,7 @@ export default function App() {
             )}
           </div>
         )}
-        <div id="main-content" className="main-content" tabIndex={-1}>
+        <div ref={surface} id="main-content" className="main-content" tabIndex={-1}>
           {route === 'home' ? (
             <Home
               lessons={lessons}
