@@ -1,477 +1,279 @@
-import { useEffect, useRef, useState } from 'react';
+import { lazy, Suspense, useEffect, useRef, useState } from 'react';
 import {
-  ArrowRight,
   BookOpen,
-  Check,
+  ChevronDown,
   Code2,
-  Download,
+  Github,
   Menu,
+  PanelLeftClose,
+  PanelLeftOpen,
   Search,
-  Trophy,
-  Upload,
+  Sparkles,
   X,
 } from 'lucide-react';
-import catalog from '../.generated/lessons.json';
-import { Sidebar } from './components/Sidebar';
-import { SelectField } from './components/SelectField';
-import { LessonLoader } from './components/LessonLoader';
-import { Home } from './components/Home';
+import catalog from '../.generated/documents.json';
+import { Catalog } from './components/Catalog';
+import { MemoryTools } from './components/MemoryTools';
 import { useProgress } from './hooks/useProgress';
-import { usePageEntrance } from './hooks/usePageEntrance';
-import { freshLesson, MAX_PROGRESS_FILE_BYTES } from './domain/progress.mjs';
-import {
-  STARTER_SUBJECT as starterSubject,
-  isStarterLesson,
-  routeFromHash,
-  hasStudyRecord,
-} from './domain/navigation.mjs';
-import type { LessonSummary } from './types';
+import { freshLesson } from './domain/progress.mjs';
+import type { DocumentSummary } from './types';
 
-const lessons = catalog as LessonSummary[];
-const slugs = lessons.map((l) => l.slug);
-const getRoute = () => routeFromHash(location.hash);
+const documents = catalog as DocumentSummary[];
+const Document = lazy(() =>
+  import('./components/Document').then((module) => ({ default: module.Document })),
+);
+const slugs = documents.map((document) => document.slug);
+const subjects = [...new Set(documents.map((document) => document.subject))];
+function route() {
+  try {
+    return decodeURIComponent(location.hash.replace(/^#\/lesson\//, ''));
+  } catch {
+    return 'invalid-route';
+  }
+}
 
 export default function App() {
-  const [route, setRoute] = useState(getRoute);
-  const [sidebar, setSidebar] = useState(false);
-  const [sidebarCollapsed, setSidebarCollapsed] = useState(() => {
-    try {
-      return localStorage.getItem('sudo-hire-me:sidebar-collapsed') === '1';
-    } catch {
-      return false;
-    }
-  });
+  const [slug, setSlug] = useState(route);
   const [query, setQuery] = useState('');
-  const [subject, setSubject] = useState('');
-  const [mapSubject, setMapSubject] = useState(starterSubject);
-  const [mapStatus, setMapStatus] = useState('all');
-  const [reviewStatus, setReviewStatus] = useState('all');
-  const [catalogLimit, setCatalogLimit] = useState(24);
-  const [lastVisited, setLastVisited] = useState(() => {
-    try {
-      const slug = localStorage.getItem('sudo-hire-me:last-lesson') ?? '';
-      return slugs.includes(slug) ? slug : '';
-    } catch {
-      return '';
-    }
-  });
-  const [notice, setNotice] = useState('');
+  const [open, setOpen] = useState(false);
+  const [mobile, setMobile] = useState(() => matchMedia('(max-width: 900px)').matches);
+  const [collapsed, setCollapsed] = useState(false);
+  const selected = documents.find((document) => document.slug === slug);
+  const [expanded, setExpanded] = useState(selected?.subject ?? subjects[0]);
   const { progress, update, importProgress, setProgress, warning } = useProgress(slugs);
-  const surface = useRef<HTMLDivElement>(null);
-  usePageEntrance(surface, route, progress.reducedMotion);
-  const completed = lessons.filter((l) => progress.lessons[l.slug]?.passed).length;
-  const lesson = lessons.find((l) => l.slug === route);
-  const pageTitle =
-    lesson?.title ??
-    (route === 'home'
-      ? '学习首页'
-      : route === 'review'
-        ? '复习手册'
-        : route === 'map'
-          ? '课程目录'
-          : '未找到课程');
-  const visibleLessons = lessons.filter(
-    (item) =>
-      (!subject || item.subject === subject) &&
-      (route !== 'review' ||
-        (hasStudyRecord(progress.lessons[item.slug]) &&
-          (reviewStatus === 'all' ||
-            (reviewStatus === 'bookmarked' && progress.lessons[item.slug]?.bookmark) ||
-            (reviewStatus === 'notes' && progress.lessons[item.slug]?.note) ||
-            (reviewStatus === 'pending' && !progress.lessons[item.slug]?.passed)))) &&
-      (route !== 'map' ||
-        mapStatus === 'all' ||
-        (mapStatus === 'passed') === !!progress.lessons[item.slug]?.passed) &&
-      (route !== 'map' ||
-        query.trim() ||
-        subject ||
-        !mapSubject ||
-        (mapSubject === starterSubject ? isStarterLesson(item) : item.subject === mapSubject)) &&
-      `${item.title}${item.subject}${item.description}`
-        .toLowerCase()
-        .includes(query.trim().toLowerCase()),
-  );
+  const sidebar = useRef<HTMLElement>(null);
   useEffect(() => {
-    const navigate = () => {
-      setRoute(getRoute());
-      window.scrollTo({ top: 0 });
+    const media = matchMedia('(max-width: 900px)');
+    const changed = () => {
+      setMobile(media.matches);
+      if (!media.matches) setOpen(false);
     };
-    window.addEventListener('hashchange', navigate);
-    return () => window.removeEventListener('hashchange', navigate);
+    media.addEventListener('change', changed);
+    return () => media.removeEventListener('change', changed);
   }, []);
+  useEffect(() => {
+    const changed = () => {
+      setSlug(route());
+      setOpen(false);
+      window.scrollTo(0, 0);
+    };
+    window.addEventListener('hashchange', changed);
+    return () => window.removeEventListener('hashchange', changed);
+  }, []);
+  useEffect(() => {
+    if (selected) setExpanded(selected.subject);
+    document.title = `${selected?.title ?? '面试基础文档'} · sudo hire me`;
+  }, [selected]);
   useEffect(() => {
     document.documentElement.dataset.motion = progress.reducedMotion ? 'reduced' : 'full';
   }, [progress.reducedMotion]);
   useEffect(() => {
-    try {
-      localStorage.setItem('sudo-hire-me:sidebar-collapsed', sidebarCollapsed ? '1' : '0');
-    } catch {
-      // The navigation still works when browser storage is unavailable.
-    }
-  }, [sidebarCollapsed]);
-  useEffect(() => {
-    document.title = `${pageTitle} · sudo hire me`;
-  }, [pageTitle]);
-  useEffect(() => {
-    setCatalogLimit(24);
-  }, [route, query, subject, mapSubject, mapStatus, reviewStatus]);
-  useEffect(() => {
-    if (!lesson) return;
-    setLastVisited(lesson.slug);
-    try {
-      localStorage.setItem('sudo-hire-me:last-lesson', lesson.slug);
-    } catch {
-      // Resume links remain usable during this session without storage.
-    }
-  }, [lesson]);
-  function browse(name = '') {
-    setSubject('');
-    setMapSubject(name || '');
-    setMapStatus('all');
-    if (name) setQuery('');
-    location.hash = '#/map';
-  }
-  function exportProgress() {
-    const url = URL.createObjectURL(
-      new Blob([JSON.stringify(progress, null, 2)], { type: 'application/json' }),
-    );
-    const anchor = document.createElement('a');
-    anchor.href = url;
-    anchor.download = 'sudo-hire-me-progress.json';
-    anchor.click();
-    setTimeout(() => URL.revokeObjectURL(url), 1000);
-  }
-  async function importFile(file?: File) {
-    if (!file) return;
-    if (file.size > MAX_PROGRESS_FILE_BYTES) {
-      setNotice('文件过大，请选择有效的进度备份。');
-      return;
-    }
-    try {
-      importProgress(await file.text());
-      setNotice('进度已导入。');
-    } catch {
-      setNotice('无法导入：文件格式、课程编号或版本不匹配。原进度未修改。');
-    }
-  }
+    if (!open) return;
+    const previous = document.activeElement as HTMLElement | null;
+    const overflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    const controls = () =>
+      [...(sidebar.current?.querySelectorAll<HTMLElement>('a,button,input') ?? [])].filter(
+        (element) => element.getClientRects().length,
+      );
+    controls()[0]?.focus();
+    const keys = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setOpen(false);
+      if (event.key !== 'Tab') return;
+      const items = controls(),
+        first = items[0],
+        last = items.at(-1);
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last?.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first?.focus();
+      }
+    };
+    document.addEventListener('keydown', keys);
+    return () => {
+      document.body.style.overflow = overflow;
+      document.removeEventListener('keydown', keys);
+      previous?.focus();
+    };
+  }, [open]);
+  const filtered = documents.filter((document) =>
+    `${document.title} ${document.description} ${document.subject} ${document.headings.map((heading) => heading.title).join(' ')}`
+      .toLowerCase()
+      .includes(query.toLowerCase().trim()),
+  );
+  const knownHome = ['', '#/home', '#/map', '#/review'].includes(slug);
   return (
-    <div
-      className={`app-shell ${sidebarCollapsed ? 'sidebar-collapsed' : ''} route-${lesson ? 'lesson' : route}`}
-    >
+    <div className={`layout ${collapsed ? 'collapsed' : ''} ${open ? 'menu-open' : ''}`}>
       <a
         className="skip-link"
-        href="#main-content"
+        href="#main"
         onClick={(event) => {
           event.preventDefault();
-          document.getElementById('main-content')?.focus();
+          document.getElementById('main')?.focus();
         }}
       >
-        跳到正文
+        跳到内容
       </a>
-      <Sidebar
-        lessons={lessons}
-        progress={progress}
-        route={route}
-        open={sidebar}
-        collapsed={sidebarCollapsed}
-        toggleCollapsed={() => setSidebarCollapsed((value) => !value)}
-        query={query}
-        setQuery={setQuery}
-        subject={subject}
-        setSubject={setSubject}
-        close={() => setSidebar(false)}
-        toggleMotion={() => setProgress((old) => ({ ...old, reducedMotion: !old.reducedMotion }))}
-      />
+      {open && <button className="backdrop" aria-label="关闭导航" onClick={() => setOpen(false)} />}
+      <aside
+        className="sidebar"
+        ref={sidebar}
+        inert={mobile && !open}
+        aria-hidden={mobile && !open}
+        aria-label="课程导航"
+        role={open ? 'dialog' : undefined}
+        aria-modal={open ? true : undefined}
+      >
+        <div className="brand-row">
+          <a className="brand" href="#/home" onClick={() => setOpen(false)}>
+            <Code2 size={24} />
+            <span>
+              sudo hire me<i>_</i>
+            </span>
+          </a>
+          <button
+            className="icon-button desktop"
+            aria-label={collapsed ? '展开导航' : '收起导航'}
+            title={collapsed ? '展开导航' : '收起导航'}
+            onClick={() => setCollapsed((value) => !value)}
+          >
+            {collapsed ? <PanelLeftOpen size={17} /> : <PanelLeftClose size={17} />}
+          </button>
+          <button
+            className="icon-button mobile"
+            aria-label="关闭导航"
+            onClick={() => setOpen(false)}
+          >
+            <X size={19} />
+          </button>
+        </div>
+        <span className="brand-caption">INTERVIEW / FREE DOCUMENTS</span>
+        <a
+          className={`directory-link ${knownHome ? 'active' : ''}`}
+          href="#/home"
+          onClick={() => {
+            setQuery('');
+            setOpen(false);
+          }}
+          title="全部文档"
+        >
+          <BookOpen size={19} />
+          <span>全部文档</span>
+          <small>{documents.length}</small>
+        </a>
+        <nav className="nav-contents" aria-label="主题分类">
+          {subjects.map((subject, index) => (
+            <div className="subject-group" key={subject}>
+              <button
+                className="subject-toggle"
+                aria-expanded={expanded === subject}
+                aria-controls={`group-${index}`}
+                onClick={() => setExpanded(expanded === subject ? '' : subject)}
+              >
+                <span>{subject}</span>
+                <ChevronDown size={15} />
+              </button>
+              <div id={`group-${index}`} hidden={expanded !== subject}>
+                {documents
+                  .filter((document) => document.subject === subject)
+                  .map((document) => (
+                    <a
+                      className={slug === document.slug ? 'active' : ''}
+                      href={`#/lesson/${document.slug}`}
+                      key={document.slug}
+                      onClick={() => setOpen(false)}
+                    >
+                      <span>{String(document.order + 1).padStart(2, '0')}</span>
+                      {document.title}
+                    </a>
+                  ))}
+              </div>
+            </div>
+          ))}
+        </nav>
+        <div className="nav-bottom">
+          <label title="减弱动效">
+            <Sparkles size={16} />
+            <span>减弱动效</span>
+            <input
+              type="checkbox"
+              checked={progress.reducedMotion}
+              onChange={(event) =>
+                setProgress((old) => ({ ...old, reducedMotion: event.currentTarget.checked }))
+              }
+            />
+          </label>
+          <a href="https://github.com/QwQBiG/sudo-hire-me" title="GitHub 文档">
+            <Github size={17} />
+            <span>GitHub 文档</span>
+          </a>
+        </div>
+      </aside>
       <div className="workspace">
         <header className="topbar">
-          <div>
-            <button
-              className="icon-button menu-button"
-              onClick={() => setSidebar(true)}
-              aria-label="打开目录"
-            >
-              <Menu size={21} />
-            </button>
-            <a className="topbar-home" href="#/home" aria-label="返回学习首页" title="学习首页">
-              <Code2 size={19} />
-            </a>
-            <a className="breadcrumb-home" href="#/home">
-              学习空间
-            </a>
-            <span className="breadcrumb-separator">/</span>
-            <strong>{pageTitle}</strong>
-          </div>
-          <div className="player-status">
-            <span className="xp">
-              <Trophy size={16} />
-              {completed * 100}
-              <small>XP</small>
-            </span>
-            <span className="topbar-divider" />
-            <span className="completion">
-              {completed} / {lessons.length} 关
-            </span>
-            <div className="mini-progress">
-              <span style={{ width: `${(completed / lessons.length) * 100}%` }} />
-            </div>
-          </div>
+          <button
+            className="icon-button mobile"
+            aria-label="打开导航"
+            onClick={() => setOpen(true)}
+          >
+            <Menu size={20} />
+          </button>
+          <a className="top-brand" href="#/home">
+            <Code2 size={19} />
+            <span>文档阅读</span>
+          </a>
+          <label className="search">
+            <Search size={17} />
+            <input
+              aria-label="搜索文档"
+              placeholder="查找概念或课程"
+              value={query}
+              onChange={(event) => {
+                setQuery(event.target.value);
+                if (selected) location.hash = '/home';
+              }}
+            />
+          </label>
+          <MemoryTools progress={progress} importProgress={importProgress} />
         </header>
-        {(notice || warning) && (
-          <div className="notice" role="status">
-            {notice || warning}
-            {notice && (
-              <button className="icon-button" aria-label="关闭提示" onClick={() => setNotice('')}>
-                <X size={16} />
-              </button>
-            )}
-          </div>
+        {warning && (
+          <p className="notice" role="status">
+            {warning}
+          </p>
         )}
-        <div ref={surface} id="main-content" className="main-content" tabIndex={-1}>
-          {route === 'home' ? (
-            <Home
-              lessons={lessons}
-              progress={progress}
-              lastVisited={lastVisited}
-              query={query}
-              setQuery={setQuery}
-              browse={browse}
-            />
-          ) : lesson ? (
-            <LessonLoader
-              key={lesson.slug}
-              lesson={lesson}
-              next={lessons[lessons.findIndex((item) => item.slug === lesson.slug) + 1]}
-              prerequisites={lessons.filter((item) => lesson.prerequisites.includes(item.slug))}
-              progress={progress.lessons[lesson.slug] ?? freshLesson()}
-              reducedMotion={progress.reducedMotion}
-              update={(patch) => update(lesson.slug, patch)}
-            />
-          ) : route === 'map' || route === 'review' ? (
-            <div className="overview page-enter">
-              <div className="eyebrow">
-                {route === 'map' ? 'THE LEARNING PATH' : 'YOUR FIELD NOTES'}
-              </div>
-              <h1>{route === 'map' ? '课程目录' : '复习手册'}</h1>
-              <p className="overview-intro">
-                {route === 'map'
-                  ? '从基础概念，到能解释、能操作、能回答。'
-                  : '收藏、笔记与练习记录，回到仍值得再想一次的问题。'}
-              </p>
-              <div className="journey-stats">
-                <div>
-                  <strong>
-                    {String(completed).padStart(2, '0')}
-                    <span> / {String(lessons.length).padStart(2, '0')}</span>
-                  </strong>
-                  <small>通过挑战</small>
-                </div>
-                <div>
-                  <strong>
-                    {completed * 100}
-                    <span> XP</span>
-                  </strong>
-                  <small>累计经验</small>
-                </div>
-                <div>
-                  <strong>{lessons.filter((l) => progress.lessons[l.slug]?.read).length}</strong>
-                  <small>已读原理</small>
-                </div>
-              </div>
-              <div className="catalog-toolbar">
-                <label className="catalog-search">
-                  <Search size={18} />
-                  <input
-                    value={query}
-                    onChange={(event) => setQuery(event.target.value)}
-                    aria-label="搜索目录"
-                    placeholder="搜索知识点、课程或主题"
-                  />
-                </label>
-                <span>{visibleLessons.length} 课</span>
-                {(query ||
-                  subject ||
-                  (route === 'map' ? mapStatus !== 'all' : reviewStatus !== 'all')) && (
-                  <button
-                    className="text-button"
-                    onClick={() => {
-                      setQuery('');
-                      setSubject('');
-                      setMapStatus('all');
-                      setReviewStatus('all');
-                    }}
-                  >
-                    清除筛选
-                  </button>
-                )}
-              </div>
-              {route === 'map' && !query.trim() && !subject && (
-                <label className="map-subject-control">
-                  <span>学习主题</span>
-                  <SelectField
-                    value={mapSubject}
-                    onChange={(event) => setMapSubject(event.target.value)}
-                    aria-label="学习主题"
-                  >
-                    <option value={starterSubject}>从零开始</option>
-                    {[...new Set(lessons.map((item) => item.subject))].map((name) => (
-                      <option key={name} value={name}>
-                        {name}
-                      </option>
-                    ))}
-                    <option value="">全部主题</option>
-                  </SelectField>
-                  <span>{visibleLessons.length} 关</span>
-                </label>
-              )}
-              {route === 'map' && (
-                <div className="map-status-filter" role="group" aria-label="挑战状态">
-                  {[
-                    ['all', '全部'],
-                    ['pending', '未通过'],
-                    ['passed', '已通过'],
-                  ].map(([value, label]) => (
-                    <button
-                      key={value}
-                      aria-pressed={mapStatus === value}
-                      onClick={() => setMapStatus(value)}
-                    >
-                      {label}
-                    </button>
-                  ))}
-                </div>
-              )}
-              {route === 'review' && (
-                <div className="map-status-filter" role="group" aria-label="复习记录类型">
-                  {[
-                    ['all', '全部记录'],
-                    ['pending', '待巩固'],
-                    ['bookmarked', '收藏'],
-                    ['notes', '笔记'],
-                  ].map(([value, label]) => (
-                    <button
-                      key={value}
-                      aria-pressed={reviewStatus === value}
-                      onClick={() => setReviewStatus(value)}
-                    >
-                      {label}
-                    </button>
-                  ))}
-                </div>
-              )}
-              <div className="course-grid">
-                {visibleLessons.slice(0, catalogLimit).map((item) => {
-                  const record = progress.lessons[item.slug];
-                  return (
-                    <a
-                      className={`course-card ${record?.passed ? 'completed' : ''}`}
-                      key={item.slug}
-                      href={`#/lesson/${item.slug}`}
-                    >
-                      <div className="course-top">
-                        <span className="course-number">
-                          {String(item.order + 1).padStart(2, '0')}
-                        </span>
-                        <span>
-                          {record?.passed ? (
-                            <>
-                              <Check size={14} />
-                              已通过
-                            </>
-                          ) : (
-                            item.subject
-                          )}
-                        </span>
-                      </div>
-                      <h2>{item.title}</h2>
-                      <p>{route === 'review' && record?.note ? record.note : item.description}</p>
-                      <div className="course-bottom">
-                        <span>
-                          {route === 'review'
-                            ? `${record?.bookmark ? '已收藏 · ' : ''}练习 ${record?.attempts ?? 0} 次`
-                            : `${item.minutes} 分钟 · 交互实验`}
-                        </span>
-                        <ArrowRight size={19} />
-                      </div>
-                    </a>
-                  );
-                })}
-              </div>
-              {visibleLessons.length > 0 && (
-                <div className="catalog-more">
-                  <span aria-live="polite">
-                    已显示 {Math.min(catalogLimit, visibleLessons.length)} / {visibleLessons.length}{' '}
-                    课
-                  </span>
-                  {catalogLimit < visibleLessons.length && (
-                    <button
-                      className="secondary"
-                      onClick={() => setCatalogLimit((value) => value + 24)}
-                    >
-                      显示更多
-                      <ArrowRight size={16} />
-                    </button>
-                  )}
-                </div>
-              )}
-              {!visibleLessons.length && (
-                <div className="empty-courses">
-                  <p>{route === 'review' ? '没有匹配的复习记录。' : '没有匹配的课程。'}</p>
-                  <a className="secondary" href="#/home">
-                    回到学习首页
-                    <ArrowRight size={16} />
-                  </a>
-                </div>
-              )}
-              {route === 'review' && (
-                <section className="backup-section">
-                  <div>
-                    <h2>
-                      <BookOpen size={19} />
-                      学习存档
-                    </h2>
-                    <p>备份包含本浏览器中的笔记、收藏和练习记录。</p>
-                  </div>
-                  <div className="backup-actions">
-                    <button className="secondary" onClick={exportProgress}>
-                      <Download size={17} />
-                      导出进度
-                    </button>
-                    <label className="secondary file-import">
-                      <Upload size={17} />
-                      导入进度
-                      <input
-                        type="file"
-                        accept="application/json,.json"
-                        onChange={(e) => {
-                          void importFile(e.target.files?.[0]);
-                          e.target.value = '';
-                        }}
-                      />
-                    </label>
-                  </div>
-                </section>
-              )}
-            </div>
+        <main className="main" id="main" tabIndex={-1}>
+          {selected ? (
+            <Suspense
+              fallback={
+                <p className="empty" role="status">
+                  正在打开文档…
+                </p>
+              }
+            >
+              <Document
+                key={slug}
+                document={selected}
+                documents={documents}
+                record={progress.lessons[slug] ?? freshLesson()}
+                reducedMotion={progress.reducedMotion}
+                update={(patch) => update(slug, patch)}
+              />
+            </Suspense>
+          ) : knownHome ? (
+            <Catalog documents={filtered} progress={progress} query={query} />
           ) : (
-            <section className="not-found">
-              <h1>没有找到这一关</h1>
-              <a className="primary" href="#/home">
-                返回学习首页 <ArrowRight size={18} />
-              </a>
+            <section className="empty">
+              <h1>没有找到这篇文档</h1>
+              <a href="#/home">返回课程目录</a>
             </section>
           )}
-        </div>
-        <footer className="site-footer">
-          <span>
-            sudo hire me<span className="footer-dot">.</span>
-          </span>
-          <span>先理解，再表达。</span>
-          <a
-            href="https://github.com/QwQBiG/sudo-hire-me/tree/main/content/lessons"
-            target="_blank"
-            rel="noreferrer"
-          >
-            开放学习 · Markdown
+        </main>
+        <footer>
+          <span>sudo hire me_</span>
+          <a href="https://github.com/QwQBiG/sudo-hire-me/tree/main/content/lessons">
+            Markdown 原文
           </a>
         </footer>
       </div>

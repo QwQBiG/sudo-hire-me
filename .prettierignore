@@ -1,7 +1,0 @@
-node_modules
-dist
-.generated
-public/lessons
-public/data
-content/lessons
-package-lock.json

@@ -1,0 +1,942 @@
+{
+  "version": 1,
+  "count": 233,
+  "files": [
+    {
+      "path": "content/lessons/amortized-dynamic-array.md",
+      "sha256": "308dacdf28409de19c0f2e04d82f439dfea5cbe2d5f64c56adca16f833efaae1"
+    },
+    {
+      "path": "content/lessons/api-contract-invariants.md",
+      "sha256": "2bab75d98c918a722679fe1d74777a81341dcdc173d7a0254f9f19960c9fe8d0"
+    },
+    {
+      "path": "content/lessons/arp-local-delivery.md",
+      "sha256": "e21e4128de0b9e7be24612915ff439954ae664078cdb5156d3706b378b442926"
+    },
+    {
+      "path": "content/lessons/array-bounds-slices.md",
+      "sha256": "23f4a0422e74e0bc3916bacd5b4216a85cdf4e051b9009a9b4b51a8cfc351a69"
+    },
+    {
+      "path": "content/lessons/array-linked-list.md",
+      "sha256": "fb793974c79cb8d6fc50ab30184c4bbcebe70cf68141246f91982572fd702bbc"
+    },
+    {
+      "path": "content/lessons/atomic-cas-basics.md",
+      "sha256": "9f469453566df01d2f5cea6cce9598b891de1717a4bcaaaf304b520abde02b20"
+    },
+    {
+      "path": "content/lessons/authentication-authorization.md",
+      "sha256": "15d263cb6058880263effdb94cec0a6829e2637df791b6d57f0907be1c320a5b"
+    },
+    {
+      "path": "content/lessons/backpressure-basics.md",
+      "sha256": "40617e96c994e07d2a8065e65ac56ea7ec44f1ae89f4e59ba8dd44054ca21cc8"
+    },
+    {
+      "path": "content/lessons/backtracking-basics.md",
+      "sha256": "05925452528534b5fd29e81ed1c52d1ddc768799c8f8469533e57bb219857d4d"
+    },
+    {
+      "path": "content/lessons/binary-representation.md",
+      "sha256": "2d7f96fa1c9e0601c3f82fe1217e4c569d66fc687197acc5fe392fc96782b7dc"
+    },
+    {
+      "path": "content/lessons/binary-search-boundary.md",
+      "sha256": "f89139d7385aa2f054c6c1328ce26c222a59899c93d8712da3d49f5dbacef036"
+    },
+    {
+      "path": "content/lessons/binary-search-tree-operations.md",
+      "sha256": "7e7113a5df8e7f29452101322095bf92c6388621d2e3e685b2d2c4fa5277e648"
+    },
+    {
+      "path": "content/lessons/binary-search.md",
+      "sha256": "72e81810bdabe5e27dd8752b0a899b7615d48137fd009628911cbff13d216e3d"
+    },
+    {
+      "path": "content/lessons/binary-tree-level-order.md",
+      "sha256": "fb296457314f7dbffeaec25dd12fa2e8dfee0c2a08f71788528f5d350e937847"
+    },
+    {
+      "path": "content/lessons/bitwise-operations.md",
+      "sha256": "993ee6c0f7bf5651c54e40d1b4d299e6435b11cf1a0c4a61219a67479522ea3d"
+    },
+    {
+      "path": "content/lessons/blocking-nonblocking-io.md",
+      "sha256": "411f642b32cd904870c12eec5bba5eb36281edd5d25d2e5d70bcda55b5c3db7d"
+    },
+    {
+      "path": "content/lessons/boundary-property-tests.md",
+      "sha256": "c62fe599861a35a20759a28ba1be73529a0839750c17132d89877e70bd4c12c4"
+    },
+    {
+      "path": "content/lessons/branch-prediction-basic.md",
+      "sha256": "66d7c30962e152962c370e34a277eb2de6001125c9394e3330eb4397d3d5910d"
+    },
+    {
+      "path": "content/lessons/build-artifact-release.md",
+      "sha256": "de2e9482e8faf3fabf44645779625c8560de001571b0e317d7a2358ccb6ce34b"
+    },
+    {
+      "path": "content/lessons/bulkhead-failure-isolation.md",
+      "sha256": "8e391830cf16855ac3437fcc28d9f2d9d0606df997d3e4c49cd427b26231d2a2"
+    },
+    {
+      "path": "content/lessons/c-array-pointer-decay.md",
+      "sha256": "27cc9581f8a44e1e3b367ae7f5eb843b965b638a3471abe5a362dcd9d2b548b0"
+    },
+    {
+      "path": "content/lessons/c-const-pointer.md",
+      "sha256": "ad82cddde5e20cad19978f3c9870b5a7d3f307e8e7daf834878c2e9b6a339505"
+    },
+    {
+      "path": "content/lessons/c-malloc-free.md",
+      "sha256": "88b1eea6cb2c9ea812932fa0a55317d52f6c02b7aeb8276ea286e6480ebfcd4e"
+    },
+    {
+      "path": "content/lessons/c-sizeof-strlen.md",
+      "sha256": "b3bd559a02bd43b73b6a55b48ca6c6deadb4af3fdd255beaeee113d3d0dfda53"
+    },
+    {
+      "path": "content/lessons/c-static-extern.md",
+      "sha256": "850a5fe6bfa4d3cdc38ade379f6948f199c423194fef076c57386841951b7483"
+    },
+    {
+      "path": "content/lessons/c-string-terminator.md",
+      "sha256": "539274b2b9d96dae91e1e057eae2291fd1018aac433ec7e3307d01f7c2729b8f"
+    },
+    {
+      "path": "content/lessons/c-undefined-behavior.md",
+      "sha256": "df13737a1b8ed8df0d039aec9202d351d472bdaf98c7a157fe529b7a07760798"
+    },
+    {
+      "path": "content/lessons/cache-coherence-basic.md",
+      "sha256": "9f97e8ec46d0bbdeba5a9329692f2388291116114d616923d2fdd8c0e00e61b8"
+    },
+    {
+      "path": "content/lessons/cache-consistency-basics.md",
+      "sha256": "a7d2c326cacaab4736829fb56d483b81bbd6c39ced2ba9d413dd932f67b7acb0"
+    },
+    {
+      "path": "content/lessons/cache-locality.md",
+      "sha256": "a7427a07656f6e51d39497d5fe18fc1a68c8463e1608250160a84cc8a5c39dbd"
+    },
+    {
+      "path": "content/lessons/cache-mapping-associativity.md",
+      "sha256": "4fba431392f8f14589c441021dbadbb36544ab1fa60303d0814fc840e14a098a"
+    },
+    {
+      "path": "content/lessons/cache-write-through-back.md",
+      "sha256": "3721da9c7cafa4e1ab54909b2a8f74aa3042cdeb1487cbe766910ed058b9de3c"
+    },
+    {
+      "path": "content/lessons/callbacks-function-pointers.md",
+      "sha256": "ca4df69b268841d9e2a328e7a6432c95615427b722d49ab485e37105ce411a06"
+    },
+    {
+      "path": "content/lessons/ci-pipeline-basic.md",
+      "sha256": "7c44875fbd19aebfa563ebb53cc9ccb6e7a8234a77232ddb4613687ad8e2a3b4"
+    },
+    {
+      "path": "content/lessons/circuit-breaker-basics.md",
+      "sha256": "69688cac67a14b1dfff780617ad149f21e2868c8a72e66e2c9800de4006577a7"
+    },
+    {
+      "path": "content/lessons/complexity.md",
+      "sha256": "bc1341e6c8faf2f8c3df0bf97ba23c258d6c40fe9dd90c2b4aac2c7d5b466087"
+    },
+    {
+      "path": "content/lessons/composite-index-order.md",
+      "sha256": "44fb02c16c3227589829c3e3a206e3106bb37ef74cb66096384c8e8c3c4d6b3a"
+    },
+    {
+      "path": "content/lessons/condition-variable.md",
+      "sha256": "aa6062da8b9ddb8836785879b3bcf760b1885cb3de2037b58a96c63a0a98754b"
+    },
+    {
+      "path": "content/lessons/configuration-secrets.md",
+      "sha256": "213275dae7aae0edc53e6c5a61bafa062b041c84977229f136456e8615310d2b"
+    },
+    {
+      "path": "content/lessons/constructor-initialization.md",
+      "sha256": "35a2cd21996d215c2e070a65dcf1f93cf894be577256533b57bf6831f498f487"
+    },
+    {
+      "path": "content/lessons/context-switch.md",
+      "sha256": "6a42f881e3499c0c43bb87dee3c5527543ec5f3be68cd6174c292bf24fa28e5c"
+    },
+    {
+      "path": "content/lessons/cookie-session-token.md",
+      "sha256": "569232e20ac957c6e40af30205de40835873204a3c93bcd425ed12f13bc61745"
+    },
+    {
+      "path": "content/lessons/copy-on-write.md",
+      "sha256": "bb1f7374c85c96289c919f3769906a7c3f05be66b6a50fac85834e80371dc944"
+    },
+    {
+      "path": "content/lessons/covering-index.md",
+      "sha256": "c0214930d3545d420110abf71ce96d30aac855e0776398ba8b42043d6e57c086"
+    },
+    {
+      "path": "content/lessons/cpp-move-semantics.md",
+      "sha256": "ea2f893ad8f7b20b6bc21baf62b5003ac04b69a27f643d5746a1b6fd4d9b9625"
+    },
+    {
+      "path": "content/lessons/cpp-raii.md",
+      "sha256": "71ef37d901743bf37a5dc19c2be74c7e1e307cab8a93e8989c8f5e5d5edc47c3"
+    },
+    {
+      "path": "content/lessons/cpp-smart-pointers.md",
+      "sha256": "c10a2ae1c7e5ac0d292ac404351efc466b33aa72c2d14aed52456c5fd375a52b"
+    },
+    {
+      "path": "content/lessons/cpp-value-categories.md",
+      "sha256": "989e3f747b3f84cc5bdea990ac99ba1b66e05507119e81cef859bafdae084f7a"
+    },
+    {
+      "path": "content/lessons/cpp-vector-invalidation.md",
+      "sha256": "df244854821383b9c5e651c30cfbc8d3b2058017f58611ac360486c98536eddb"
+    },
+    {
+      "path": "content/lessons/cpp-virtual-destructor.md",
+      "sha256": "0c58d35373982da02f089bfa8d5e3b8b54a42a3170f30fad41c8741b154198b9"
+    },
+    {
+      "path": "content/lessons/cpu-execution.md",
+      "sha256": "2c126059bf292cb3dbd0c875b8fbbc1996c8704ee19605443aa75746cc4c4dd3"
+    },
+    {
+      "path": "content/lessons/cpu-pipeline-hazards.md",
+      "sha256": "5c342c858647b513c901fb83b2a8b40d0d73aca8e15aa9fe8419363fe9ada655"
+    },
+    {
+      "path": "content/lessons/cpu-scheduling.md",
+      "sha256": "d3e49b6acecbae112e4bc91f4e1190a8ef9a67394876ad57616f784394f5604a"
+    },
+    {
+      "path": "content/lessons/database-bplus-tree.md",
+      "sha256": "9f53ae12805b611a6ff73ec440673b9250fe3f64a4e8e952592d67566db043fe"
+    },
+    {
+      "path": "content/lessons/database-connection-pool.md",
+      "sha256": "87916b2a81a21a4c314f3b3826684ef824f306eafaeb890759713c421f8215f1"
+    },
+    {
+      "path": "content/lessons/database-explain-plan.md",
+      "sha256": "70ad8ea2b582c603f6a7922cd9eac7bd3b4467b660b6b59ad5beb0bcc4e7fce5"
+    },
+    {
+      "path": "content/lessons/database-index-selectivity.md",
+      "sha256": "c7687f5076f901d0f15396c76a7d438ba8ea4f5be5e29399e93115107762e3a6"
+    },
+    {
+      "path": "content/lessons/database-indexes.md",
+      "sha256": "299cf52f009cd8445a74a251b1de1e94b81f4084f05d8bdacf4050a947ec8c0d"
+    },
+    {
+      "path": "content/lessons/database-isolation.md",
+      "sha256": "2475c1c189cbe5fa8b586272d78b422f7b75fbb3e219e2d584121f58d290d85c"
+    },
+    {
+      "path": "content/lessons/database-join-algorithms.md",
+      "sha256": "869c7c8f6e73f2213ea54da9ebfa49fdb4cca59b8ae07f7ba8656f584f2f35ea"
+    },
+    {
+      "path": "content/lessons/database-mvcc-basic.md",
+      "sha256": "aa4bbf774efd6e07e38815b915ffe89e4286428b213e769ff49958e4c9410532"
+    },
+    {
+      "path": "content/lessons/database-normalization.md",
+      "sha256": "0acfc8dafd8fb8aaf9c4568a66abe9639c58ed0046c0fed66cb5f2b7b50a027b"
+    },
+    {
+      "path": "content/lessons/database-transactions.md",
+      "sha256": "96aec1d3946a8b903e501878b367bf1bea406233dfb0e7f33e58ac9eb8da1137"
+    },
+    {
+      "path": "content/lessons/database-write-ahead-log.md",
+      "sha256": "358bebbcf3ca6c7d37e8acd5633bb69e7ba9d807ae82b8f789c4b0f50bec02ba"
+    },
+    {
+      "path": "content/lessons/deadlock.md",
+      "sha256": "e7a25db0e12d031f953a3f1eee6cdb2604e8cbfbae8bd720c5681ef67f1b7880"
+    },
+    {
+      "path": "content/lessons/debugging-story-evidence.md",
+      "sha256": "a976b4727a9a4665ce5d0187503a66d0c7af8caf2c3a73674ddce3bff63d2b19"
+    },
+    {
+      "path": "content/lessons/dependency-lockfiles.md",
+      "sha256": "f1450fbb7347fe8e1c987058784673b449d62a8559b5b1cf5408637c220eb387"
+    },
+    {
+      "path": "content/lessons/deployment-rollback.md",
+      "sha256": "6e4f07f66a481e07e8485c234f7a060b398562b578052339082e5451acb96ad0"
+    },
+    {
+      "path": "content/lessons/dma-basic.md",
+      "sha256": "1b63807ad1a52c54c6c1b24e786d110f23142a1aced3015f173ac3d4111534ef"
+    },
+    {
+      "path": "content/lessons/dns-cache-ttl.md",
+      "sha256": "31112ada747f4428380dd0b36b31acf4c2075bdec4c6c7dc2c37e6bdc7b5cd4a"
+    },
+    {
+      "path": "content/lessons/dns-resolution.md",
+      "sha256": "b8b6e3dc2d014414b3493d4b84de9d73099e3bd13c3dea9c15fc578dcc3a6237"
+    },
+    {
+      "path": "content/lessons/dynamic-programming-intro.md",
+      "sha256": "067f8e7fb5b9be88be4ab3630913e92b2d64b9efc0b7f6e752a6652c7cba159c"
+    },
+    {
+      "path": "content/lessons/dynamic-programming-knapsack.md",
+      "sha256": "8cc973bbadf7d0dc3f23d539fd9585b34fcc604289bb95791dc3ba1d7dff55e6"
+    },
+    {
+      "path": "content/lessons/dynamic-programming-lcs.md",
+      "sha256": "927d2782cd75e950725e93cfddc05d4584047dd7645193b0ef21f11a11ea0158"
+    },
+    {
+      "path": "content/lessons/encoding-encryption-hashing.md",
+      "sha256": "ef353eb6b0b6ce883427d889c20531ced3cc36b6eef1748d134cc6c9d06a7831"
+    },
+    {
+      "path": "content/lessons/endianness.md",
+      "sha256": "c3b369066fb5b1f8d2471797c29396f492bebeca8f2caf42d15f887775cf4abe"
+    },
+    {
+      "path": "content/lessons/error-handling-models.md",
+      "sha256": "cff49a5320c4366bbe9f9e38617c14f0c09f7d0083fd310941ef174ede28a30b"
+    },
+    {
+      "path": "content/lessons/file-descriptor.md",
+      "sha256": "21e3aaa6f4ebd1377c68553a7ef55d8a5b12f12dba66a0620650ecd316067131"
+    },
+    {
+      "path": "content/lessons/file-io-buffering.md",
+      "sha256": "80c21537fdae95abd25921e617d5ad22f806395dc394bd26a270bff3a67725c1"
+    },
+    {
+      "path": "content/lessons/file-system-inode.md",
+      "sha256": "38e7fbd573701ad5b5c22cf8869eb4538efe0e62cf2a36e6904bf2c4a9e82e87"
+    },
+    {
+      "path": "content/lessons/floating-point-basics.md",
+      "sha256": "d5c0dfcdc69742cb311d8aacb775b2d41daa27a714b7de9cadb90de28750ede1"
+    },
+    {
+      "path": "content/lessons/function-arguments.md",
+      "sha256": "0e0033b2fabae05722106385b861723d023dffbdc812db3700b2b4c88658da57"
+    },
+    {
+      "path": "content/lessons/generic-programming-basics.md",
+      "sha256": "f17259d8c3228186ab11a838096ba655dbfe864c1eea2a5406291f7ed4ed1336"
+    },
+    {
+      "path": "content/lessons/git-basics.md",
+      "sha256": "86f1c8ac3590c46d949aa82b59539ff9e46d9478e3452ebd85f14f2fb32ee1ad"
+    },
+    {
+      "path": "content/lessons/git-branch-merge-rebase.md",
+      "sha256": "3d6189a7e893f72accd355570822b32cfa4e817d86b08252da07210be1643c90"
+    },
+    {
+      "path": "content/lessons/git-restore-reset-revert.md",
+      "sha256": "225c632231c1e690cc244f919c972ecf03bf843a501381addb358839b874972b"
+    },
+    {
+      "path": "content/lessons/graph-bfs.md",
+      "sha256": "04bb6d5d0eb43dbd248da48f7332923366485bae6643954acece96c9d16d46bd"
+    },
+    {
+      "path": "content/lessons/graph-dfs.md",
+      "sha256": "2a2a6c2b12c23fa885da72213a5dba98184529289a5dbdeecc39130088998e62"
+    },
+    {
+      "path": "content/lessons/graph-shortest-path-dijkstra.md",
+      "sha256": "77d2bcd23afa1aa2428a7c85a4dc1051d908e1eeecffc77b0bb9479e2631397f"
+    },
+    {
+      "path": "content/lessons/greedy-basics.md",
+      "sha256": "d649e4cc233e98efc9d6914feaab588c4d614c04088f402c4e6e9e7aa2f07db7"
+    },
+    {
+      "path": "content/lessons/hash-collisions-resizing.md",
+      "sha256": "c6c02b91b05e572037a0cacfcae2d91985a94eb166c5a9c8e719462a062ef438"
+    },
+    {
+      "path": "content/lessons/hash-table.md",
+      "sha256": "21ddcd843a0f1165decc1eda39ff825b17cb91e779d336ea0f0977ea6ca1f2fa"
+    },
+    {
+      "path": "content/lessons/heap-priority-queue.md",
+      "sha256": "efbece5cc6c20193b1ab7b5bbc45647bd34d22b3fe5ff330568bfc1d7b6c882f"
+    },
+    {
+      "path": "content/lessons/heap-top-k.md",
+      "sha256": "63fe2f1dea47ac60cc56c4379510a4fe0d2428855ac62519ef1046c28acac001"
+    },
+    {
+      "path": "content/lessons/http-caching.md",
+      "sha256": "504360cd132ff857d72dabde07670a015f4adcf8c2a3df0036cd4a9717ce4219"
+    },
+    {
+      "path": "content/lessons/http-https.md",
+      "sha256": "069b5173f051cc6a98f54fa47fc853f5a041c9e0581587fb2cb1c8fbf7475266"
+    },
+    {
+      "path": "content/lessons/http-methods.md",
+      "sha256": "b74f855ecfcb27e4910b649cc86dd8138abcabd27c9cec186d164b3b443490bb"
+    },
+    {
+      "path": "content/lessons/http-status-codes.md",
+      "sha256": "156842584047b220cafef357406eadda4c2783368a50a550054f83027aeb3e8d"
+    },
+    {
+      "path": "content/lessons/http1-keepalive.md",
+      "sha256": "218f1daeadb3dbc5255e69fb6dcfc7e8f51ff4d8c0b96be5c6dbf1b60de0e329"
+    },
+    {
+      "path": "content/lessons/http2-multiplexing.md",
+      "sha256": "5f9954084b2e433190f04f5cc5cda5a32df9b9aee84afe37486619acd41a78b3"
+    },
+    {
+      "path": "content/lessons/idempotency-requests.md",
+      "sha256": "2e9c33e016b518559f7c3157aa6db0f9b7206de924c081b58f2ef139bb3f9d69"
+    },
+    {
+      "path": "content/lessons/incident-triage-postmortem.md",
+      "sha256": "8bf947bd1947122f74bc40ee923eb710a08cfc3e818985ca7517589cb90c13ae"
+    },
+    {
+      "path": "content/lessons/integer-overflow.md",
+      "sha256": "af33f24a6d881b460d8724ebe3ced6e44f5019eb61f3033d12718a9b3aa476ab"
+    },
+    {
+      "path": "content/lessons/interrupt-exception-trap.md",
+      "sha256": "07da4154c12f4916c2b4353b93266e7ad3dc6b54f6c5ee5121e076035d31bae8"
+    },
+    {
+      "path": "content/lessons/interrupt-vs-polling.md",
+      "sha256": "2f6c0a286f62e3f77c7a21bb96eb10503f2c81bb7b116caae2f76e8f5449b964"
+    },
+    {
+      "path": "content/lessons/io-multiplexing-readiness.md",
+      "sha256": "eaf418fb4ec2cf2ab79dd378c2e58669320adb06b194aed9d8a1856a850ee143"
+    },
+    {
+      "path": "content/lessons/ipc-pipe.md",
+      "sha256": "c8b84b641d33deb33ac1e75d28ef21b66250604d116d76c76141bed60a945b68"
+    },
+    {
+      "path": "content/lessons/ipv4-subnet.md",
+      "sha256": "d63e737edef813c2d1173a56e3b6751b1f5ce22857fecbbd42dbccccccdf582d"
+    },
+    {
+      "path": "content/lessons/java-equals-hashcode.md",
+      "sha256": "c594a4543a5b106d274809fb49e01552d3d38dab4726a34476fc37ba7324da47"
+    },
+    {
+      "path": "content/lessons/java-gc-references.md",
+      "sha256": "551009798aee08f51a9794c28abd04addca5300080ee494fd4957695aa0b6421"
+    },
+    {
+      "path": "content/lessons/java-jvm-memory.md",
+      "sha256": "798faa0988e983dbffd0dbfb890352e0304c53f7ee8ef00dcc62c06a5fce2416"
+    },
+    {
+      "path": "content/lessons/java-volatile-synchronized.md",
+      "sha256": "981efe8dd07fb0ea0b94ddfeb2aff3b89fcc76b02ab4b4cbe1fe2122d84c349a"
+    },
+    {
+      "path": "content/lessons/javascript-closures.md",
+      "sha256": "78dccaf9d945ce991757426445c4722d72e7cc1deab3912c2d772e5bab052195"
+    },
+    {
+      "path": "content/lessons/javascript-equality.md",
+      "sha256": "2e9d96abecaa891632d6a6da48f3cdd9b182a62c4fa8f711effd821f1f7b67de"
+    },
+    {
+      "path": "content/lessons/javascript-event-loop.md",
+      "sha256": "a9b71cd996132bdc693f742d96f7ec4681df2988207a902aca2d525675f4da85"
+    },
+    {
+      "path": "content/lessons/javascript-prototype.md",
+      "sha256": "7fdc67b63a2e78d0041b613a7887e11e307120a419fbdc9a6fb81da9888defba"
+    },
+    {
+      "path": "content/lessons/javascript-this.md",
+      "sha256": "29690f744aa6856411bb1826071fcd6e134d432277f0970fb04185b8742c3939"
+    },
+    {
+      "path": "content/lessons/javascript-values.md",
+      "sha256": "d59542ea45ac75ba055bcee6bad92ce8d5f4d6771638561e82f7cd556292ade5"
+    },
+    {
+      "path": "content/lessons/kotlin-null-safety.md",
+      "sha256": "a82fe35b2dffe7a48c467325991d7645c5c701b665fa4bf7657e717da76ac096"
+    },
+    {
+      "path": "content/lessons/kotlin-val-collections.md",
+      "sha256": "087f7e1ae22a9011ef2fc117541f6732e657a3c603f9d4925235b015f6a8d71b"
+    },
+    {
+      "path": "content/lessons/linear-search-first.md",
+      "sha256": "e08f71d49454dec57d99927ae29ba7b1c7dae45e9d0a66eff41f49c162af0504"
+    },
+    {
+      "path": "content/lessons/linked-list-cycle.md",
+      "sha256": "3e2913a5d6a09c50c52ea6357a87fcac4c38be55b2222e16f0638811e6ea8bbb"
+    },
+    {
+      "path": "content/lessons/linked-list-reversal.md",
+      "sha256": "1e245b2f12f6f6cdad27462d7a9591323bad0aba013527ab8d83d4eee04a95ec"
+    },
+    {
+      "path": "content/lessons/linux-permissions-umask.md",
+      "sha256": "05dac715c5e9518b04cebabcb0aa34dd9e59d6383da01079c35e0f898de5d826"
+    },
+    {
+      "path": "content/lessons/linux-zombie-orphan.md",
+      "sha256": "1234896a98359cf27ab34731f8563590d42dd37c0213c25b54b0cb652a255fa3"
+    },
+    {
+      "path": "content/lessons/load-balancing-basics.md",
+      "sha256": "237f71db5d3772f27f86a0ee3e6ac334cfb1224c953d34c62ae635ae8ee59672"
+    },
+    {
+      "path": "content/lessons/loop-invariants.md",
+      "sha256": "94efa51e2199f46143c1eae0e4ecb31f402a1e4e9a5966400713bdc7adf7203a"
+    },
+    {
+      "path": "content/lessons/lru-cache.md",
+      "sha256": "3e4f7ff152e08181950495359ad91a5453f005b1d38fd9738db5bb6b24d2428f"
+    },
+    {
+      "path": "content/lessons/mac-ip-port.md",
+      "sha256": "64f78d024c686ff76eeeb7810dd3d619dc4400edc0272208ce1882ed19a14f8d"
+    },
+    {
+      "path": "content/lessons/memory-alignment-padding.md",
+      "sha256": "f02196659825cbbf0b1195ed3bdeff98fec2bbd28bffc713ba5bdf90b582017d"
+    },
+    {
+      "path": "content/lessons/memory-hierarchy-basic.md",
+      "sha256": "73b177ebe554060b78b61ab9a1c2941cfd7934d7d678cee6ede8bd124020beb1"
+    },
+    {
+      "path": "content/lessons/memory-leak-use-after-free.md",
+      "sha256": "098fc2db98adac4b4024a97d4ca2114a807b4269d90f1785ca9d2ebce95577a7"
+    },
+    {
+      "path": "content/lessons/memory-mapped-files.md",
+      "sha256": "3d94098537e4fc10645515d10d766e676bcbd46d3e522a8e73e3951e2f3b2197"
+    },
+    {
+      "path": "content/lessons/memory-ordering-visibility.md",
+      "sha256": "4cf49c8a6347060ec918d58a2843f45a6eee57ac122fc66520253bfafa6a7b98"
+    },
+    {
+      "path": "content/lessons/memory-units.md",
+      "sha256": "ed93e534393d8a5099563e6672f0143fa3831b5c821a5255ac01736257e81892"
+    },
+    {
+      "path": "content/lessons/merge-sort.md",
+      "sha256": "36f499fc5efb3ab26aab477ab9f502fda58d007bfed95ae1584ec606fe7b01f0"
+    },
+    {
+      "path": "content/lessons/message-queue-delivery.md",
+      "sha256": "ce25fd86354869ef777278864d7ed796053d4ff6af46a895d16f3695cbd6803e"
+    },
+    {
+      "path": "content/lessons/metrics-tracing-basics.md",
+      "sha256": "5bea4d6c177b61cf51ce6cc03548045d97cdf8f3747e90b93a5f986dcd6ea94a"
+    },
+    {
+      "path": "content/lessons/module-compile-link.md",
+      "sha256": "0a04861eaf5f80ead92dc1b4809345264e9231777e4e5c2f968959b826bde181"
+    },
+    {
+      "path": "content/lessons/monotonic-stack.md",
+      "sha256": "f92fad844fa18d3d4388df3c6de89b8a361524499fc8a2082b5c616d2e0470bc"
+    },
+    {
+      "path": "content/lessons/mutability-aliasing.md",
+      "sha256": "e00891ad3b3dbf4aef4ae37b10ecbb503452baaac86b5a4daff01dc5a4005c66"
+    },
+    {
+      "path": "content/lessons/mutex-vs-semaphore.md",
+      "sha256": "d17548e111541d659644e4b86f0565cfa1600be19b84d422d0ac002c721bfdfb"
+    },
+    {
+      "path": "content/lessons/nat-basic.md",
+      "sha256": "43b7a236e240a34cc9291585a1aa15fb150a3df5cef7c6dd80606618c64af8f9"
+    },
+    {
+      "path": "content/lessons/network-layers.md",
+      "sha256": "e0522cfd4763321b9fb6c0f440ab8906d80ca81ab11b7476c7a64c8e0e740365"
+    },
+    {
+      "path": "content/lessons/null-option-absence.md",
+      "sha256": "45e7907ec246cfbabfa957ce3359691db80d8f2e64fb606ebd59127f5018e628"
+    },
+    {
+      "path": "content/lessons/object-identity-equality.md",
+      "sha256": "9206fb316b87bba1104c0d4c7d76e10a7e281be4c27ca4d7db8996f65702bf28"
+    },
+    {
+      "path": "content/lessons/oop-abstraction.md",
+      "sha256": "a2d6e6e8b705c4282e84f0a8035ba645d7df1d89e09832f55aae85c138f239a8"
+    },
+    {
+      "path": "content/lessons/oop-classes-objects.md",
+      "sha256": "fd686c47387ac337f3b1ce27e4b2c18f3ece50a6c76c997c464899835ac59181"
+    },
+    {
+      "path": "content/lessons/oop-encapsulation.md",
+      "sha256": "3e1c3f4db8a203bfd6feb70356ff1dc4bd290d3434dfca5f6b9acde0adeda223"
+    },
+    {
+      "path": "content/lessons/oop-inheritance-composition.md",
+      "sha256": "81140748c6b27cd465ae39e898e0e19b6fbf3d32c82cda726994da3bb862017a"
+    },
+    {
+      "path": "content/lessons/oop-interface-abstract-class.md",
+      "sha256": "a7c31c15cd25baeba80af6eb318c732f48b1050c5349840850c5f68c45ddc7e6"
+    },
+    {
+      "path": "content/lessons/oop-overloading-overriding.md",
+      "sha256": "250782bbc5b8ec6dc540afcdff72336c6227ec18ce825fbd437d12270ea36de4"
+    },
+    {
+      "path": "content/lessons/oop-polymorphism.md",
+      "sha256": "e2c200dab1f1dee1675258ef3591015c20da33fd82152068ca9ca6cb1bea9d7d"
+    },
+    {
+      "path": "content/lessons/oop-static-instance-members.md",
+      "sha256": "05537351c367a7c93842bb3279300317ad69ae98c202431631cfa96ee49321c0"
+    },
+    {
+      "path": "content/lessons/open-source-contribution-story.md",
+      "sha256": "9d991f383e067dacf508d45fbeca5191d9d6ebe8c8918f6097fe21c9fdfe1cfd"
+    },
+    {
+      "path": "content/lessons/page-replacement.md",
+      "sha256": "7d20cd873fbf4567ae08e8d06317167f39ba942c51c3beed6c78fc48cbd052b4"
+    },
+    {
+      "path": "content/lessons/page-table-tlb.md",
+      "sha256": "6324619eaf6986c8124ade053ef3a0f30b46af78367c29eb832a99b602ea5ad0"
+    },
+    {
+      "path": "content/lessons/performance-profiling-basic.md",
+      "sha256": "a3ab59acc7f594abf4eeb5ff42d7e8334bf9ff8576d412a431d81d1657374e4c"
+    },
+    {
+      "path": "content/lessons/personal-contribution-evidence.md",
+      "sha256": "6351d71ab0188fb590a045541b7a5bb85b1f9013cc28fed5e3ea2fa15fae5070"
+    },
+    {
+      "path": "content/lessons/pointer-reference-basics.md",
+      "sha256": "f5168f8549331018825b2da930a22e96642232459ba07bf7e07d4a50a7ca979f"
+    },
+    {
+      "path": "content/lessons/prefix-sums-basic.md",
+      "sha256": "082380d1b9feef5af078dbda23a256c5e22a89099b7bccf8dc8b9e7b088f5703"
+    },
+    {
+      "path": "content/lessons/process-state-transitions.md",
+      "sha256": "ae1331d0f02eba914342e0ec50ec09e8646d48a7796f343008394469eb5e8594"
+    },
+    {
+      "path": "content/lessons/process-thread.md",
+      "sha256": "69d4e97923fbcb108e90f5995ad10a047f31dec9bca84de43ef80e8d63adb325"
+    },
+    {
+      "path": "content/lessons/process-vs-thread-resources.md",
+      "sha256": "400a174709f2818ae36d36d03b1d39054ce4de5443ba5ccfdd5f970548e1d0c5"
+    },
+    {
+      "path": "content/lessons/producer-consumer-queue.md",
+      "sha256": "198fdb55e886d5760dd2cd59b5052100f6578407aabe760ae28b6b0085126d07"
+    },
+    {
+      "path": "content/lessons/program-compile-run.md",
+      "sha256": "6cff207509c8a6430f800b452db61287a99578fb6a9609bcd3bcddf192d38653"
+    },
+    {
+      "path": "content/lessons/project-explanation-structure.md",
+      "sha256": "40e9732899c886c1b682799bcb6019497970f6d491cfc7d2a0832d110c1acdf3"
+    },
+    {
+      "path": "content/lessons/promise-async.md",
+      "sha256": "28f7f2a742ece9e83ef7dc1a83f1fa753ed7f050433405c76a3b36c876862bef"
+    },
+    {
+      "path": "content/lessons/python-gil-concurrency.md",
+      "sha256": "c7ee04199e33d3a8b0224a4259a907e52b5c5c86feda0491c3fd2fc827fb42fc"
+    },
+    {
+      "path": "content/lessons/python-iterators-generators.md",
+      "sha256": "cb98ffae741a1d023b7232754886c758bbf635285e7a544f88a6907ab5587c7f"
+    },
+    {
+      "path": "content/lessons/python-mutable-default.md",
+      "sha256": "695fdee50738eb9e3e1b85a450ac860a44886d69ae7602c9f3c8c4471d8fc565"
+    },
+    {
+      "path": "content/lessons/quick-sort-partition.md",
+      "sha256": "71a4d350c02375a736e3fc8307eff86e3e9b8e10dd21965bc965e0006857b227"
+    },
+    {
+      "path": "content/lessons/race-condition-vs-data-race.md",
+      "sha256": "f8e8422b8f95d49cc2e17f48132295125087d3cf8a8cc8a7d56b176acb95a336"
+    },
+    {
+      "path": "content/lessons/rate-limiting-basics.md",
+      "sha256": "827f268fb5fda609139b5e1fc506a699a7300cd1239247adf7e537214c26b814"
+    },
+    {
+      "path": "content/lessons/recursion.md",
+      "sha256": "bf39ef58f1f1280a1678e1a9ed1598b79e07601ffb1537dab8e6dbfa1ac1487e"
+    },
+    {
+      "path": "content/lessons/retry-exponential-backoff.md",
+      "sha256": "b2b9883737571f228c85452cbe295a8bbfb5ee403ea586174ef4c2a0aec83c41"
+    },
+    {
+      "path": "content/lessons/rust-borrowing-lifetimes.md",
+      "sha256": "ca537fe93774c1b27bf8a7c9ac29a8745486f99a35019318a37c19b7a7c287fa"
+    },
+    {
+      "path": "content/lessons/rust-ownership.md",
+      "sha256": "cf57981caacb9e36e98c033fdf962b97d23e160618c85b85d8ca6603fc6a6a93"
+    },
+    {
+      "path": "content/lessons/rust-rc-arc-weak.md",
+      "sha256": "b0a3f790e7c87a1fe2a1a83861ce6ee0dc749d51300d750c0015d70ebc15612e"
+    },
+    {
+      "path": "content/lessons/rust-send-sync.md",
+      "sha256": "e87ef5f5522b27252c5b4f806358e8f8155e0b3d62b131b8de3d4e1f81ea3e9a"
+    },
+    {
+      "path": "content/lessons/scheduler-starvation-priority.md",
+      "sha256": "326f8d43fd41561ede8279ea2b3fdcc888389d9de36fc7240804fb95cb161dd6"
+    },
+    {
+      "path": "content/lessons/self-introduction-technical.md",
+      "sha256": "a626d9dbe41c76b7e14c4232285e579602b11f4c7a29cfb7c34174e9c87fe68a"
+    },
+    {
+      "path": "content/lessons/shallow-deep-copy.md",
+      "sha256": "4f7c664f258b89f06e4f5fa4d997e705066d8641de465164bd9144d7ae41156d"
+    },
+    {
+      "path": "content/lessons/short-circuit-evaluation.md",
+      "sha256": "8aaf6c6487bc0f23cebf7ab9b4aac95d34a4b23d7c4f8d045947f7859b81714c"
+    },
+    {
+      "path": "content/lessons/sliding-window-basic.md",
+      "sha256": "12602de7da84e9830b4cc1342b37ffdaa98f3b3f83e9f241e86a93e286f17488"
+    },
+    {
+      "path": "content/lessons/sorting-stability.md",
+      "sha256": "18f05a00637bda53d36a2aa81021c48f0867facaac94f95495c1d1e08a102b67"
+    },
+    {
+      "path": "content/lessons/sql-basics.md",
+      "sha256": "42ee42f2a405128a077b86f00f3f347f1bdc8699ab4e9a129dfab654b0982344"
+    },
+    {
+      "path": "content/lessons/sql-constraints.md",
+      "sha256": "1624b1e6ff5cf6473281a86b1dda10d1649adebd2782a0923ba91a23850df208"
+    },
+    {
+      "path": "content/lessons/sql-correlated-subquery.md",
+      "sha256": "bd04b206e6bf30b063fc24fd023e0951d75788de26a8e1bf494593cf8fc41fd9"
+    },
+    {
+      "path": "content/lessons/sql-count-null.md",
+      "sha256": "0353fa2aecaa2545142a2aa9cbbc72d3e227dc7d36acce442ab2f4cca919fe24"
+    },
+    {
+      "path": "content/lessons/sql-exists-null.md",
+      "sha256": "393aaf80e29f61e6759873200bce663aa173c3c941849ace5e6ba241b7814ec7"
+    },
+    {
+      "path": "content/lessons/sql-grouping.md",
+      "sha256": "fb9dd38062c0fa382e00c34da5b663801eb1d6fc2eb5165273b79b5a962ddc08"
+    },
+    {
+      "path": "content/lessons/sql-injection-parameters.md",
+      "sha256": "217dccc748a413244324d60e9048b8bc7e32c699ff77b089d59455800d95d763"
+    },
+    {
+      "path": "content/lessons/sql-join-duplicates.md",
+      "sha256": "cb9b87701c969e094fb03d29781d249dfc5f91360035082dc60946e659ad0141"
+    },
+    {
+      "path": "content/lessons/sql-join.md",
+      "sha256": "43476164321e1324e5b58f77ba6927588fc71adbefd836b4b035e5eb84c13850"
+    },
+    {
+      "path": "content/lessons/sql-pagination.md",
+      "sha256": "0d7753c59b33e0509866ba738aff624afe1d0d28bdf83ce603bf2e4955435462"
+    },
+    {
+      "path": "content/lessons/sql-update-delete-safety.md",
+      "sha256": "63e11847f7219e11ed18e9a3333190cae2cc26b752c838f15a4e045dc30026f3"
+    },
+    {
+      "path": "content/lessons/sql-window-functions.md",
+      "sha256": "e40a99566a1a05211170f8bbd990e4709eacdf8c8f8a65f28b067be669232373"
+    },
+    {
+      "path": "content/lessons/stack-queue.md",
+      "sha256": "3e6a1c88d1787a7628eda30a55a3ab8e9a64aa2739db9ad4318bcb7f49025734"
+    },
+    {
+      "path": "content/lessons/stack-valid-parentheses.md",
+      "sha256": "5d9991f6052eb6e5f78ce62adaa596f5f3953421081c1a16e8a24d379b3fc114"
+    },
+    {
+      "path": "content/lessons/stack-vs-heap.md",
+      "sha256": "48a44d68ccb832c375a32c936a97abb20f534018644e81993fb4d1da409c7dde"
+    },
+    {
+      "path": "content/lessons/string-pattern-kmp.md",
+      "sha256": "f3c0cb849be560afac069cc1a56f92eb5964508aeefa7824643ccb87c5085be7"
+    },
+    {
+      "path": "content/lessons/struct-enum-modeling.md",
+      "sha256": "97d4ab336d79de6b881a9dda3ebf4838669edc37e96ef670a4456b9fd84bca8e"
+    },
+    {
+      "path": "content/lessons/structured-logging-levels.md",
+      "sha256": "35c4919b275a5b7bcaa542052519e10ba3ba6bc4ee55c413f6bd8f99b4447476"
+    },
+    {
+      "path": "content/lessons/synchronization.md",
+      "sha256": "064f28c828c757bca2d682b8b857cec45c7ea55d4ab25d62e95357819460e54f"
+    },
+    {
+      "path": "content/lessons/system-call.md",
+      "sha256": "8b55081275f613d31dcaf932c197cea2d3f2b9449df83643f798f1cac4c8ba1e"
+    },
+    {
+      "path": "content/lessons/tcp-byte-stream-framing.md",
+      "sha256": "81da99980d6207040e7d52e4315808660e085fcdbfa62ad1dd32adc5d2d3e460"
+    },
+    {
+      "path": "content/lessons/tcp-close-four-way.md",
+      "sha256": "c53410e24f79d74ae0a3dd363b2cc86bef47d6a5242b441127ad275ba2f9f5f9"
+    },
+    {
+      "path": "content/lessons/tcp-connection.md",
+      "sha256": "a5aae35b563fe0cc2a821ce283e1689cd043eb925d63b7525f889219a87d491b"
+    },
+    {
+      "path": "content/lessons/tcp-flow-congestion.md",
+      "sha256": "cd9672020c89f0e890018176d5c783cee538687633e4536bab7e4dcda6bcf54c"
+    },
+    {
+      "path": "content/lessons/tcp-reliability.md",
+      "sha256": "0eeecba4668508e5b19720bc60b0a1abdeb994afb10e50891ce228df05aee662"
+    },
+    {
+      "path": "content/lessons/tcp-retransmission-rto.md",
+      "sha256": "07ea8c6fb2a9448f23e5ded6eb551b57a1500d6b134a7d6c8e2c1dbccea3dcf5"
+    },
+    {
+      "path": "content/lessons/tcp-time-wait.md",
+      "sha256": "f0c49ff0bf962037953ad1af1a70e9911a4f62bd7fc8879c19e4838a57b28436"
+    },
+    {
+      "path": "content/lessons/tcp-udp.md",
+      "sha256": "28911c5c75e3ee2637a9fbf471d2ca79ca04be0248376ca654ecb45df3c4365e"
+    },
+    {
+      "path": "content/lessons/technical-tradeoffs.md",
+      "sha256": "aafb0b85664b6d54c3feb7e49cef8e1b7fdf63dbe8238b5fce6d89ca37ad3dfd"
+    },
+    {
+      "path": "content/lessons/testing-debugging.md",
+      "sha256": "567417c8b54705be1fdb2b4bfc9d842cd22730acdf60819c0793391fc7732ef8"
+    },
+    {
+      "path": "content/lessons/text-encoding-utf8.md",
+      "sha256": "67ded7d7a0f175ddddbc72fb84857ce8da03d1dee36b20ebc5b9cf8fefdcf6e7"
+    },
+    {
+      "path": "content/lessons/thread-pool-basics.md",
+      "sha256": "9bc2f4a33fd5087bf62a03759bd5723e0221a7a7a2cdb7ecc1fafb47bfb769a9"
+    },
+    {
+      "path": "content/lessons/timeouts-deadlines.md",
+      "sha256": "2632bc3535998e9921292029f592df62f385576344157864fa50dac3b7a76770"
+    },
+    {
+      "path": "content/lessons/tls-handshake-basic.md",
+      "sha256": "fefa572e88d27c0c822231b33d0dd988de5f08c23aadffba4c628026b0426fef"
+    },
+    {
+      "path": "content/lessons/topological-sort.md",
+      "sha256": "dc17c07af07cfcd268b7a9fcf97b1101bfca8e6d215d46abfc36f3b5fc70a686"
+    },
+    {
+      "path": "content/lessons/tree-traversal.md",
+      "sha256": "a2364534ac6389f72ff2f9df396ae6877d1546a276a8526f533d733bb126a456"
+    },
+    {
+      "path": "content/lessons/two-pointers-basic.md",
+      "sha256": "61e8e01a4c3fd908055d5323ec99e0494b142ef877f7c7c33d55e7b906b625cb"
+    },
+    {
+      "path": "content/lessons/type-conversion-casting.md",
+      "sha256": "c469807bd153544abd91e35615d1f01c466bdc8e4a80e864ce974aa029a51d6f"
+    },
+    {
+      "path": "content/lessons/union-find-basic.md",
+      "sha256": "dc3ac70c7006ce9c1cd45171863dce000ba319e272099f5ff59cba7b93f3890b"
+    },
+    {
+      "path": "content/lessons/unit-integration-e2e-tests.md",
+      "sha256": "426fe409d2d60f59bdb99f1ef8f9fe87f41e664c4b9c4dcdac03a5e611869fed"
+    },
+    {
+      "path": "content/lessons/unknown-question-reasoning.md",
+      "sha256": "76e84a4ad4ffd5bfdc163ba8af88f505bc92a90422ad08850581d52bc5daa231"
+    },
+    {
+      "path": "content/lessons/user-kernel-mode.md",
+      "sha256": "85dab85184cc7a6f87403a3f89f7e6318052667bd91f086807dc852587203040"
+    },
+    {
+      "path": "content/lessons/variable-scope-lifetime.md",
+      "sha256": "6bcd83cb8f6ebbefb8117c3d1aeb07915983a8f6362e89ab1a81921fea511984"
+    },
+    {
+      "path": "content/lessons/virtual-memory.md",
+      "sha256": "03a15186c00151b1aea2c9340d0cbc920621e327fc52b644993d15edd1fe0eb6"
+    },
+    {
+      "path": "content/lessons/zig-allocator-ownership.md",
+      "sha256": "fcd54ad8cef3d55261ceec6af031341f80ef639ca48f640fa50ed412f0201504"
+    },
+    {
+      "path": "content/lessons/zig-comptime-basics.md",
+      "sha256": "6c9190a960297716c12c44600c2369b2d3591cd8e9d24eec31dea23bdd64ab50"
+    },
+    {
+      "path": "content/lessons/zig-error-union-defer.md",
+      "sha256": "c0742a42170c0eddf88c708b896884b638f944dfce0196cfd93cfdec3b564177"
+    },
+    {
+      "path": "docs/CATALOG.md",
+      "sha256": "d123cc9ed72d7442ee8f15152cc437e230ed62ace5373ac79fea1921d9c1da7f"
+    }
+  ]
+}

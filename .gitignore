@@ -1,10 +1,9 @@
 node_modules/
 dist/
+.generated/
+public/lessons/
+public/reading/
 .env
 .env.*
 !.env.example
-.generated/
-public/lessons/
-public/data/
-.DS_Store
 *.log
